@@ -2,6 +2,9 @@
 <!DOCTYPE HTML>  
 <html>
 <head>
+  <title>Signup</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 <style>
 .error {color: #FF0000;}
 </style>
@@ -9,9 +12,10 @@
 <body>  
 
 <?php
+include_once "Functions.php";
 // define variables and set to empty values
-$usernameErr = $passwordErr = $nameErr = $emailErr = $genderErr = $websiteErr = "";
-$username = $password = $name = $email = $gender = $website = "";
+$usernameErr = $passwordErr = $passwordConfirmationErr = $nameErr = $emailErr = $genderErr = $websiteErr = "";
+$username = $password = $passwordConfirmation = $name = $email = $gender = $website = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
@@ -33,14 +37,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   if (empty($_POST["password"])) {
     $passwordErr = "Password is required";
   } else {
-    $password = test_input($_POST["password"]);
+    $password = $_POST["password"];
     // check if name only contains letters and whitespace
-    /*
-    if (!preg_match("/^[a-zA-Z-' ]*$/",$password)) {
-    $nameErr = "Only letters and white space allowed";
-    //need toggle password visibility, need ensure user type 8~16 char with special character
+    //print_r($_POST);
+    if(strlen($_POST["password"])<8 || strlen($_POST["password"])>16){
+      $passwordErr = "Password must be at least 8-16 characters.";
     }
-    */
+
+    else if (!preg_match("/[a-zA-Z]/", $_POST["password"])) {
+      $passwordErr = "Password must contain at least one letter.";
+      //need toggle password visibility, need ensure user type 8~16 char with special character
+    }
+    
+    else if (!preg_match("/[0-9]/", $_POST["password"])) {
+      $passwordErr = "Password must contain at least one number.";
+    }
+    else if (!preg_match("/[^A-Za-z0-9]/", $_POST["password"])){
+      $passwordErr = "Password must contain at least one special character.";
+    }
+  }
+
+  if (empty($_POST["passwordConfirmation"])) {
+    $passwordConfirmationErr = "Password confirmation is required.";
+  } else {
+    if ($_POST["password"] !== $_POST["passwordConfirmation"])
+    {
+      $passwordConfirmationErr = "Password must match.";
+    }
+    //$passwordConfirmation = test_input($_POST["passwordConfirmation"]);
   }
     
     if (empty($_POST["email"])) {
@@ -72,40 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
     if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["name"]))
     {
-      insert_to_table($name, $username, $password, $email);
-    }else{}
-}
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-
-function test_escape_char($data){
-  $sentence = "";
-  foreach(preg_split("/((\r?\n)|(\r\n?))/", $data) as $line)
-  {
-    $line = str_replace("\\","\\\\",$line);
-    $line = str_replace("'","\\'",$line);
-    $sentence .=$line;
-  } 
-  return $sentence;
-}
-
-function debug_to_console($data, $switch){
-  switch ($switch) {
-    case 0:
-      echo "<script>console.log('$data');</script>";
-      break;
-    case 1:
-      echo "<script>console.warn('$data');</script>";
-      break;
-    case 2:
-      echo "<script>console.error('$data');</script>";
-      break;
-  } 
+      insert_to_table($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
+    }
 }
 ?>
 
@@ -120,7 +112,11 @@ function debug_to_console($data, $switch){
   <br><br>
   Password: <input type="password" name="password" value="<?php echo $password;?>" id="password">
   <span class="error">* <?php echo $passwordErr;?></span><br>
-  <input type="checkbox" onclick="passwordVisibility()">Show Password
+  <input type="checkbox" onclick="passwordVisibility('password')" name="passwordVisibilityCheckbox" <?php if(!empty($_POST['passwordVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
+  <br><br>
+  Password Confirmation: <input type="password" name="passwordConfirmation" value="<?php echo $passwordConfirmation;?>" id="passwordConfirmation">
+  <span class="error">* <?php echo $passwordConfirmationErr;?></span><br>
+  <input type="checkbox" onclick="passwordVisibility('passwordConfirmation')" name="passwordConfirmationVisibilityCheckbox" <?php if(!empty($_POST['passwordConfirmationVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
   E-mail: <input type="text" name="email" value="<?php echo $email;?>">
   <span class="error">* <?php echo $emailErr;?></span>
@@ -138,31 +134,9 @@ function debug_to_console($data, $switch){
   <input type="submit" name="submit" value="Submit">  
 </form>
 
-<script>
-function passwordVisibility() {
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
-</script>
-
 <?php
-/*
-echo "<h2>Your Input:</h2>";
-echo $name;
-echo "<br>";
-echo $email;
-echo "<br>";
-echo $website;
-echo "<br>";
-echo $gender;
-*/
-?>
 
-<?php
+debug_to_console($banana,0);
 /*
 //demonstration of password hashing
 $hash = password_hash("password",PASSWORD_ARGON2ID);
@@ -258,46 +232,6 @@ function insert_to_table($name, $username, $password, $email){
   }
 }
 //--------------------------End of insertion to table--------------------------
-
-/*
-$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbname'";
-
-if ($db_conn->query($sql) === TRUE) 
-{
-  echo "Database connected\n";
-  echo "<br>";
-}
- else
-{
-  echo "Database $dbname is not connected\n";
-  echo "<br>";
-
-  
-
-    /*
-    // sql to create table
-    $sql = "CREATE TABLE IF NOT EXISTS $tbname 
-    (
-      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-      username VARCHAR(30) NOT NULL UNIQUE,
-      password VARCHAR(30) NOT NULL,
-      email VARCHAR(50),
-      reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )";
-
-  if ($conn->query($sql) === TRUE) 
-  {
-    echo "Table $tbname created successfully";
-  } 
-  else 
-  {
-    echo "Error creating table: " . $conn->error;
-  }
-  //
-}
-*/
-
-
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:
 $db_conn->close(); 

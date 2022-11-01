@@ -26,3 +26,6 @@ https://www.w3schools.com/php/php_looping_foreach.asp
 https://stackoverflow.com/questions/49660349/how-to-create-line-breaks-in-console-log-in-node-js
 https://stackoverflow.com/questions/3712222/does-mysql-ignore-null-values-on-unique-constraints
 https://stackoverflow.com/questions/4620391/mysql-and-php-insert-null-rather-than-empty-string
+https://www.youtube.com/watch?v=5L9UhOnuos0
+https://www.w3schools.com/tags/att_input_checked.asp
+https://watercss.kognise.dev/
