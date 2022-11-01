@@ -18,3 +18,10 @@ https://www.php.net/manual/en/function.password-verify.php
 https://www.w3schools.com/howto/howto_js_toggle_password.asp
 https://stackoverflow.com/questions/4323411/how-can-i-write-to-the-console-in-php
 https://www.w3schools.com/php/php_switch.asp
+https://www.geeksforgeeks.org/how-to-append-a-string-in-php/
+https://www.w3schools.com/php/func_string_str_replace.asp
+https://en.wikipedia.org/wiki/Escape_character
+https://stackoverflow.com/questions/1462720/iterate-over-each-line-in-a-string-in-php
+https://www.w3schools.com/php/php_looping_foreach.asp
+https://stackoverflow.com/questions/49660349/how-to-create-line-breaks-in-console-log-in-node-js
+https://stackoverflow.com/questions/3712222/does-mysql-ignore-null-values-on-unique-constraints
