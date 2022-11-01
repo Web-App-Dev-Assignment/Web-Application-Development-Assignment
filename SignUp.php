@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
     if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["name"]))
     {
-        debug_to_console("Hello World");
+      insert_to_table($name, $username, $password, $email);
     }else{}
 }
 
@@ -221,49 +221,43 @@ catch(Throwable $e)
 }
 //--------------------------End of connecting to database--------------------------
 
-function insert($id, $username, $password, $email){}
-//--------------------------Connecting to the table--------------------------
-try
-{
-  $id = md5(uniqid());
-  $hash = password_hash($password,PASSWORD_ARGON2ID);
-  $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
-  VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
-  $db_conn->query($sql);
-  debug_to_console("Insertion into table $tbname success!",0);
-}
-catch(Throwable $e)
-{
-  $e = test_escape_char($e);
-  debug_to_console("$e",2);
+//--------------------------Inserting to the table--------------------------
+function insert_to_table($name, $username, $password, $email){
   try
   {
-    $sql = "CREATE TABLE $tbname
-    (
-      id VARCHAR(32) NOT NULL PRIMARY KEY,
-      name VARCHAR(50),
-      username VARCHAR(30) NOT NULL UNIQUE,
-      pw VARCHAR(97) NOT NULL,
-      email VARCHAR(50) UNIQUE,
-      reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )";
+    $id = md5(uniqid());
+    $hash = password_hash($password,PASSWORD_ARGON2ID);
+    $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
+    VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
     $db_conn->query($sql);
-    debug_to_console("Table $tbname not found. Table $tbname created.",1);
+    debug_to_console("Insertion into table $tbname success!",0);
   }
   catch(Throwable $e)
   {
     $e = test_escape_char($e);
-    debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
-    //echo "<script>console.log('testing \\n 123');</script>";
-    //debug_to_console("Testing\\n123\\nabc",0);
-    //debug_to_console("$e",2);
-    //$test = $e;
-    //echo "$e";
-    //echo "<script>console.log('$e');</script>";
+    debug_to_console("$e",2);
+    try
+    {
+      $sql = "CREATE TABLE $tbname
+      (
+        id VARCHAR(32) NOT NULL PRIMARY KEY,
+        name VARCHAR(50),
+        username VARCHAR(30) NOT NULL UNIQUE,
+        pw VARCHAR(97) NOT NULL,
+        email VARCHAR(50) UNIQUE,
+        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )";
+      $db_conn->query($sql);
+      debug_to_console("Table $tbname not found. Table $tbname created.",1);
+    }
+    catch(Throwable $e)
+    {
+      $e = test_escape_char($e);
+      debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
+    }
   }
-  // sql to create table
 }
-//--------------------------End of connecting to table--------------------------
+//--------------------------End of insertion to table--------------------------
 
 /*
 $sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbname'";
