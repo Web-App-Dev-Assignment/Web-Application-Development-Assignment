@@ -82,6 +82,34 @@ function test_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
+
+function test_escape_char($data){
+  $sentence = "";
+  foreach(preg_split("/((\r?\n)|(\r\n?))/", $data) as $line)
+  {
+    $line = str_replace("\\","\\\\",$line);
+    $line = str_replace("'","\\'",$line);
+    $sentence .=$line;
+  } 
+  return $sentence;
+}
+
+function debug_to_console($data, $switch){
+  switch ($switch) {
+    case 0:
+      $sentence = test_escape_char($data);
+      echo "<script>console.log('$sentence');</script>";
+      break;
+    case 1:
+      $sentence = test_escape_char($data);
+      echo "<script>console.warn('$sentence');</script>";
+      break;
+    case 2:
+      $sentence = test_escape_char($data);
+      echo "<script>console.error('$sentence');</script>";
+      break;
+  } 
+}
 ?>
 
 <h2>PHP Form Validation Example</h2>
@@ -155,26 +183,23 @@ $serverpassword = "";
 $dbname = "myDB";
 $tbname = "Users";
 
-//Connecting to MySQL server
+//--------------------------Connecting to MySQL server--------------------------
 try
 {
   $db_conn = mysqli_connect($servername,$serverusername,$serverpassword);
-  //echo "<script>console.log('Hello World.');</script>";
-  echo "Connected MySQL server successfully!\n";
-  echo "<br>\n";
+  debug_to_console("Connected MySQL server successfully!",0);
 }
 catch(Throwable $e)
 {
-  echo "Connection to MySQL server unsuccessful.";
-  echo "<br>\n";
+  debug_to_console("Connection to MySQL server unsuccessful.",2);
 }
+//--------------------------End of connecting to MySQL server--------------------------
 
-//Connecting to the db
+//--------------------------Connecting to the database--------------------------
 try
 {
   $db_conn->select_db($dbname);
-  echo "Connected database $dbname successfully!\n";
-  echo "<br>\n";
+  debug_to_console("Connected database $dbname successfully!",0);
 }
 catch(Throwable $e)
 {
@@ -184,24 +209,23 @@ catch(Throwable $e)
     $sql = "CREATE DATABASE $dbname";
     $db_conn->query($sql);
     $db_conn->select_db($dbname);
-    echo "Database $dbname  not found. Database $dbname created.\n";
-    echo "<br>\n";
+    debug_to_console("Database $dbname  not found. Database $dbname created.",1);
   }
   catch(Throwable $e)
   {
-    echo "Unable to connect to the database $dbname. Try checking if MySQL is running.\nError: $e\n";
+    debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. Error: $e",2);
   }
 }
+//--------------------------End of connecting to database--------------------------
 
 function insert($id, $username, $password, $email){}
-//Connecting to the table
+//--------------------------Connecting to the table--------------------------
 try
 {
   $sql = "INSERT INTO $tbname (id, username, pw, email, reg_date)
   VALUES (md5(uniqid()), $username , password_hash($password,PASSWORD_ARGON2ID) , $email)";
   $db_conn->query($sql);
-  echo "Insertion into table $tbname success!\n";
-  echo "<br>\n";
+  debug_to_console("Insertion into table $tbname success!",0);
 }
 catch(Throwable $e)
 {
@@ -217,15 +241,19 @@ catch(Throwable $e)
       reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
     $db_conn->query($sql);
-    echo "Table $tbname not found. Table $tbname created.\n";
-    echo "<br>\n";
+    debug_to_console("Table $tbname not found. Table $tbname created.",1);
   }
   catch(Throwable $e)
   {
-    echo "Table $tbname already exists. Try checking the sql code.\nError: $e\n";
+    debug_to_console("Table $tbname already exists. Try checking the sql code.",2);
+    debug_to_console("$e",2);
+    //$test = $e;
+    //echo "$e";
+    //echo "<script>console.log('$e');</script>";
   }
   // sql to create table
 }
+//--------------------------End of connecting to table--------------------------
 
 /*
 $sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbname'";
