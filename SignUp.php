@@ -225,13 +225,17 @@ function insert($id, $username, $password, $email){}
 //--------------------------Connecting to the table--------------------------
 try
 {
-  $sql = "INSERT INTO $tbname (id, username, pw, email, reg_date)
-  VALUES (md5(uniqid()), $username , password_hash($password,PASSWORD_ARGON2ID) , $email)";
+  $id = md5(uniqid());
+  $hash = password_hash($password,PASSWORD_ARGON2ID);
+  $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
+  VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
   $db_conn->query($sql);
   debug_to_console("Insertion into table $tbname success!",0);
 }
 catch(Throwable $e)
 {
+  $e = test_escape_char($e);
+  debug_to_console("$e",2);
   try
   {
     $sql = "CREATE TABLE $tbname

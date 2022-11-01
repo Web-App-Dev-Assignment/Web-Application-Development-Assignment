@@ -25,3 +25,4 @@ https://stackoverflow.com/questions/1462720/iterate-over-each-line-in-a-string-i
 https://www.w3schools.com/php/php_looping_foreach.asp
 https://stackoverflow.com/questions/49660349/how-to-create-line-breaks-in-console-log-in-node-js
 https://stackoverflow.com/questions/3712222/does-mysql-ignore-null-values-on-unique-constraints
+https://stackoverflow.com/questions/4620391/mysql-and-php-insert-null-rather-than-empty-string
