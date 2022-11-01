@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
     if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["name"]))
     {
-        echo "Hello World";
+        debug_to_console("Hello World");
     }else{}
 }
 
@@ -97,16 +97,13 @@ function test_escape_char($data){
 function debug_to_console($data, $switch){
   switch ($switch) {
     case 0:
-      $sentence = test_escape_char($data);
-      echo "<script>console.log('$sentence');</script>";
+      echo "<script>console.log('$data');</script>";
       break;
     case 1:
-      $sentence = test_escape_char($data);
-      echo "<script>console.warn('$sentence');</script>";
+      echo "<script>console.warn('$data');</script>";
       break;
     case 2:
-      $sentence = test_escape_char($data);
-      echo "<script>console.error('$sentence');</script>";
+      echo "<script>console.error('$data');</script>";
       break;
   } 
 }
@@ -153,6 +150,7 @@ function passwordVisibility() {
 </script>
 
 <?php
+/*
 echo "<h2>Your Input:</h2>";
 echo $name;
 echo "<br>";
@@ -161,9 +159,11 @@ echo "<br>";
 echo $website;
 echo "<br>";
 echo $gender;
+*/
 ?>
 
 <?php
+/*
 //demonstration of password hashing
 $hash = password_hash("password",PASSWORD_ARGON2ID);
 //$hash = md5(uniqid());
@@ -175,6 +175,8 @@ if (password_verify("password", $hash)) {
   echo 'Invalid password.';
 }
 echo "<br>\n";
+*/
+
 //Under the xampp control panel, ensure that the module Apache and MySQL has been started
 //Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
 $servername = "localhost";
@@ -213,7 +215,8 @@ catch(Throwable $e)
   }
   catch(Throwable $e)
   {
-    debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. Error: $e",2);
+    $e = test_escape_char($e);
+    debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. \\nError:\\n$e",2);
   }
 }
 //--------------------------End of connecting to database--------------------------
@@ -245,8 +248,11 @@ catch(Throwable $e)
   }
   catch(Throwable $e)
   {
-    debug_to_console("Table $tbname already exists. Try checking the sql code.",2);
-    debug_to_console("$e",2);
+    $e = test_escape_char($e);
+    debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
+    //echo "<script>console.log('testing \\n 123');</script>";
+    //debug_to_console("Testing\\n123\\nabc",0);
+    //debug_to_console("$e",2);
     //$test = $e;
     //echo "$e";
     //echo "<script>console.log('$e');</script>";
