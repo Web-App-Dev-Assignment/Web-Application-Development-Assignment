@@ -12,7 +12,8 @@
 <body>  
 
 <?php
-include_once "Functions.php";
+include_once __DIR__ . "/Functions.php";
+$db_conn = include_once __DIR__ . "/database.php";
 // define variables and set to empty values
 $usernameErr = $passwordErr = $passwordConfirmationErr = $nameErr = $emailErr = $genderErr = $websiteErr = "";
 $username = $password = $passwordConfirmation = $name = $email = $gender = $website = "";
@@ -64,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
       $passwordConfirmationErr = "Password must match.";
     }
+    $passwordConfirmation = $_POST["passwordConfirmation"];
     //$passwordConfirmation = test_input($_POST["passwordConfirmation"]);
   }
     
@@ -94,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $gender = test_input($_POST["gender"]);
     }
 
-    if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["name"]))
+    if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["name"] && $_POST["password"] === $_POST["passwordConfirmation"]))
     {
       insert_to_table($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
     }
@@ -137,6 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <?php
 
 debug_to_console($banana,0);
+//echo $banana;
 /*
 //demonstration of password hashing
 $hash = password_hash("password",PASSWORD_ARGON2ID);
@@ -151,90 +154,19 @@ if (password_verify("password", $hash)) {
 echo "<br>\n";
 */
 
-//Under the xampp control panel, ensure that the module Apache and MySQL has been started
-//Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
-$servername = "localhost";
-$serverusername = "root";
-$serverpassword = "";
+/*
+$host = "localhost";
+$hostusername = "root";
+$hostpassword = "";
 $dbname = "myDB";
 $tbname = "Users";
 
-//--------------------------Connecting to MySQL server--------------------------
-try
-{
-  $db_conn = mysqli_connect($servername,$serverusername,$serverpassword);
-  debug_to_console("Connected MySQL server successfully!",0);
+$db_conn = new mysqli($host,$hostusername,$hostpassword);
+if ($db_conn->connect_errno){
+  die("Connection error: " . $db_conn->connect_error);
 }
-catch(Throwable $e)
-{
-  debug_to_console("Connection to MySQL server unsuccessful.",2);
-}
-//--------------------------End of connecting to MySQL server--------------------------
+*/
 
-//--------------------------Connecting to the database--------------------------
-try
-{
-  $db_conn->select_db($dbname);
-  debug_to_console("Connected database $dbname successfully!",0);
-}
-catch(Throwable $e)
-{
-  try
-  {
-    //Create the database if not found, then connect to the newly created database
-    $sql = "CREATE DATABASE $dbname";
-    $db_conn->query($sql);
-    $db_conn->select_db($dbname);
-    debug_to_console("Database $dbname  not found. Database $dbname created.",1);
-  }
-  catch(Throwable $e)
-  {
-    $e = test_escape_char($e);
-    debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. \\nError:\\n$e",2);
-  }
-}
-//--------------------------End of connecting to database--------------------------
-
-//--------------------------Inserting to the table--------------------------
-function insert_to_table($name, $username, $password, $email){
-  try
-  {
-    $id = md5(uniqid());
-    $hash = password_hash($password,PASSWORD_ARGON2ID);
-    $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
-    VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
-    $db_conn->query($sql);
-    debug_to_console("Insertion into table $tbname success!",0);
-  }
-  catch(Throwable $e)
-  {
-    $e = test_escape_char($e);
-    debug_to_console("$e",2);
-    try
-    {
-      $sql = "CREATE TABLE $tbname
-      (
-        id VARCHAR(32) NOT NULL PRIMARY KEY,
-        name VARCHAR(50),
-        username VARCHAR(30) NOT NULL UNIQUE,
-        pw VARCHAR(97) NOT NULL,
-        email VARCHAR(50) UNIQUE,
-        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )";
-      $db_conn->query($sql);
-      debug_to_console("Table $tbname not found. Table $tbname created.",1);
-    }
-    catch(Throwable $e)
-    {
-      $e = test_escape_char($e);
-      debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
-    }
-  }
-}
-//--------------------------End of insertion to table--------------------------
-
-//The connection will be closed automatically when the script ends. To close the connection before, use the following:
-$db_conn->close(); 
 ?> 
 
 </body>

@@ -29,3 +29,6 @@ https://stackoverflow.com/questions/4620391/mysql-and-php-insert-null-rather-tha
 https://www.youtube.com/watch?v=5L9UhOnuos0
 https://www.w3schools.com/tags/att_input_checked.asp
 https://watercss.kognise.dev/
+https://www.php.net/manual/en/function.md5.php
+https://www.w3schools.com/php/php_mysql_prepared_statements.asp
+https://www.w3schools.com/php/php_variables_scope.asp
