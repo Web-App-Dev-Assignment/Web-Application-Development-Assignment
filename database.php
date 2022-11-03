@@ -48,6 +48,7 @@ catch(Throwable $e)
 
 //--------------------------Inserting to the table--------------------------
 function insert_to_table($name, $username, $password, $email){
+  
   try
   {
     global $tbname, $db_conn;
@@ -62,8 +63,44 @@ function insert_to_table($name, $username, $password, $email){
       $stmt->prepare($sql);
     }
     catch(Throwable $e){
-      $e = test_escape_char($e);
-      debug_to_console("Error preparing the SQL code, please check the SQL code. \\nError:\\n$e",1);
+      debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+      debug_to_console("Error preparing the SQL code. \\nError:\\n" . test_escape_char($e),1);
+      
+      if($db_conn->errno === 1146)//1146 Table doesn't exist
+      {
+        debug_to_console("Table $tbname doesn\\'t exists.", 1);
+        try
+        {
+          $sql_table = "CREATE TABLE $tbname
+          (
+            id VARCHAR(32) NOT NULL PRIMARY KEY,
+            name VARCHAR(128),
+            username VARCHAR(128) NOT NULL UNIQUE,
+            pw VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE,
+            reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          )";
+          $db_conn->query($sql_table);
+          $stmt->prepare($sql);
+          debug_to_console("Table $tbname not found. Table $tbname created.",1);
+        }
+        catch(Throwable $e)
+        {
+          debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+          if ($db_conn->errno === 1050)//1050 duplicate table
+          {
+            debug_to_console("Table $tbname already exists. \\nError:\\n" . test_escape_char($e),1);
+          }
+          else
+          {
+            debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+          }
+        }
+      }
+      else
+      {
+        debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+      }
     }
 
     $stmt->bind_param("sssss", $id, $name, $username, $hash, $email);
@@ -75,28 +112,14 @@ function insert_to_table($name, $username, $password, $email){
     }
     catch(Throwable $e)
     {
-      $e = test_escape_char($e);
-      debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n$e",1);
-
-      try
+      debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+      if($db_conn->errno === 1062)//1062 duplicate Unique information
       {
-        $sql = "CREATE TABLE $tbname
-        (
-          id VARCHAR(32) NOT NULL PRIMARY KEY,
-          name VARCHAR(128),
-          username VARCHAR(128) NOT NULL UNIQUE,
-          pw VARCHAR(255) NOT NULL,
-          email VARCHAR(255) UNIQUE,
-          reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )";
-        $db_conn->query($sql);
-        $stmt->execute();
-        debug_to_console("Table $tbname not found. Table $tbname created.",1);
+        debug_to_console("Duplicate Unique entry. \\nError:\\n" . test_escape_char($e),1);
       }
-      catch(Throwable $e)
+      else
       {
-        $e = test_escape_char($e);
-        debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
+        debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n" . test_escape_char($e),2);
       }
     }
 
@@ -106,8 +129,8 @@ function insert_to_table($name, $username, $password, $email){
   }
   catch(Throwable $e)
   {
-    $e = test_escape_char($e);
-    debug_to_console("$e",2);
+    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
   }
 }
 //--------------------------End of insertion to table--------------------------

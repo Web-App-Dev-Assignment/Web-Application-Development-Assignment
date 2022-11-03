@@ -32,3 +32,4 @@ https://watercss.kognise.dev/
 https://www.php.net/manual/en/function.md5.php
 https://www.w3schools.com/php/php_mysql_prepared_statements.asp
 https://www.w3schools.com/php/php_variables_scope.asp
+https://mariadb.com/kb/en/mariadb-error-codes/
