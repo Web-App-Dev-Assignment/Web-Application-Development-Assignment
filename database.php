@@ -56,44 +56,64 @@ function insert_to_table($name, $username, $password, $email){
     $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
     VALUES ( ?, NULLIF(?,''), ?, ?, NULLIF(?,''))";
     $stmt = $db_conn->stmt_init();
-    $stmt->prepare($sql);
+
+    try
+    {
+      $stmt->prepare($sql);
+    }
+    catch(Throwable $e){
+      $e = test_escape_char($e);
+      debug_to_console("Error preparing the SQL code, please check the SQL code. \\nError:\\n$e",1);
+    }
 
     $stmt->bind_param("sssss", $id, $name, $username, $hash, $email);
-    $stmt->execute();
+
+    try
+    {
+      $stmt->execute();
+      debug_to_console("Insertion into table $tbname success!",0);
+    }
+    catch(Throwable $e)
+    {
+      $e = test_escape_char($e);
+      debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n$e",1);
+
+      try
+      {
+        $sql = "CREATE TABLE $tbname
+        (
+          id VARCHAR(32) NOT NULL PRIMARY KEY,
+          name VARCHAR(128),
+          username VARCHAR(128) NOT NULL UNIQUE,
+          pw VARCHAR(255) NOT NULL,
+          email VARCHAR(255) UNIQUE,
+          reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )";
+        $db_conn->query($sql);
+        $stmt->execute();
+        debug_to_console("Table $tbname not found. Table $tbname created.",1);
+      }
+      catch(Throwable $e)
+      {
+        $e = test_escape_char($e);
+        debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
+      }
+    }
 
     //$sql = "INSERT INTO $tbname (id,name ,username, pw, email)
     //VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
     //$db_conn->query($sql);
-    debug_to_console("Insertion into table $tbname success!",0);
   }
   catch(Throwable $e)
   {
     $e = test_escape_char($e);
     debug_to_console("$e",2);
-    try
-    {
-      $sql = "CREATE TABLE $tbname
-      (
-        id VARCHAR(32) NOT NULL PRIMARY KEY,
-        name VARCHAR(128),
-        username VARCHAR(128) NOT NULL UNIQUE,
-        pw VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE,
-        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )";
-      $db_conn->query($sql);
-      debug_to_console("Table $tbname not found. Table $tbname created.",1);
-    }
-    catch(Throwable $e)
-    {
-      $e = test_escape_char($e);
-      debug_to_console("Table $tbname already exists. Try checking the sql code. \\nError:\\n$e",2);
-    }
   }
 }
 //--------------------------End of insertion to table--------------------------
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:
+//$stmt->close();
 //$db_conn->close(); 
 
 return $db_conn;
