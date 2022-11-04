@@ -12,7 +12,7 @@
 <body>  
 
 <?php
-include_once __DIR__ . "/Functions.php";
+include_once __DIR__ . "/functions.php";
 $db_conn = include_once __DIR__ . "/database.php";
 // define variables and set to empty values
 $usernameErr = $passwordErr = $passwordConfirmationErr = $nameErr = $emailErr = $genderErr = $websiteErr = "";
@@ -103,27 +103,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 }
 ?>
 
-<h2>PHP Form Validation Example</h2>
+<h2>Signup</h2>
 <p><span class="error">* required field</span></p>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Name: <input type="text" name="name" value="<?php echo $name;?>">
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>  
-  Username: <input type="text" name="username" value="<?php echo $username;?>">
+  Username: <input type="text" name="username" value="<?php echo htmlspecialchars($username);?>">
   <span class="error">* <?php echo $usernameErr;?></span>
   <br><br>
-  Password: <input type="password" name="password" value="<?php echo $password;?>" id="password">
+  Password: <input type="password" name="password" value="<?php echo htmlspecialchars($password);?>" id="password">
   <span class="error">* <?php echo $passwordErr;?></span><br>
   <input type="checkbox" onclick="passwordVisibility('password')" name="passwordVisibilityCheckbox" <?php if(!empty($_POST['passwordVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
-  Password Confirmation: <input type="password" name="passwordConfirmation" value="<?php echo $passwordConfirmation;?>" id="passwordConfirmation">
+  Password Confirmation: <input type="password" name="passwordConfirmation" value="<?php echo htmlspecialchars($passwordConfirmation);?>" id="passwordConfirmation">
   <span class="error">* <?php echo $passwordConfirmationErr;?></span><br>
   <input type="checkbox" onclick="passwordVisibility('passwordConfirmation')" name="passwordConfirmationVisibilityCheckbox" <?php if(!empty($_POST['passwordConfirmationVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
-  E-mail: <input type="text" name="email" value="<?php echo $email;?>">
+  E-mail: <input type="text" name="email" value="<?php echo htmlspecialchars($email);?>">
   <span class="error">* <?php echo $emailErr;?></span>
   <br><br>
-  Website: <input type="text" name="website" value="<?php echo $website;?>">
+  Website: <input type="text" name="website" value="<?php echo htmlspecialchars($website);?>">
   <span class="error"><?php echo $websiteErr;?></span>
   <br><br>
   Gender:

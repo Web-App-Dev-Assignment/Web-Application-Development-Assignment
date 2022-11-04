@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/Functions.php";
+include_once __DIR__ . "/functions.php";
 //Under the xampp control panel, ensure that the module Apache and MySQL has been started
 //Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
 $host = "localhost";
@@ -109,6 +109,8 @@ function insert_to_table($name, $username, $password, $email){
     {
       $stmt->execute();
       debug_to_console("Insertion into table $tbname success!",0);
+      header("Location: signup-success.html");
+      exit;
     }
     catch(Throwable $e)
     {
