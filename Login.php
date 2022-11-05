@@ -21,7 +21,7 @@ try
   
     if($user)
     {
-      if(password_verify($_POST["password"], $user["password_hash"]))
+      if(password_verify($_POST["password"], $user["password"]))
       {
         debug_to_console("Login successful.", 0);
         session_start();

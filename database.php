@@ -54,7 +54,7 @@ function insert_to_table($name, $username, $password, $email){
     global $tbname, $db_conn;
     $id = md5(uniqid());
     $hash = password_hash($password,PASSWORD_ARGON2ID);
-    $sql = "INSERT INTO $tbname (id,name ,username, pw, email)
+    $sql = "INSERT INTO $tbname (id,name ,username, password, email)
     VALUES ( ?, NULLIF(?,''), ?, ?, NULLIF(?,''))";
     $stmt = $db_conn->stmt_init();
 
@@ -76,7 +76,7 @@ function insert_to_table($name, $username, $password, $email){
             id VARCHAR(32) NOT NULL PRIMARY KEY,
             name VARCHAR(128),
             username VARCHAR(128) NOT NULL UNIQUE,
-            pw VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE,
             reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )";
@@ -109,7 +109,7 @@ function insert_to_table($name, $username, $password, $email){
     {
       $stmt->execute();
       debug_to_console("Insertion into table $tbname success!",0);
-      //header("Location: signup-success.html");
+      header("Location: signup-success.html");
       //exit;
     }
     catch(Throwable $e)
