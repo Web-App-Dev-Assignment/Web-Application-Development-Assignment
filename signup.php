@@ -19,15 +19,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   if (empty($_POST["username"])) {
     $usernameErr = "Username is required";
   } else {
-    $username = test_input($_POST["username"]);
-    //also need to check if username is taken
+    $username = $_POST["username"];
+    try
+    {
+      $sql = sprintf("SELECT * FROM $tbname 
+      WHERE username = '%s'",
+      $db_conn->real_escape_string($_POST["username"]));
+    
+      $result = $db_conn->query($sql);
+      $user = $result->fetch_assoc();
+
+      if($user)
+      {
+        $usernameErr = "Username has already been taken.";
+      }
+    }
+    catch(Throwable $e)
+    {
+      debug_to_console(test_escape_char($e), 0);
+    }
   }
   if (empty($_POST["password"])) {
     $passwordErr = "Password is required";
   } else {
     $password = $_POST["password"];
-    // check if name only contains letters and whitespace
-    //print_r($_POST);
     if(strlen($_POST["password"])<8 || strlen($_POST["password"])>16){
       $passwordErr = "Password must be at least 8-16 characters.";
     }
@@ -57,13 +72,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   }
     
     if (empty($_POST["email"])) {
-        $emailErr = "";
+        //$emailErr = "";
         //$emailErr = "Email is required";
     } else {
         $email = test_input($_POST["email"]);
         // check if e-mail address is well-formed
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = "Invalid email format";
+        }
+        else{
+          try
+          {
+            $sql = sprintf("SELECT * FROM $tbname
+            WHERE email = '%s'",
+            $db_conn->real_escape_string($_POST["email"]));
+          
+            $result = $db_conn->query($sql);
+            $user = $result->fetch_assoc();
+
+            if($user)
+            {
+              $emailErr = "Email has already been taken.";
+            }
+          }
+          catch(Throwable $e)
+          {
+            debug_to_console(test_escape_char($e), 0);
+          }
         }
     }
         

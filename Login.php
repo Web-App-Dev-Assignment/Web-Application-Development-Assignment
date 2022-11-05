@@ -8,7 +8,7 @@ try
   {
     $db_conn = require_once __DIR__ . "/database.php";
   
-    $sql = sprintf("SELECT * FROM user 
+    $sql = sprintf("SELECT * FROM $tbname 
     WHERE username = '%s'",
     $db_conn->real_escape_string($_POST["username"]));
   
