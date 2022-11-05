@@ -15,8 +15,8 @@ if (isset($SESSION["user_id"]))
 
 session_start();
 
-//print_r($_SESSION);
-debug_to_console($_SESSION, 0);
+print_r($_SESSION);
+//debug_to_console(, 0);
 
 ?>
 
@@ -38,7 +38,7 @@ debug_to_console($_SESSION, 0);
       <p>Hello <?= htmlspecialchars($user["name"])?></p>
       <p><a href="logout.php">Log out</a></p>
     <?php else: ?>
-            <p><a href="login.php">Log in</a> or <a href="signup.html">sign up</a></p>
+            <p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>
     <?php endif; ?>
 
 </body>

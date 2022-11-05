@@ -1,6 +1,9 @@
 <?php
 
-$db_conn = require __DIR__ . "/database.php";
+$db_conn = require_once __DIR__ . "/database.php";
+include_once __DIR__ . "/function.php";
+
+debug_to_console("validation called");
 
 $sql = sprintf("SELECT * FROM user
                 WHERE username = '%s'",
