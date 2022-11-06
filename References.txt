@@ -41,3 +41,4 @@ https://www.w3schools.com/sql/sql_update.asp
 https://www.w3schools.com/mysql/mysql_update.asp
 https://www.w3schools.com/sql/sql_operators.asp
 https://www.w3schools.com/sql/func_sqlserver_nullif.asp
+https://www.w3schools.com/sql/sql_delete.asp
