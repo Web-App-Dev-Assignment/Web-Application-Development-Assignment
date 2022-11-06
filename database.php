@@ -137,6 +137,169 @@ function insert_to_table($name, $username, $password, $email){
 }
 //--------------------------End of insertion to table--------------------------
 
+//--------------------------Updating to the table--------------------------
+function update_table($id, $name, $username, $password, $email)
+{
+  try
+  {
+    $usernameErr = username_condition($username);
+    $passwordErr = password_condition($password);
+    $emailErr = email_condition($email);
+    
+    $sql = "UPDATE $tbname
+    SET name = $db_conn->real_escape_string($name)";
+
+    if(empty($usernameErr))
+    {
+      $sql .= ", username = $db_conn->real_escape_string($username)";
+
+    }
+    if(empty($passwordErr))
+    {
+      $sql .= ", password = $db_conn->real_escape_string($password)";
+
+    }
+    if(empty($emailErr))
+    {
+      $sql .= ", email = $db_conn->real_escape_string($email)";
+
+    }
+    $sql .= "WHERE id = $id";
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($e), 0);
+  }
+}
+//--------------------------End of update to table--------------------------
+
+//--------------------------Retrieving current user data--------------------------
+function retrieve_current_user_data()
+{
+  include_once __DIR__ . "/index.php";
+  try
+  {
+    if (isset($user))
+    {
+      return $user;
+    }
+
+    // if (isset($_SESSION["user_id"]))
+    // {
+    //   $sql = "SELECT * FROM $tbname WHERE id = {$_SESSION["user_id"]}";
+    //   $result = $db_conn->query($sql);
+  
+    //   $user = $result->fetch_assoc();
+    // }
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($e), 0);
+  }
+}
+//--------------------------End Retrieving current user data--------------------------
+
+function delete_user_account()
+{
+  include_once __DIR__ . "/index.php";
+  try
+  {
+    if (isset($user))
+    {
+      //return $user;
+    }
+
+    // if (isset($_SESSION["user_id"]))
+    // {
+    //   $sql = "SELECT * FROM $tbname WHERE id = {$_SESSION["user_id"]}";
+    //   $result = $db_conn->query($sql);
+  
+    //   $user = $result->fetch_assoc();
+    // }
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($e), 0);
+  }
+}
+
+//format of the username condition
+function username_condition($username)
+{
+  try
+  {
+    $sql = sprintf("SELECT * FROM $tbname 
+    WHERE username = '%s'",
+    $db_conn->real_escape_string($_POST["username"]));
+  
+    $result = $db_conn->query($sql);
+    $user = $result->fetch_assoc();
+
+    if($user)
+    {
+      $usernameErr = "Username has already been taken.";
+    }
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($e), 0);
+  }
+  return $usernameErr;
+}
+
+//format of the password condition
+function password_condition($password)
+{
+  if(strlen($password)<8 || strlen($password)>16){
+    $passwordErr = "Password must be at least 8-16 characters.";
+  }
+
+  else if (!preg_match("/[a-zA-Z]/", $password)) {
+    $passwordErr = "Password must contain at least one letter.";
+    //need toggle password visibility, need ensure user type 8~16 char with special character
+  }
+  
+  else if (!preg_match("/[0-9]/", $password)) {
+    $passwordErr = "Password must contain at least one number.";
+  }
+  else if (!preg_match("/[^A-Za-z0-9]/", $password)){
+    $passwordErr = "Password must contain at least one special character.";
+  }
+  return $passwordErr;
+}
+
+//format of the email condition
+function email_condition($email)
+{
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+  {
+    $emailErr = "Invalid email format";
+  }
+  else
+  {
+    try
+    {
+      $sql = sprintf("SELECT * FROM $tbname
+      WHERE email = '%s'",
+      $db_conn->real_escape_string($_POST["email"]));
+    
+      $result = $db_conn->query($sql);
+      $user = $result->fetch_assoc();
+
+      if($user)
+      {
+        $emailErr = "Email has already been taken.";
+      }
+    }
+    catch(Throwable $e)
+    {
+      debug_to_console(test_escape_char($e), 0);
+    }
+  }
+  
+  return $emailErr;
+}
+
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:
 //$stmt->close();
 //$db_conn->close(); 

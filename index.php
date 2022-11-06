@@ -1,12 +1,12 @@
 <?php
 include_once __DIR__ . "/functions.php";
 
-if (isset($SESSION["user_id"]))
+if (isset($_SESSION["user_id"]))
 {
     $db_conn = include_once __DIR__ . "/database.php";
 
     $sql = "SELECT * FROM $tbname
-    WHERE id = {$SESSION["user_id"]}";
+    WHERE id = {$_SESSION["user_id"]}";
 
     $result = $db_conn->query($sql);
 
