@@ -201,21 +201,14 @@ function retrieve_current_user_data()
 
 function delete_user_account()
 {
-  include_once __DIR__ . "/index.php";
   try
   {
-    if (isset($user))
+    if (isset($_SESSION["user_id"]))
     {
-      //return $user;
+      $sql = "DELETE FROM $tbname WHERE id = {$_SESSION["user_id"]}";
+      $db_conn->query($sql);
+      header("Location: index.php");
     }
-
-    // if (isset($_SESSION["user_id"]))
-    // {
-    //   $sql = "SELECT * FROM $tbname WHERE id = {$_SESSION["user_id"]}";
-    //   $result = $db_conn->query($sql);
-  
-    //   $user = $result->fetch_assoc();
-    // }
   }
   catch(Throwable $e)
   {
