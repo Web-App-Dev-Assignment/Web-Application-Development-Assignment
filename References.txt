@@ -42,3 +42,6 @@ https://www.w3schools.com/mysql/mysql_update.asp
 https://www.w3schools.com/sql/sql_operators.asp
 https://www.w3schools.com/sql/func_sqlserver_nullif.asp
 https://www.w3schools.com/sql/sql_delete.asp
+https://php.watch/versions/8.1/mysqli-error-mode
+https://www.w3schools.com/sql/sql_foreignkey.asp
+https://www.w3schools.com/sql/sql_ref_foreign_key.asp

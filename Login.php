@@ -44,6 +44,10 @@ try
 catch(Throwable $e)
 {
   debug_to_console(test_escape_char($e), 0);
+  if($db_conn->errno === 1146)//1146 Table doesn't exist
+  {
+    debug_to_console("Login unsuccessful.", 1);
+  }
 }
 
 

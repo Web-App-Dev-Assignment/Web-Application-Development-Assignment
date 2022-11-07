@@ -73,7 +73,7 @@ function insert_to_table($name, $username, $password, $email){
         {
           $sql_table = "CREATE TABLE $tbname
           (
-            id VARCHAR(32) NOT NULL PRIMARY KEY,
+            id VARCHAR(128) NOT NULL PRIMARY KEY,
             name VARCHAR(128),
             username VARCHAR(128) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
@@ -291,6 +291,64 @@ function email_condition($email)
   }
   
   return $emailErr;
+}
+
+function create_game_database()
+{
+  $game_db = "game";
+  $chat_db = "chat";
+
+  try
+  {
+    $sql_table = "CREATE TABLE $game_db
+    (
+      GameId VARCHAR(32) NOT NULL PRIMARY KEY,
+      GameColor VARCHAR(128) NOT NULL,
+      GameOpponent VARCHAR(128) NOT NULL,
+      MoveString VARCHAR(255) NOT NULL,
+      latestMove VARCHAR(255) NOT NULL,
+      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
+    )";
+    $db_conn->query($sql_table);
+    debug_to_console("Table $game_db not found. Table $game_db created.",1);
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    if ($db_conn->errno === 1050)//1050 duplicate table
+    {
+      debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
+    }
+    else
+    {
+      debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+    }
+  }
+
+  try
+  {
+    $sql_table = "CREATE TABLE $chat_db
+    (
+      ChatId VARCHAR(128) NOT NULL PRIMARY KEY,
+      ChatText VARCHAR(255) NOT NULL,
+      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
+      GameId VARCHAR(128) FOREIGN KEY REFERENCES $game_db(GameId)
+    )";
+    $db_conn->query($sql_table);
+    debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
+  }
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    if ($db_conn->errno === 1050)//1050 duplicate table
+    {
+      debug_to_console("Table $chat_db already exists. \\nError:\\n" . test_escape_char($e),1);
+    }
+    else
+    {
+      debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+    }
+  }
 }
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:
