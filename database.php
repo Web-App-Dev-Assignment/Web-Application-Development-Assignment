@@ -7,6 +7,8 @@ $hostusername = "root";
 $hostpassword = "";
 $dbname = "myDB";
 $tbname = "Users";
+$game_db = "game";
+$chat_db = "chat";
 
 //--------------------------Connecting to host code--------------------------
 try
@@ -219,6 +221,8 @@ function delete_user_account()
 //format of the username condition
 function username_condition($username)
 {
+  global $tbname, $db_conn;
+  $usernameErr = "";
   try
   {
     $sql = sprintf("SELECT * FROM $tbname 
@@ -243,6 +247,7 @@ function username_condition($username)
 //format of the password condition
 function password_condition($password)
 {
+  $passwordErr = "";
   if(strlen($password)<8 || strlen($password)>16){
     $passwordErr = "Password must be at least 8-16 characters.";
   }
@@ -264,6 +269,8 @@ function password_condition($password)
 //format of the email condition
 function email_condition($email)
 {
+  global $tbname, $db_conn;
+  $emailErr = "";
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
   {
     $emailErr = "Invalid email format";
@@ -295,8 +302,7 @@ function email_condition($email)
 
 function create_game_database()
 {
-  $game_db = "game";
-  $chat_db = "chat";
+  global $tbname, $db_conn, $game_db, $chat_db;
 
   try
   {
