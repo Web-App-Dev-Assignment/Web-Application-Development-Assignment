@@ -7,79 +7,30 @@ function login()
   $.ajax
   ({
   type:'post',
-  url:'login.php',
+  url:'do_login.php',
   data:{
    username:username,
    password:password
   },
   success:function(response) {
-  if(response=="success")
+  //if(response=="success")
+  if(response.indexOf('success') >= 0)
   {
     window.location.href="index.php";
+    alert("Correct Details");
+    console.log(response);
   }
   else
   {
     alert("Wrong Details");
+    console.log(response);
   }
   }
-  });
+   });
 }
 </script>
 
-<?php
-include_once __DIR__ . "/functions.php";
 
-$is_invalid = false;
-try
-{
-  if ($_SERVER["REQUEST_METHOD"] === "POST")
-  {
-    $db_conn = require_once __DIR__ . "/database.php";
-  
-    $sql = sprintf("SELECT * FROM $tbname 
-    WHERE username = '%s'",
-    $db_conn->real_escape_string($_POST["username"]));
-  
-    $result = $db_conn->query($sql);
-  
-    $user = $result->fetch_assoc();
-  
-    // var_dump($user);
-    // exit;
-  
-    if($user)
-    {
-      if(password_verify($_POST["password"], $user["password"]))
-      {
-        debug_to_console("Login successful.", 0);
-        session_start();
-        session_regenerate_id();//prevent session fixation attack
-  
-        $_SESSION["user_id"] = $user["id"];
-  
-        header("Location: index.php");
-        exit;
-      }
-      else
-      {
-        debug_to_console("Login unsuccessful.", 1);
-      }
-    }
-  
-    $is_invalid = true;
-  }
-}
-catch(Throwable $e)
-{
-  debug_to_console(test_escape_char($e), 0);
-  if($db_conn->errno === 1146)//1146 Table doesn't exist
-  {
-    debug_to_console("Login unsuccessful.", 1);
-  }
-}
-
-
-?>
 
 <!DOCTYPE HTML>  
 <html>
@@ -87,6 +38,7 @@ catch(Throwable $e)
   <title>Login</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 .error {color: #FF0000;}
 </style>
@@ -94,18 +46,16 @@ catch(Throwable $e)
 <body>
     <h1>Login</h1>
 
-    <?php if ($is_invalid): ?>
-      <em>Invalid login</em>
-    <?php endif; ?>
+    
 
     <form method="post">
       <label for="username">Username</label>
-      <input type="username" name="username" id="username value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" placeholder="Enter your username.">
+      <input type="username" name="username" id="username" value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" placeholder="Enter your username.">
 
       <label for="password">Password</label>
       <input type="password" name="password" id="password" value="<?= htmlspecialchars($_POST["password"] ?? "") ?>" placeholder="Enter your password.">
 
-      <button>Log in</button>
+      <button type="button" onclick="login()">Login</button>
     </form>
 </body>
 </html>

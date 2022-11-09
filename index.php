@@ -1,19 +1,26 @@
 <?php
 include_once __DIR__ . "/functions.php";
 
-if (isset($_SESSION["user_id"]))
+session_start();
+
+try
 {
-    $db_conn = include_once __DIR__ . "/database.php";
-
-    $sql = "SELECT * FROM $tbname
-    WHERE id = {$_SESSION["user_id"]}";
-
-    $result = $db_conn->query($sql);
-
-    $user = $result->fetch_assoc();
+  if (isset($_SESSION["user_id"]))
+  {
+      $db_conn = include_once __DIR__ . "/database.php";
+      $sql = "SELECT * FROM $tbname
+      WHERE id = '{$_SESSION["user_id"]}'";
+  
+      $result = $db_conn->query($sql);
+  
+      $user = $result->fetch_assoc();
+  }
+}
+catch(Throwable $e)
+{
+  debug_to_console(test_escape_char($e), 0);
 }
 
-session_start();
 
 print_r($_SESSION);
 //debug_to_console(, 0);

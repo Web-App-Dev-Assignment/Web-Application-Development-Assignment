@@ -1,38 +1,38 @@
 <script>
-function signup()
-{
-  var name=$("#name").val();
-  var username=$("#username").val();
-  var password=$("#password").val();
-  var email=$("#email").val();
-  var gender=$("#gender").val();
+// function signup()
+// {
+//   var name=$("#name").val();
+//   var username=$("#username").val();
+//   var password=$("#password").val();
+//   var email=$("#email").val();
+//   var gender=$("#gender").val();
 
 
 
-  $.ajax
-  ({
-  type:'post',
-  url:'signup.php',
-  data:{
-   name:name,
-   username:username,
-   password:password,
-   email:email,
-   gemder:gender
+//   $.ajax
+//   ({
+//   type:'post',
+//   url:'signup.php',
+//   data:{
+//    name:name,
+//    username:username,
+//    password:password,
+//    email:email,
+//    gemder:gender
    
-  },
-  success:function(response) {
-  if(response=="success")
-  {
-    window.location.href="index.php";
-  }
-  else
-  {
-    alert("Wrong Details");
-  }
-  }
-  });
-}
+//   },
+//   success:function(response) {
+//   if(response=="success")
+//   {
+//     window.location.href="index.php";
+//   }
+//   else
+//   {
+//     alert("Wrong Details");
+//   }
+//   }
+//   });
+// }
 </script>
 
 <?php
@@ -45,7 +45,7 @@ $username = $password = $passwordConfirmation = $name = $email = $gender = $webs
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
   if (empty($_POST["name"])) {
-    $nameErr = "Name is required";
+    //$nameErr = "Name is required";
   } else {
     $name = test_input($_POST["name"]);
     // check if name only contains letters and whitespace
@@ -144,10 +144,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   <span class="error"><?php echo $websiteErr;?></span>
   <br><br>
   Gender:
-  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male">Male
-  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
-  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
-  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="prefer_not_to_say") echo "checked";?> value="prefer_not_to_say">Prefer not to say  
+  <input type="radio" name="gender" id="gender1" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male">Male
+  <input type="radio" name="gender" id="gender2" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
+  <input type="radio" name="gender" id="gender3" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
+  <input type="radio" name="gender" id="gender4" <?php if (isset($gender) && $gender=="prefer_not_to_say") echo "checked";?> value="prefer_not_to_say">Prefer not to say  
   <span class="error">* <?php echo $genderErr;?></span>
   <br><br>
   <input type="submit" name="submit" value="Submit">  
