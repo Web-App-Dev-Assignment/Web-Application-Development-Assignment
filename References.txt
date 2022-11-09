@@ -45,3 +45,7 @@ https://www.w3schools.com/sql/sql_delete.asp
 https://php.watch/versions/8.1/mysqli-error-mode
 https://www.w3schools.com/sql/sql_foreignkey.asp
 https://www.w3schools.com/sql/sql_ref_foreign_key.asp
+https://api.jquery.com/jquery.ajax/
+https://learn.jquery.com/using-jquery-core/document-ready/
+https://talkerscode.com/webtricks/ajax-login-form-using-jquery-php-and-mysql.php
+https://www.youtube.com/watch?v=bSUPeJ6bmLc

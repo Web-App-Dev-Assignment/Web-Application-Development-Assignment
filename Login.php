@@ -1,4 +1,32 @@
-﻿<?php
+﻿<script>
+function login()
+{
+  var username=$("#username").val();
+  var password=$("#password").val();
+
+  $.ajax
+  ({
+  type:'post',
+  url:'login.php',
+  data:{
+   username:username,
+   password:password
+  },
+  success:function(response) {
+  if(response=="success")
+  {
+    window.location.href="index.php";
+  }
+  else
+  {
+    alert("Wrong Details");
+  }
+  }
+  });
+}
+</script>
+
+<?php
 include_once __DIR__ . "/functions.php";
 
 $is_invalid = false;
@@ -25,7 +53,7 @@ try
       {
         debug_to_console("Login successful.", 0);
         session_start();
-        session_regenerate_id();
+        session_regenerate_id();//prevent session fixation attack
   
         $_SESSION["user_id"] = $user["id"];
   
@@ -71,11 +99,11 @@ catch(Throwable $e)
     <?php endif; ?>
 
     <form method="post">
-      <label for="username">username</label>
-      <input type="username" name="username" id="username value="<?= htmlspecialchars($_POST["username"] ?? "") ?>">
+      <label for="username">Username</label>
+      <input type="username" name="username" id="username value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" placeholder="Enter your username.">
 
-      <label for="password">password</label>
-      <input type="password" name="password" id="password" value="<?= htmlspecialchars($_POST["password"] ?? "") ?>">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" value="<?= htmlspecialchars($_POST["password"] ?? "") ?>" placeholder="Enter your password.">
 
       <button>Log in</button>
     </form>
