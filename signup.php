@@ -1,3 +1,40 @@
+<script>
+function signup()
+{
+  var name=$("#name").val();
+  var username=$("#username").val();
+  var password=$("#password").val();
+  var email=$("#email").val();
+  var gender=$("#gender").val();
+
+
+
+  $.ajax
+  ({
+  type:'post',
+  url:'signup.php',
+  data:{
+   name:name,
+   username:username,
+   password:password,
+   email:email,
+   gemder:gender
+   
+  },
+  success:function(response) {
+  if(response=="success")
+  {
+    window.location.href="index.php";
+  }
+  else
+  {
+    alert("Wrong Details");
+  }
+  }
+  });
+}
+</script>
+
 <?php
 include_once __DIR__ . "/functions.php";
 $db_conn = include_once __DIR__ . "/database.php";
@@ -86,31 +123,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <h2>Signup</h2>
 <p><span class="error">* required field</span></p>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Name: <input type="text" name="name" value="<?php echo $name;?>">
+  Name: <input type="text" name="name" id="name" value="<?php echo $name;?>" placeholder="Enter your name.">
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>  
-  Username: <input type="text" name="username" value="<?php echo htmlspecialchars($username);?>">
+  Username: <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($username);?>" placeholder="Enter your username.">
   <span class="error">* <?php echo $usernameErr;?></span>
   <br><br>
-  Password: <input type="password" name="password" value="<?php echo htmlspecialchars($password);?>" id="password">
+  Password: <input type="password" name="password" id="password" value="<?php echo htmlspecialchars($password);?>" placeholder="Enter your password.">
   <span class="error">* <?php echo $passwordErr;?></span><br>
   <input type="checkbox" onclick="passwordVisibility('password')" name="passwordVisibilityCheckbox" <?php if(!empty($_POST['passwordVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
-  Password Confirmation: <input type="password" name="passwordConfirmation" value="<?php echo htmlspecialchars($passwordConfirmation);?>" id="passwordConfirmation">
+  Password Confirmation: <input type="password" name="passwordConfirmation" id="passwordConfirmation" value="<?php echo htmlspecialchars($passwordConfirmation);?>" placeholder="Re-enter your password.">
   <span class="error">* <?php echo $passwordConfirmationErr;?></span><br>
   <input type="checkbox" onclick="passwordVisibility('passwordConfirmation')" name="passwordConfirmationVisibilityCheckbox" <?php if(!empty($_POST['passwordConfirmationVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
-  E-mail: <input type="text" name="email" value="<?php echo htmlspecialchars($email);?>">
+  E-mail: <input type="text" name="email" id="email" value="<?php echo htmlspecialchars($email);?>" placeholder="Enter your email.">
   <span class="error">* <?php echo $emailErr;?></span>
   <br><br>
   Website: <input type="text" name="website" value="<?php echo htmlspecialchars($website);?>">
   <span class="error"><?php echo $websiteErr;?></span>
   <br><br>
   Gender:
-  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male">Male
-  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
-  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
-  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="prefer_not_to_say") echo "checked";?> value="prefer_not_to_say">Prefer not to say  
+  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male">Male
+  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
+  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
+  <input type="radio" name="gender" id="gender" <?php if (isset($gender) && $gender=="prefer_not_to_say") echo "checked";?> value="prefer_not_to_say">Prefer not to say  
   <span class="error">* <?php echo $genderErr;?></span>
   <br><br>
   <input type="submit" name="submit" value="Submit">  
