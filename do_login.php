@@ -5,7 +5,8 @@ $is_invalid = false;
 try
 {
 //   if ($_SERVER["REQUEST_METHOD"] === "POST")
-//   {
+  if (isset($_POST['login']))
+   {
     $db_conn = require_once __DIR__ . "/database.php";
   
     $sql = sprintf("SELECT * FROM $tbname 
@@ -29,22 +30,26 @@ try
   
         $_SESSION["user_id"] = $user["id"];
 
-        echo "success";
+        //echo "success";
   
-        header("Location: index.php");
-        exit('success');
+        //header("Location: index.php");
+        exit('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b');
       }
       else
       {
-        echo "fail";
+        //echo "fail";
         
         debug_to_console("Login unsuccessful.", 1);
         exit('fail');
       }
     }
+    else
+    {
+      exit('fail');
+    }
   
     $is_invalid = true;
-//   }
+   }
 }
 catch(Throwable $e)
 {
@@ -53,6 +58,7 @@ catch(Throwable $e)
   {
     debug_to_console("Login unsuccessful.", 1);
   }
+  exit('fail');
 }
 
 

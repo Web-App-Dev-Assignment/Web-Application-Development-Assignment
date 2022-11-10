@@ -50,3 +50,7 @@ https://learn.jquery.com/using-jquery-core/document-ready/
 https://talkerscode.com/webtricks/ajax-login-form-using-jquery-php-and-mysql.php
 https://www.youtube.com/watch?v=bSUPeJ6bmLc
 https://www.youtube.com/watch?v=BmGMnDz9kOA
+https://git-scm.com/
+https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message
+https://www.w3schools.com/jquery/jquery_selectors.asp
+https://www.w3schools.com/jquery/jquery_dom_set.asp
