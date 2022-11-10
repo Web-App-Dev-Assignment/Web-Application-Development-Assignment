@@ -54,3 +54,10 @@ https://git-scm.com/
 https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message
 https://www.w3schools.com/jquery/jquery_selectors.asp
 https://www.w3schools.com/jquery/jquery_dom_set.asp
+https://www.w3schools.com/jsref/jsref_length_string.asp
+https://stackoverflow.com/questions/154059/how-do-i-check-for-an-empty-undefined-null-string-in-javascript
+https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+https://stackoverflow.com/questions/37024149/calling-a-function-everytime-user-types
+https://www.geeksforgeeks.org/how-to-check-whether-a-radio-button-is-selected-with-javascript/
+https://www.geeksforgeeks.org/how-to-get-value-of-selected-radio-button-using-javascript/
+https://stackoverflow.com/questions/2272507/find-out-whether-radio-button-is-checked-with-jquery

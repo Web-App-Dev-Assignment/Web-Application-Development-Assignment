@@ -4,8 +4,8 @@ include_once __DIR__ . "/functions.php";
 $is_invalid = false;
 try
 {
-//   if ($_SERVER["REQUEST_METHOD"] === "POST")
-  if (isset($_POST['login']))
+  //if (isset($_POST['login']))
+  if ($_SERVER["REQUEST_METHOD"] == "POST") 
    {
     $db_conn = require_once __DIR__ . "/database.php";
   
@@ -17,9 +17,6 @@ try
   
     $user = $result->fetch_assoc();
   
-    // var_dump($user);
-    // exit;
-  
     if($user)
     {
       if(password_verify($_POST["password"], $user["password"]))
@@ -29,15 +26,11 @@ try
         session_regenerate_id();//prevent session fixation attack
   
         $_SESSION["user_id"] = $user["id"];
-
-        //echo "success";
   
-        //header("Location: index.php");
         exit('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b');
       }
       else
       {
-        //echo "fail";
         
         debug_to_console("Login unsuccessful.", 1);
         exit('fail');

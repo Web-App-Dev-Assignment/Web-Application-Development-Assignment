@@ -223,25 +223,34 @@ function username_condition($username)
 {
   global $tbname, $db_conn;
   $usernameErr = "";
-  try
-  {
-    $sql = sprintf("SELECT * FROM $tbname 
-    WHERE username = '%s'",
-    $db_conn->real_escape_string($_POST["username"]));
-  
-    $result = $db_conn->query($sql);
-    $user = $result->fetch_assoc();
 
-    if($user)
-    {
-      $usernameErr = "Username has already been taken.";
-    }
-  }
-  catch(Throwable $e)
+  if (empty($username)) 
   {
-    debug_to_console(test_escape_char($e), 0);
+    $usernameErr = "Username is required";
+    return $usernameErr;
+  } 
+  else
+  {
+    try
+    {
+      $sql = sprintf("SELECT * FROM $tbname 
+      WHERE username = '%s'",
+      $db_conn->real_escape_string($_POST["username"]));
+    
+      $result = $db_conn->query($sql);
+      $user = $result->fetch_assoc();
+
+      if($user)
+      {
+        $usernameErr = "Username has already been taken.";
+      }
+    }
+    catch(Throwable $e)
+    {
+      debug_to_console(test_escape_char($e), 0);
+    }
+    return $usernameErr;
   }
-  return $usernameErr;
 }
 
 //format of the password condition
@@ -271,7 +280,11 @@ function email_condition($email)
 {
   global $tbname, $db_conn;
   $emailErr = "";
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+  if (empty($email)) 
+  {
+    return $emailErr;
+  } 
+  else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
   {
     $emailErr = "Invalid email format";
   }

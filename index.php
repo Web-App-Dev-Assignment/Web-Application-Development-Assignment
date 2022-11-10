@@ -22,7 +22,7 @@ catch(Throwable $e)
 }
 
 
-print_r($_SESSION);
+//print_r($_SESSION);
 //debug_to_console(, 0);
 
 ?>

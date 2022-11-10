@@ -32,18 +32,6 @@
 
       <button type="button" id="login">Login</button>
     </form>
-<!--
-    <form method="post" submit="false">
-      <label for="username">Username</label>
-      <input type="username" name="username" id="username" value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" placeholder="Enter your username.">
-
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="<?= htmlspecialchars($_POST["password"] ?? "") ?>" placeholder="Enter your password.">
-
-      <button type="button" onclick="login()">Login</button>
-    </form>
--->
-
 
 </body>
 </html>
@@ -53,9 +41,8 @@
   {
     $("#login").on('click', function()
     {
-      //$("#err").text("testing");
-      var username = $("#username").val();
-      var password=$("#password").val();
+      //var username = $("#username").val();
+      //var password = $("#password").val();
       console.log(username + " , " + password);
 
       $.ajax
@@ -65,62 +52,22 @@
         data:
         {
           login:1,
-          username:username,
-          password:password
+          username:$("#username").val(),
+          password:$("#password").val()
         },
         success:function(response)
         {
-          //console.log(response);
-          
-          //if(response=="success")
           if(response.indexOf('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b') >= 0)
           {
             window.location.href="index.php";
             $("#err").text("*Login success.");
-            //console.log("Correct Details");
           }
           else
           {
             $("#err").text("*Login failed.");
-            //console.log("Wrong Details");
           }
-          // console.log(response);
-          // console.log(username);
-        }//,
-        //dataType: 'text'
+        }
       });
     })
   })
-</script>
-
-<script>
-function loginfunction()
-{
-  var username=$("#username").val();
-  var password=$("#password").val();
-
-  $.ajax
-  ({
-  type:'post',
-  url:'do_login.php',
-  data:{
-   username:username,
-   password:password
-  },
-  success:function(response) {
-  //if(response=="success")
-  if(response.indexOf('success') >= 0)
-  {
-    //window.location.href="index.php";
-    alert("Correct Details");
-  }
-  else
-  {
-    alert("Wrong Details");
-  }
-  console.log(response);
-  console.log(username);
-  }
-   });
-}
 </script>

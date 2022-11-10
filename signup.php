@@ -1,40 +1,3 @@
-<script>
-// function signup()
-// {
-//   var name=$("#name").val();
-//   var username=$("#username").val();
-//   var password=$("#password").val();
-//   var email=$("#email").val();
-//   var gender=$("#gender").val();
-
-
-
-//   $.ajax
-//   ({
-//   type:'post',
-//   url:'signup.php',
-//   data:{
-//    name:name,
-//    username:username,
-//    password:password,
-//    email:email,
-//    gemder:gender
-   
-//   },
-//   success:function(response) {
-//   if(response=="success")
-//   {
-//     window.location.href="index.php";
-//   }
-//   else
-//   {
-//     alert("Wrong Details");
-//   }
-//   }
-//   });
-// }
-</script>
-
 <?php
 include_once __DIR__ . "/functions.php";
 $db_conn = include_once __DIR__ . "/database.php";
@@ -97,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
 
     if (empty($_POST["gender"])) {
-        $genderErr = "Gender is required";
+        $genderErr = "*Gender is required";
     } else {
         $gender = test_input($_POST["gender"]);
     }
@@ -109,12 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
 }
 ?>
+
 <!DOCTYPE HTML>  
 <html>
 <head>
   <title>Signup</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 .error {color: #FF0000;}
 </style>
@@ -127,18 +92,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>  
   Username: <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($username);?>" placeholder="Enter your username.">
-  <span class="error">* <?php echo $usernameErr;?></span>
+  <span class="error" id="usernameErr" value=""></span>
   <br><br>
   Password: <input type="password" name="password" id="password" value="<?php echo htmlspecialchars($password);?>" placeholder="Enter your password.">
-  <span class="error">* <?php echo $passwordErr;?></span><br>
+  <span class="error" id="passwordErr" value=""></span><br>
   <input type="checkbox" onclick="passwordVisibility('password')" name="passwordVisibilityCheckbox" <?php if(!empty($_POST['passwordVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
   Password Confirmation: <input type="password" name="passwordConfirmation" id="passwordConfirmation" value="<?php echo htmlspecialchars($passwordConfirmation);?>" placeholder="Re-enter your password.">
-  <span class="error">* <?php echo $passwordConfirmationErr;?></span><br>
+  <span class="error" id="passwordConfirmationErr" value=""></span><br>
   <input type="checkbox" onclick="passwordVisibility('passwordConfirmation')" name="passwordConfirmationVisibilityCheckbox" <?php if(!empty($_POST['passwordConfirmationVisibilityCheckbox'])){echo "checked";} ?>  >Show Password
   <br><br>
   E-mail: <input type="text" name="email" id="email" value="<?php echo htmlspecialchars($email);?>" placeholder="Enter your email.">
-  <span class="error">* <?php echo $emailErr;?></span>
+  <span class="error" id="emailErr" value=""></span>
   <br><br>
   Website: <input type="text" name="website" value="<?php echo htmlspecialchars($website);?>">
   <span class="error"><?php echo $websiteErr;?></span>
@@ -148,10 +113,220 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   <input type="radio" name="gender" id="gender2" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
   <input type="radio" name="gender" id="gender3" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
   <input type="radio" name="gender" id="gender4" <?php if (isset($gender) && $gender=="prefer_not_to_say") echo "checked";?> value="prefer_not_to_say">Prefer not to say  
-  <span class="error">* <?php echo $genderErr;?></span>
+  <span class="error"><?php echo $genderErr;?></span>
   <br><br>
-  <input type="submit" name="submit" value="Submit">  
+  <button type="button" id="signup">Signup</button>
 </form>
+
+<script>
+  $(document).ready(function(){
+   $('#username').keyup(function()
+   {
+      console.log("you are typing something...");
+      $.ajax
+      ({
+        type:'post',
+        url:'check_username.php',
+        data:
+        {
+          username:$("#username").val()
+        },
+        success:function(response)
+        {
+          console.log(response);
+          if(response.indexOf('Username has already been taken') >= 0)
+          {
+            $("#usernameErr").text("*Username has already been taken.");
+          }
+          else if(response.indexOf('Username is required') >= 0)
+          {
+            $("#usernameErr").text("*Username is required.");
+          }
+          else
+          {
+            $("#usernameErr").text("");
+          }
+        }
+      });
+   });
+
+   $('#password').keyup(function()
+   {
+      console.log("you are typing something...");
+      //console.log($("#password").val().length);
+      if(!$("#password").val())//redundant
+      {
+        $("#passwordErr").text("*Password is required.");
+      }
+      else if ($("#password").val().length < 8 || $("#password").val().length > 16)
+      {
+        $("#passwordErr").text("*Password must be at least 8-16 characters.");
+      }
+      else if(!$("#password").val().match(/[a-zA-Z]/))
+      {
+        $("#passwordErr").text("*Password must contain at least one letter.");
+      }
+      else if(!$("#password").val().match(/[0-9]/))//same as /\d/
+      {
+        $("#passwordErr").text("*Password must contain at least one number.");
+      }
+      else if(!$("#password").val().match(/[^A-Za-z0-9]/))//same as /\W/
+      {
+        $("#passwordErr").text("*Password must contain at least one special character.");
+      }
+      else
+      {
+        $("#passwordErr").text("");
+      }
+    });
+
+    $('#passwordConfirmation').keyup(function()
+    {
+      console.log("you are typing something...");
+      //console.log($("#passwordConfirmation").val().length);
+      if(!$("#passwordConfirmation").val())//redundant
+      {
+        $("#passwordConfirmationErr").text("*Password confirmation is required.");
+      }
+      else if ($("#password").val() !== $("#passwordConfirmation").val())
+      {
+        $("#passwordConfirmationErr").text("*Password must match.");
+      }
+      else
+      {
+        $("#passwordConfirmationErr").text("");
+      }
+    });
+
+    $('#email').keyup(function()
+    {
+      console.log("you are typing something...");
+      $.ajax
+      ({
+        type:'post',
+        url:'check_email.php',
+        data:
+        {
+          email:$("#email").val()
+        },
+        success:function(response)
+        {
+          console.log(response);
+          if(response.indexOf('Email has already been taken') >= 0)
+          {
+            $("#emailErr").text("*Email has already been taken.");
+          }
+          else if(response.indexOf('Invalid email format') >= 0)
+          {
+            $("#emailErr").text("*Invalid email format.");
+          }
+          else
+          {
+            $("#emailErr").text("");
+          }
+        }
+      });
+    });
+      
+   });
+</script>
+
+<script>
+// function signup()
+// {
+//   var name=$("#name").val();
+//   var username=$("#username").val();
+//   var password=$("#password").val();
+//   var email=$("#email").val();
+//   var gender=$("#gender").val();
+
+
+
+//   $.ajax
+//   ({
+//   type:'post',
+//   url:'signup.php',
+//   data:{
+//    name:name,
+//    username:username,
+//    password:password,
+//    email:email,
+//    gemder:gender
+   
+//   },
+//   success:function(response) {
+//   if(response=="success")
+//   {
+//     window.location.href="index.php";
+//   }
+//   else
+//   {
+//     alert("Wrong Details");
+//   }
+//   }
+//   });
+// }
+</script>
+
+<script>
+  //$("input[name='gender']:checked").val();
+  function checkGenderValue() 
+  {
+    if(!$('gender').val()) 
+    { 
+      console.log("it's checked"); 
+    }
+    var radioButton = document.getElementsByName('gender');
+      
+    for(i = 0; i < radioButton.length; i++) 
+    {
+      if(radioButton[i].checked)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+</script>
+
+<script>
+  $(document).ready(function()
+  {
+    $("#signup").on('click', function()
+    {
+      //var username = $("#username").val();
+      //var password = $("#password").val();
+      //console.log(username + " , " + password);
+      if(!$("#usernameErr").val() && !$("#passwordErr").val() && !$("#passwordConfirmationErr").val() && !$("#emailErr").val() && !$("input[name='gender']:checked").val())
+      {
+        $.ajax
+        ({
+          type:'post',
+          url:'do_signup.php',
+          data:
+          {
+            login:1,
+            username:$("#username").val(),
+            password:$("#password").val()
+          },
+          success:function(response)
+          {
+            if(response.indexOf('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b') >= 0)
+            {
+              window.location.href="index.php";
+              $("#err").text("*Login success.");
+            }
+            else
+            {
+              $("#err").text("*Login failed.");
+            }
+          }
+        });
+      }
+    })
+  })
+</script>
+
 
 <?php
 
