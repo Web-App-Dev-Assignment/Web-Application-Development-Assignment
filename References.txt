@@ -61,3 +61,4 @@ https://stackoverflow.com/questions/37024149/calling-a-function-everytime-user-t
 https://www.geeksforgeeks.org/how-to-check-whether-a-radio-button-is-selected-with-javascript/
 https://www.geeksforgeeks.org/how-to-get-value-of-selected-radio-button-using-javascript/
 https://stackoverflow.com/questions/2272507/find-out-whether-radio-button-is-checked-with-jquery
+https://stackoverflow.com/questions/5142300/javascript-jquery-radio-button-click

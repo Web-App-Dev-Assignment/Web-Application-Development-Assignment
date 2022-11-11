@@ -1,7 +1,5 @@
 <?php
 
-$banana = "banana";
-
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);

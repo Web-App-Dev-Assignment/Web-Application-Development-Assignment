@@ -209,6 +209,7 @@ function delete_user_account()
     {
       $sql = "DELETE FROM $tbname WHERE id = {$_SESSION["user_id"]}";
       $db_conn->query($sql);
+      session_destroy();
       header("Location: index.php");
     }
   }
