@@ -111,7 +111,7 @@ function insert_to_table($name, $username, $password, $email){
     {
       $stmt->execute();
       debug_to_console("Insertion into table $tbname success!",0);
-      header("Location: signup-success.html");
+      //header("Location: signup-success.html");
       //exit;
     }
     catch(Throwable $e)

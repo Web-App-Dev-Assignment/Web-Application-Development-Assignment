@@ -51,13 +51,12 @@
         url:'do_login.php',
         data:
         {
-          login:1,
           username:$("#username").val(),
           password:$("#password").val()
         },
         success:function(response)
         {
-          if(response.indexOf('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b') >= 0)
+          if(response.indexOf('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b') >= 0)
           {
             window.location.href="index.php";
             $("#err").text("*Login success.");

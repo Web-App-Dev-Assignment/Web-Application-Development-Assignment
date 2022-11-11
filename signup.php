@@ -12,7 +12,7 @@
 <body>  
 <h2>Signup</h2>
 <p><span class="error">* required field</span></p>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+<form method="post" submit="false">
   Name: <input type="text" name="name" id="name" value="" placeholder="Enter your name.">
   <span class="error" id="nameErr" value=""></span>
   <br><br>  
@@ -42,6 +42,8 @@
   <span class="error" id="genderErr"></span>
   <br><br>
   <button type="button" id="signup">Signup</button>
+  <br>
+  <span class="error" id="err"></span>
 </form>
 
 <script>
@@ -94,7 +96,7 @@
           {
             $("#usernameErr").text("*Username has already been taken.");
           }
-          else
+          else//redundant
           {
             $("#usernameErr").text("");
           }
@@ -153,6 +155,12 @@
     $('#email').keyup(function()
     {
       console.log("you are typing something...");
+      if(!$("#email").val())
+      {
+        $("#emailErr").text("");
+        return;
+      }
+
       $.ajax
       ({
         type:'post',
@@ -246,7 +254,7 @@
   }
 </script>
 
-<script>
+<script>//might require refinement on the condition
   $(document).ready(function()
   {
     $("#signup").on('click', function()
@@ -256,6 +264,7 @@
       //console.log(username + " , " + password);
       if($("#usernameErr").text() || $("#passwordErr").text() || $("#passwordConfirmationErr").text())
       {
+        console.log("error");
         return;
       }
       else if(!$("#username").val())
@@ -279,16 +288,14 @@
         return;
       }
 
-      else if(!$("#nameErr").text() && !$("#usernameErr").text() && !$("#passwordErr").text() && !$("#passwordConfirmationErr").text() && !$("#emailErr").text() && !$("input[name='gender']:checked").val())
+      else if(!$("#nameErr").text() && !$("#usernameErr").text() && !$("#passwordErr").text() && !$("#passwordConfirmationErr").text() && !$("#emailErr").text() && $("input[name='gender']:checked").val())
       {
-        return;//remember to remove this
         $.ajax
         ({
           type:'post',
           url:'do_signup.php',
           data:
           {
-            signup:1,
             name:$("#name").val(),
             username:$("#username").val(),
             password:$("#password").val(),
@@ -297,10 +304,10 @@
           },
           success:function(response)
           {
-            if(response.indexOf('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b') >= 0)
+            if(response.indexOf('@0^/s&d~v~x2LiN?^signup successk+ZJ[+Nk1QK+b') >= 0)
             {
-              window.location.href="index.php";
               $("#err").text("*Signup success.");
+              window.location.href="index.php";
             }
             else
             {

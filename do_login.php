@@ -6,7 +6,7 @@ try
 {
   //if (isset($_POST['login']))
   if ($_SERVER["REQUEST_METHOD"] == "POST") 
-   {
+  {
     $db_conn = require_once __DIR__ . "/database.php";
   
     $sql = sprintf("SELECT * FROM $tbname 
@@ -27,7 +27,7 @@ try
   
         $_SESSION["user_id"] = $user["id"];
   
-        exit('@0^/s&d~v~x2LiN?^k+ZJ[+Nk1QK+b');
+        exit('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b');
       }
       else
       {
@@ -42,7 +42,7 @@ try
     }
   
     $is_invalid = true;
-   }
+  }
 }
 catch(Throwable $e)
 {
