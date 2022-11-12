@@ -63,3 +63,4 @@ https://www.geeksforgeeks.org/how-to-get-value-of-selected-radio-button-using-ja
 https://stackoverflow.com/questions/2272507/find-out-whether-radio-button-is-checked-with-jquery
 https://stackoverflow.com/questions/5142300/javascript-jquery-radio-button-click
 https://stackoverflow.com/questions/807867/difference-between-val-and-text
+https://www.php.net/manual/en/function.mysql-real-escape-string.php

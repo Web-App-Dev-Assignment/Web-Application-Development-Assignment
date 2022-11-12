@@ -23,11 +23,11 @@
     <h1>Login</h1>
 
     <form method="post" submit="false">
-      <label for="username">Username</label>
-      <input type="username" name="username" id="username" value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" placeholder="Enter your username.">
+      <label for="username">Username/Email</label>
+      <input type="username" name="username" id="username" value="" placeholder="Enter username/email.">
 
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="<?= htmlspecialchars($_POST["password"] ?? "") ?>" placeholder="Enter your password.">
+      <input type="password" name="password" id="password" value="" placeholder="Enter password.">
       <span class="error" id="err"></span><br><br>
 
       <button type="button" id="login">Login</button>
@@ -41,10 +41,6 @@
   {
     $("#login").on('click', function()
     {
-      //var username = $("#username").val();
-      //var password = $("#password").val();
-      console.log(username + " , " + password);
-
       $.ajax
       ({
         type:'post',
@@ -56,6 +52,7 @@
         },
         success:function(response)
         {
+          console.log(response);
           if(response.indexOf('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b') >= 0)
           {
             window.location.href="index.php";

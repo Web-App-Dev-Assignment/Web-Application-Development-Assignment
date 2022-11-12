@@ -41,8 +41,13 @@ catch(Throwable $e)
     <h1>Home</h1>
 
     <?php if (isset($user)): ?>
-
-      <p>Hello <?= htmlspecialchars($user["name"])?></p>
+      <p>Hello
+      <?php if (!empty($user["name"])): ?>
+        <?= htmlspecialchars($user["name"])?>
+      <?php elseif (!empty($user["username"])): ?>
+        <?= htmlspecialchars($user["username"])?>
+      <?php endif; ?>
+       </p>
       <p><a href="logout.php">Log out</a></p>
     <?php else: ?>
             <p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>

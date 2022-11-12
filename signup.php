@@ -50,7 +50,6 @@
   $(document).ready(function(){
     $('#name').keyup(function()
     {
-      console.log("you are typing something...");
       if($("#name").val().match(/\d/))//same as /[0-9]/
       {
         $("#nameErr").text("*Name must not contain number.");
@@ -66,12 +65,6 @@
     });
    $('#username').keyup(function()
    {
-      console.log("you are typing something...");
-      // console.log($("#username").val());
-      // console.log($("#username").text());
-      // console.log($("#usernameErr").text());
-      // console.log($("#usernameErr").text());
-      
       if($("#username").val())
       {
         $("#usernameErr").text("");
@@ -106,8 +99,6 @@
 
    $('#password').keyup(function()
    {
-      console.log("you are typing something...");
-      //console.log($("#password").val().length);
       if(!$("#password").val())//redundant
       {
         $("#passwordErr").text("*Password is required.");
@@ -136,8 +127,6 @@
 
     $('#passwordConfirmation').keyup(function()
     {
-      console.log("you are typing something...");
-      //console.log($("#passwordConfirmation").val().length);
       if(!$("#passwordConfirmation").val())//redundant
       {
         $("#passwordConfirmationErr").text("*Password confirmation is required.");
@@ -154,7 +143,6 @@
 
     $('#email').keyup(function()
     {
-      console.log("you are typing something...");
       if(!$("#email").val())
       {
         $("#emailErr").text("");
@@ -197,44 +185,6 @@
 </script>
 
 <script>
-// function signup()
-// {
-//   var name=$("#name").val();
-//   var username=$("#username").val();
-//   var password=$("#password").val();
-//   var email=$("#email").val();
-//   var gender=$("#gender").val();
-
-
-
-//   $.ajax
-//   ({
-//   type:'post',
-//   url:'signup.php',
-//   data:{
-//    name:name,
-//    username:username,
-//    password:password,
-//    email:email,
-//    gemder:gender
-   
-//   },
-//   success:function(response) {
-//   if(response=="success")
-//   {
-//     window.location.href="index.php";
-//   }
-//   else
-//   {
-//     alert("Wrong Details");
-//   }
-//   }
-//   });
-// }
-</script>
-
-<script>
-  //$("input[name='gender']:checked").val();
   function checkGenderValue() 
   {
     if(!$('gender').val()) 
@@ -259,10 +209,7 @@
   {
     $("#signup").on('click', function()
     {
-      //var username = $("#username").val();
-      //var password = $("#password").val();
-      //console.log(username + " , " + password);
-      if($("#usernameErr").text() || $("#passwordErr").text() || $("#passwordConfirmationErr").text())
+      if($("#nameErr").text() || $("#usernameErr").text() || $("#passwordErr").text() || $("#passwordConfirmationErr").text() || $("#emailErr").text())
       {
         console.log("error");
         return;
@@ -288,7 +235,7 @@
         return;
       }
 
-      else if(!$("#nameErr").text() && !$("#usernameErr").text() && !$("#passwordErr").text() && !$("#passwordConfirmationErr").text() && !$("#emailErr").text() && $("input[name='gender']:checked").val())
+      else
       {
         $.ajax
         ({

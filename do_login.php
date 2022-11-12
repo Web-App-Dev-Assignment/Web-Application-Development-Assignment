@@ -1,16 +1,26 @@
 <?php
 include_once __DIR__ . "/functions.php";
 
-$is_invalid = false;
 try
 {
   //if (isset($_POST['login']))
   if ($_SERVER["REQUEST_METHOD"] == "POST") 
   {
     $db_conn = require_once __DIR__ . "/database.php";
-  
-    $sql = sprintf("SELECT * FROM $tbname 
-    WHERE username = '%s'",
+
+    $sql = "SELECT * FROM $tbname 
+    WHERE ";
+
+    if(filter_var($_POST["username"], FILTER_VALIDATE_EMAIL))
+    {
+      $sql .= "email = ";
+    }
+    else
+    {
+      $sql .= "username = ";
+    }
+
+    $sql = sprintf("$sql '%s'",
     $db_conn->real_escape_string($_POST["username"]));
   
     $result = $db_conn->query($sql);
@@ -31,7 +41,6 @@ try
       }
       else
       {
-        
         debug_to_console("Login unsuccessful.", 1);
         exit('fail');
       }
@@ -40,8 +49,6 @@ try
     {
       exit('fail');
     }
-  
-    $is_invalid = true;
   }
 }
 catch(Throwable $e)
