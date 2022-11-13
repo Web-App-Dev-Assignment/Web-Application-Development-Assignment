@@ -14,12 +14,12 @@ $chat_db = "chat";
 try
 {
   $db_conn = mysqli_connect($host,$hostusername,$hostpassword);
-  debug_to_console("Connected $host successfully!",0);
+  //debug_to_console("Connected $host successfully!",0);
 }
 catch(Throwable $e)
 {
   $e = test_escape_char($e);
-  debug_to_console("Connection to $host unsuccessful. \\nError:\\n$e",2);
+  //debug_to_console("Connection to $host unsuccessful. \\nError:\\n$e",2);
 }
 //--------------------------End of connecting to host code--------------------------
 
@@ -27,7 +27,7 @@ catch(Throwable $e)
 try
 {
   $db_conn->select_db($dbname);
-  debug_to_console("Connected database $dbname successfully!",0);
+  //debug_to_console("Connected database $dbname successfully!",0);
 }
 catch(Throwable $e)
 {
@@ -38,12 +38,12 @@ catch(Throwable $e)
     $db_conn->query($sql);
     $db_conn->select_db($dbname);
     $e = test_escape_char($e);
-    debug_to_console("Database $dbname  not found. Database $dbname created. \\nWarning:\\n$e",1);
+    //debug_to_console("Database $dbname  not found. Database $dbname created. \\nWarning:\\n$e",1);
   }
   catch(Throwable $e)
   {
     $e = test_escape_char($e);
-    debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. \\nError:\\n$e",2);
+    //debug_to_console("Unable to connect to the database $dbname. Try checking if MySQL is running. \\nError:\\n$e",2);
   }
 }
 //--------------------------End of connecting to database code--------------------------
@@ -65,12 +65,12 @@ function insert_to_table($name, $username, $password, $email){
       $stmt->prepare($sql);
     }
     catch(Throwable $e){
-      debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-      debug_to_console("Error preparing the SQL code. \\nError:\\n" . test_escape_char($e),1);
+      // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+      // debug_to_console("Error preparing the SQL code. \\nError:\\n" . test_escape_char($e),1);
       
       if($db_conn->errno === 1146)//1146 Table doesn't exist
       {
-        debug_to_console("Table $tbname doesn\\'t exists.", 1);
+        // debug_to_console("Table $tbname doesn\\'t exists.", 1);
         try
         {
           $sql_table = "CREATE TABLE $tbname
@@ -84,24 +84,24 @@ function insert_to_table($name, $username, $password, $email){
           )";
           $db_conn->query($sql_table);
           $stmt->prepare($sql);
-          debug_to_console("Table $tbname not found. Table $tbname created.",1);
+          // debug_to_console("Table $tbname not found. Table $tbname created.",1);
         }
         catch(Throwable $e)
         {
-          debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+          // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
           if ($db_conn->errno === 1050)//1050 duplicate table
           {
-            debug_to_console("Table $tbname already exists. \\nError:\\n" . test_escape_char($e),1);
+            // debug_to_console("Table $tbname already exists. \\nError:\\n" . test_escape_char($e),1);
           }
           else
           {
-            debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+            // debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
           }
         }
       }
       else
       {
-        debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+        // debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
       }
     }
 
@@ -110,20 +110,20 @@ function insert_to_table($name, $username, $password, $email){
     try
     {
       $stmt->execute();
-      debug_to_console("Insertion into table $tbname success!",0);
+      // debug_to_console("Insertion into table $tbname success!",0);
       //header("Location: signup-success.html");
       //exit;
     }
     catch(Throwable $e)
     {
-      debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+      // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
       if($db_conn->errno === 1062)//1062 duplicate Unique information
       {
-        debug_to_console("Duplicate Unique entry. \\nError:\\n" . test_escape_char($e),1);
+        // debug_to_console("Duplicate Unique entry. \\nError:\\n" . test_escape_char($e),1);
       }
       else
       {
-        debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n" . test_escape_char($e),2);
+        // debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n" . test_escape_char($e),2);
       }
     }
 
@@ -133,7 +133,7 @@ function insert_to_table($name, $username, $password, $email){
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
   }
 }
@@ -170,7 +170,7 @@ function update_table($id, $name, $username, $password, $email)
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($e), 0);
+    // debug_to_console(test_escape_char($e), 0);
   }
 }
 //--------------------------End of update to table--------------------------
@@ -196,7 +196,7 @@ function retrieve_current_user_data()
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($e), 0);
+    // debug_to_console(test_escape_char($e), 0);
   }
 }
 //--------------------------End Retrieving current user data--------------------------
@@ -210,12 +210,12 @@ function delete_user_account()
       $sql = "DELETE FROM $tbname WHERE id = {$_SESSION["user_id"]}";
       $db_conn->query($sql);
       session_destroy();
-      header("Location: index.php");
+      //header("Location: index.php");
     }
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($e), 0);
+    // debug_to_console(test_escape_char($e), 0);
   }
 }
 
@@ -248,7 +248,7 @@ function username_condition($username)
     }
     catch(Throwable $e)
     {
-      debug_to_console(test_escape_char($e), 0);
+      //debug_to_console(test_escape_char($e), 0);
     }
     return $usernameErr;
   }
@@ -307,7 +307,7 @@ function email_condition($email)
     }
     catch(Throwable $e)
     {
-      debug_to_console(test_escape_char($e), 0);
+      //debug_to_console(test_escape_char($e), 0);
     }
   }
   
@@ -330,18 +330,18 @@ function create_game_database()
       id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
-    debug_to_console("Table $game_db not found. Table $game_db created.",1);
+    //debug_to_console("Table $game_db not found. Table $game_db created.",1);
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
-      debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
+      //debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
     }
     else
     {
-      debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
     }
   }
 
@@ -355,18 +355,18 @@ function create_game_database()
       GameId VARCHAR(128) FOREIGN KEY REFERENCES $game_db(GameId)
     )";
     $db_conn->query($sql_table);
-    debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
+    //debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
   }
   catch(Throwable $e)
   {
-    debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
-      debug_to_console("Table $chat_db already exists. \\nError:\\n" . test_escape_char($e),1);
+      //debug_to_console("Table $chat_db already exists. \\nError:\\n" . test_escape_char($e),1);
     }
     else
     {
-      debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
     }
   }
 }

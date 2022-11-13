@@ -50,17 +50,20 @@
           username:$("#username").val(),
           password:$("#password").val()
         },
+        //dataType:'json',
         success:function(response)
         {
+          jason = $.parseJSON(response);
           console.log(response);
-          if(response.indexOf('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b') >= 0)
+          console.log(jason.name);
+          if(!jason.errormessage)
           {
             window.location.href="index.php";
             $("#err").text("*Login success.");
           }
           else
           {
-            $("#err").text("*Login failed.");
+            $("#err").text("*"+jason.errormessage);
           }
         }
       });

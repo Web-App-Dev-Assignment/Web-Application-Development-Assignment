@@ -1,3 +1,7 @@
+<?php
+include_once __DIR__ . "/functions.js";
+?>
+
 <!DOCTYPE HTML>  
 <html>
 <head>
@@ -13,25 +17,27 @@
 <h2>Signup</h2>
 <p><span class="error">* required field</span></p>
 <form method="post" submit="false">
-  Name: <input type="text" name="name" id="name" value="" placeholder="Enter your name.">
+  <label for="name">Name:</label>
+  <input type="text" name="name" id="name" value="" placeholder="Enter your name.">
   <span class="error" id="nameErr" value=""></span>
   <br><br>  
-  Username: <input type="text" name="username" id="username" value="" placeholder="Enter your username.">
+  <label for="username">Username:</label>
+  <input type="text" name="username" id="username" value="" placeholder="Enter your username.">
   <span class="error" id="usernameErr" value=""></span>
   <br><br>
-  Password: <input type="password" name="password" id="password" value="" placeholder="Enter your password.">
+  <label for="password">Password:</label>
+  <input type="password" name="password" id="password" value="" placeholder="Enter your password.">
   <span class="error" id="passwordErr" value=""></span><br>
   <input type="checkbox" onclick="passwordVisibility('password')" name="passwordVisibilityCheckbox">Show Password
   <br><br>
-  Password Confirmation: <input type="password" name="passwordConfirmation" id="passwordConfirmation" value="" placeholder="Re-enter your password.">
+  <label for="passwordConfirmation">Password Confirmation:</label>
+  <input type="password" name="passwordConfirmation" id="passwordConfirmation" value="" placeholder="Re-enter your password.">
   <span class="error" id="passwordConfirmationErr" value=""></span><br>
   <input type="checkbox" onclick="passwordVisibility('passwordConfirmation')" name="passwordConfirmationVisibilityCheckbox">Show Password
   <br><br>
-  E-mail: <input type="text" name="email" id="email" value="" placeholder="Enter your email.">
+  <label for="email">E-mail:</label>
+  <input type="text" name="email" id="email" value="" placeholder="Enter your email.">
   <span class="error" id="emailErr" value=""></span>
-  <br><br>
-  Website: <input type="text" name="website" value="">
-  <span class="error" id="websiteErr" value=""></span>
   <br><br>
   Gender:
   <input type="radio" name="gender" id="gender1"  value="male">Male
@@ -84,14 +90,15 @@
         },
         success:function(response)
         {
+          jason = $.parseJSON(response);
           console.log(response);
-          if(response.indexOf('Username has already been taken') >= 0)
-          {
-            $("#usernameErr").text("*Username has already been taken.");
-          }
-          else//redundant
+          if(!jason.errormessage)//redundant
           {
             $("#usernameErr").text("");
+          }
+          else
+          {
+            $("#usernameErr").text("*"+jason.errormessage);
           }
         }
       });
@@ -159,18 +166,15 @@
         },
         success:function(response)
         {
+          jason = $.parseJSON(response);
           console.log(response);
-          if(response.indexOf('Invalid email format') >= 0)
+          if(!jason.errormessage)
           {
-            $("#emailErr").text("*Invalid email format.");
-          }
-          else if(response.indexOf('Email has already been taken') >= 0)
-          {
-            $("#emailErr").text("*Email has already been taken.");
+            $("#emailErr").text("");
           }
           else
           {
-            $("#emailErr").text("");
+            $("#emailErr").text("*"+jason.errormessage);
           }
         }
       });
@@ -216,12 +220,12 @@
       }
       else if(!$("#username").val())
       {
-        $("#usernameErr").text("Username is required.");
+        $("#usernameErr").text("*Username is required.");
         return;
       }
       else if(!$("#password").val())
       {
-        $("#passwordErr").text("Password is required.");
+        $("#passwordErr").text("*Password is required.");
         return;
       }
       else if(!$("#passwordConfirmation").val())
@@ -231,7 +235,7 @@
       }
       else if(!$("input[name='gender']:checked").val())
       {
-        $("#genderErr").text("Gender is required.");
+        $("#genderErr").text("*Gender is required.");
         return;
       }
 
@@ -251,14 +255,17 @@
           },
           success:function(response)
           {
-            if(response.indexOf('@0^/s&d~v~x2LiN?^signup successk+ZJ[+Nk1QK+b') >= 0)
+            jason = $.parseJSON(response);
+            console.log(response);
+            //console.log(jason.testing);
+            if(!jason.errormessage)
             {
               $("#err").text("*Signup success.");
               window.location.href="index.php";
             }
             else
             {
-              $("#err").text("*Signup failed.");
+              $("#err").text("*"+jason.errormessage);
             }
           }
         });

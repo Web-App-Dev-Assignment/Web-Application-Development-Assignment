@@ -10,6 +10,7 @@
     }
     else
     {
-        exit($usernameErr);
+        $output = array("errormessage"=>$usernameErr);
+        exit(json_encode($output));
     }
 ?>

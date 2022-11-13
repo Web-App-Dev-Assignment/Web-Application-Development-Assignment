@@ -31,34 +31,48 @@ try
     {
       if(password_verify($_POST["password"], $user["password"]))
       {
-        debug_to_console("Login successful.", 0);
+        //console.log("Login successful.");
+        //debug_to_console("Login successful.", 0);
         session_start();
         session_regenerate_id();//prevent session fixation attack
   
         $_SESSION["user_id"] = $user["id"];
-  
-        exit('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b');
+        $output = array("name" => $user["name"]);
+        //echo json_encode($output);
+        exit(json_encode($output));
+        //exit('@0^/s&d~v~x2LiN?^-login success-k+ZJ[+Nk1QK+b');
       }
       else
       {
-        debug_to_console("Login unsuccessful.", 1);
-        exit('fail');
+        //debug_to_console("Login unsuccessful.", 1);
+        $output = array("errormessage"=>"Login unsuccessful");
+        //echo json_encode($output);
+        exit(json_encode($output));
       }
     }
     else
     {
-      exit('fail');
+      $output = array("errormessage"=>"Login unsuccessful");
+      //$temp = array("testing"=>"testing123");
+      //$output += $temp;
+      //array_push($output, $temp, $temp);
+      //echo json_encode($output);
+      exit(json_encode($output));
     }
   }
 }
 catch(Throwable $e)
 {
-  debug_to_console(test_escape_char($e), 0);
+  //debug_to_console(test_escape_char($e), 0);
+  $output = array("errormessage"=>"Login unsuccessful");
+  //echo json_encode($output);
   if($db_conn->errno === 1146)//1146 Table doesn't exist
   {
-    debug_to_console("Login unsuccessful.", 1);
+    //debug_to_console("Login unsuccessful.", 1);
+    // $output = array("errormessage"=>"Login unsuccessful");
+    // echo json_encode($output);
   }
-  exit('fail');
+  exit(json_encode($output));
 }
 
 

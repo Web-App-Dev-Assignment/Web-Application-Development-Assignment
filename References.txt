@@ -64,3 +64,7 @@ https://stackoverflow.com/questions/2272507/find-out-whether-radio-button-is-che
 https://stackoverflow.com/questions/5142300/javascript-jquery-radio-button-click
 https://stackoverflow.com/questions/807867/difference-between-val-and-text
 https://www.php.net/manual/en/function.mysql-real-escape-string.php
+https://stackoverflow.com/questions/5384847/adding-an-item-to-an-associative-array
+https://stackoverflow.com/questions/7064391/php-returning-json-to-jquery-ajax-call
+https://stackoverflow.com/questions/8649621/returning-a-json-object-from-php-in-ajax-call
+https://stackoverflow.com/questions/41089218/return-json-array-from-php-to-jquery-ajax

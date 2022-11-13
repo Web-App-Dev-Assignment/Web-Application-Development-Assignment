@@ -10,6 +10,7 @@
     }
     else
     {
-        exit($emailErr);
+        $output = array("errormessage"=>$emailErr);
+        exit(json_encode($output));
     }
 ?>
