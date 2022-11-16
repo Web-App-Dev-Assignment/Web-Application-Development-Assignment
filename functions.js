@@ -1,4 +1,3 @@
-<script>
 function passwordVisibility($string) {
   var x = document.getElementById($string);
   if (x.type === "password") {
@@ -7,4 +6,3 @@ function passwordVisibility($string) {
     x.type = "password";
   }
 }
-</script>

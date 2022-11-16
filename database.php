@@ -80,8 +80,10 @@ function insert_to_table($name, $username, $password, $email){
             username VARCHAR(128) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE,
+            gender VARCHAR(32),
+            last_online TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-          )";
+          )";//ON INSERT or ON UPDATE, check
           $db_conn->query($sql_table);
           $stmt->prepare($sql);
           // debug_to_console("Table $tbname not found. Table $tbname created.",1);
@@ -316,7 +318,7 @@ function email_condition($email)
 
 function create_game_database()
 {
-  global $tbname, $db_conn, $game_db, $chat_db;
+  global $tbname, $db_conn, $game_db;
 
   try
   {
@@ -335,6 +337,8 @@ function create_game_database()
   catch(Throwable $e)
   {
     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    // $output = array("errormessage"=>$e);
+    // echo json_encode($output);
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
       //debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
@@ -345,6 +349,12 @@ function create_game_database()
     }
   }
 
+  
+}
+
+function create_chat_database()
+{
+  global $tbname, $db_conn, $game_db, $chat_db;
   try
   {
     $sql_table = "CREATE TABLE $chat_db
@@ -360,6 +370,8 @@ function create_game_database()
   catch(Throwable $e)
   {
     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    // $output = array("errormessage"=>$e);
+    // echo json_encode($output);
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
       //debug_to_console("Table $chat_db already exists. \\nError:\\n" . test_escape_char($e),1);
@@ -368,6 +380,96 @@ function create_game_database()
     {
       //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
     }
+  }
+}
+
+function fetch_other_users()
+{
+  global $tbname, $db_conn;
+
+  $sql = "SELECT * FROM $tbname
+  WHERE id != '{$_SESSION["user_id"]}'";
+
+  $result = $db_conn->query($sql);
+
+  $user = $result->fetchAll();
+
+  if ($user)
+  {
+    foreach ($user as $row) 
+    {
+      $output .= '
+      <tr>
+       <td>';
+       if(!empty($row["name"]))
+       {
+        $output .= htmlspecialchars($row['name']);
+       }
+       else
+       {
+        $output .= htmlspecialchars($row['username']);
+       }
+       $output .=
+       '</td>
+      </tr>
+      ';
+     }
+     
+     $output .= '</table>';
+     
+     echo $output;
+
+  }
+  else
+  {
+    $err = "There are no other users.";
+    return $err;
+  }
+}
+
+function update_last_online()
+{
+  global $tbname, $db_conn;
+
+  $sql = "UPDATE $tbname
+  SET last_online = now() 
+  WHERE id = '{$_SESSION["user_id"]}'";
+
+  $stmt = $db_conn->stmt_init();
+  $stmt->prepare($sql);
+  $stmt->execute();
+}
+
+function fetch_user_last_activity($user_id)
+{
+  global $tbname, $db_conn;
+
+  $sql = "SELECT * FROM $tbname
+  WHERE id = '$user_id' 
+  ORDER BY last_online DESC 
+  LIMIT 1";
+  $stmt = $db_conn->stmt_init();
+  $stmt->prepare($sql);
+  $stmt->execute();
+  $result = $stmt->fetch_assoc();
+  if($result)
+  {
+    return $row['last_online'];
+  }
+}
+
+function check_online_status()
+{
+  $get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
+  $timestamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
+
+  if($get_last_online > $timestamp)
+  {
+    //online
+  }
+  else
+  {
+    //offline
   }
 }
 
