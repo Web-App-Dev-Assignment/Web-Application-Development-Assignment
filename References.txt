@@ -74,3 +74,8 @@ https://www.php.net/manual/en/mysqli-result.fetch-assoc.php
 https://www.w3schools.com/php/func_mysqli_fetch_all.asp
 https://www.w3schools.com/php/func_date_strtotime.asp
 https://www.w3schools.com/php/php_date.asp
+https://www.w3schools.com/sql/func_mysql_now.asp
+https://www.w3schools.com/sql/sql_autoincrement.asp
+https://www.w3schools.com/sql/sql_in.asp
+https://www.php.net/manual/en/function.array-pop.php
+https://www.php.net/manual/en/function.shuffle.php

@@ -2,7 +2,7 @@
     include_once __DIR__ . "/functions.php";
     $db_conn = include_once __DIR__ . "/database.php";
     
-    $emailErr = email_condition($_POST["email"]);
+    $emailErr = emailCondition($_POST["email"]);
 
     if(empty($emailErr))
     {

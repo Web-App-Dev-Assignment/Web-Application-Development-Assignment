@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
   try
   {
-    insert_to_table($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
+    insertToTable($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
     //$output = array("errormessage"=>"Signup successful");
     exit();
     //exit('@0^/s&d~v~x2LiN?^signup successk+ZJ[+Nk1QK+b');

@@ -83,7 +83,7 @@ include_once __DIR__ . "/functions.js";
       $.ajax
       ({
         type:'post',
-        url:'check_username.php',
+        url:'ajax_checkUsername.php',
         data:
         {
           username:$("#username").val()
@@ -159,7 +159,7 @@ include_once __DIR__ . "/functions.js";
       $.ajax
       ({
         type:'post',
-        url:'check_email.php',
+        url:'ajax_checkEmail.php',
         data:
         {
           email:$("#email").val()
@@ -244,7 +244,7 @@ include_once __DIR__ . "/functions.js";
         $.ajax
         ({
           type:'post',
-          url:'do_signup.php',
+          url:'ajax_signup.php',
           data:
           {
             name:$("#name").val(),

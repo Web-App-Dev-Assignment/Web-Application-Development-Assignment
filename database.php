@@ -5,10 +5,11 @@ include_once __DIR__ . "/functions.php";
 $host = "localhost";
 $hostusername = "root";
 $hostpassword = "";
-$dbname = "myDB";
-$tbname = "Users";
+$dbname = "mydb";
+$tbname = "users";
 $game_db = "game";
 $chat_db = "chat";
+$matchmaking_db = "matchmaking";
 
 //--------------------------Connecting to host code--------------------------
 try
@@ -49,7 +50,7 @@ catch(Throwable $e)
 //--------------------------End of connecting to database code--------------------------
 
 //--------------------------Inserting to the table--------------------------
-function insert_to_table($name, $username, $password, $email){
+function insertToTable($name, $username, $password, $email){
   
   try
   {
@@ -142,7 +143,7 @@ function insert_to_table($name, $username, $password, $email){
 //--------------------------End of insertion to table--------------------------
 
 //--------------------------Updating to the table--------------------------
-function update_table($id, $name, $username, $password, $email)
+function updateTable($id, $name, $username, $password, $email)
 {
   try
   {
@@ -178,7 +179,7 @@ function update_table($id, $name, $username, $password, $email)
 //--------------------------End of update to table--------------------------
 
 //--------------------------Retrieving current user data--------------------------
-function retrieve_current_user_data()
+function retrieveCurrentUserData()
 {
   include_once __DIR__ . "/index.php";
   try
@@ -203,7 +204,7 @@ function retrieve_current_user_data()
 }
 //--------------------------End Retrieving current user data--------------------------
 
-function delete_user_account()
+function deleteUserAccount()
 {
   try
   {
@@ -222,7 +223,7 @@ function delete_user_account()
 }
 
 //format of the username condition
-function username_condition($username)
+function usernameCondition($username)
 {
   global $tbname, $db_conn;
   $usernameErr = "";
@@ -257,7 +258,7 @@ function username_condition($username)
 }
 
 //format of the password condition
-function password_condition($password)
+function passwordCondition($password)
 {
   $passwordErr = "";
   if(strlen($password)<8 || strlen($password)>16){
@@ -279,7 +280,7 @@ function password_condition($password)
 }
 
 //format of the email condition
-function email_condition($email)
+function emailCondition($email)
 {
   global $tbname, $db_conn;
   $emailErr = "";
@@ -316,7 +317,39 @@ function email_condition($email)
   return $emailErr;
 }
 
-function create_game_database()
+function createMatchmakingDatabase()
+{
+  global $tbname, $db_conn, $matchmaking_db;
+
+  try
+  {
+    $sql_table = "CREATE TABLE $matchmaking_db
+    (
+      index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      id VARCHAR(128) UNIQUE FOREIGN KEY REFERENCES $tbname(id)
+    )";
+    $db_conn->query($sql_table);
+    //debug_to_console("Table $game_db not found. Table $game_db created.",1);
+  }
+  catch(Throwable $e)
+  {
+    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    // $output = array("errormessage"=>$e);
+    // echo json_encode($output);
+    if ($db_conn->errno === 1050)//1050 duplicate table
+    {
+      //debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
+    }
+    else
+    {
+      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+    }
+  }
+
+  
+}
+
+function createGameDatabase()
 {
   global $tbname, $db_conn, $game_db;
 
@@ -324,11 +357,11 @@ function create_game_database()
   {
     $sql_table = "CREATE TABLE $game_db
     (
-      GameId VARCHAR(32) NOT NULL PRIMARY KEY,
-      GameColor VARCHAR(128) NOT NULL,
-      GameOpponent VARCHAR(128) NOT NULL,
-      MoveString VARCHAR(255) NOT NULL,
-      latestMove VARCHAR(255) NOT NULL,
+      index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      game_id VARCHAR(32) NOT NULL,
+      chess_color VARCHAR(16) NOT NULL,
+      move_string VARCHAR(256) NOT NULL,
+      latest_move VARCHAR(256) NOT NULL,
       id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
@@ -352,17 +385,18 @@ function create_game_database()
   
 }
 
-function create_chat_database()
+function createChatDatabase()
 {
   global $tbname, $db_conn, $game_db, $chat_db;
   try
   {
     $sql_table = "CREATE TABLE $chat_db
     (
-      ChatId VARCHAR(128) NOT NULL PRIMARY KEY,
-      ChatText VARCHAR(255) NOT NULL,
-      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
-      GameId VARCHAR(128) FOREIGN KEY REFERENCES $game_db(GameId)
+      chat_id VARCHAR(128) NOT NULL PRIMARY KEY,
+      chat_text VARCHAR(255) NOT NULL,
+      chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id),
+      game_id VARCHAR(128) FOREIGN KEY REFERENCES $game_db(GameId)
     )";
     $db_conn->query($sql_table);
     //debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
@@ -383,7 +417,7 @@ function create_chat_database()
   }
 }
 
-function fetch_other_users()
+function fetchOtherUsers()
 {
   global $tbname, $db_conn;
 
@@ -427,7 +461,7 @@ function fetch_other_users()
   }
 }
 
-function update_last_online()
+function updateLastOnline()
 {
   global $tbname, $db_conn;
 
@@ -440,7 +474,7 @@ function update_last_online()
   $stmt->execute();
 }
 
-function fetch_user_last_activity($user_id)
+function fetchUserLastActivity($user_id)
 {
   global $tbname, $db_conn;
 
@@ -458,18 +492,22 @@ function fetch_user_last_activity($user_id)
   }
 }
 
-function check_online_status()
+function checkOnlineStatus($user_id)
 {
-  $get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
+  //$get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
+  $get_last_online = fetch_user_last_activity($user_id);
   $timestamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
 
   if($get_last_online > $timestamp)
   {
     //online
+    return "online";
   }
   else
   {
+    
     //offline
+    //return "offline";
   }
 }
 
