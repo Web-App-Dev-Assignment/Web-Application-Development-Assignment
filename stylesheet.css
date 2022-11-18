@@ -1,0 +1,71 @@
+.error {color: #FF0000;}
+
+.leftColumn, .rightColumn, .middleColumn
+{
+	box-sizing: border-box;
+	float: left;
+	padding: 1em;
+}
+
+.leftColumn
+{
+	width: 20%;
+}
+
+.rightColumn
+{
+	width: 20%;
+}
+
+.middleColumn
+{
+	width: 60%;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) 
+{
+	.leftColumn, .rightColumn, .middleColumn 
+	{
+		width: 100%;
+	}
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  cursor: pointer;
+  text-align: left;
+}
+
+.chat
+{
+	position:fixed;
+	height: 3em;
+	max-height: 50%;
+	width: 20%;
+	bottom: 0;
+  right: 0;
+	transition: height 0.2s ease-out;
+	margin-right: 0.3em;
+}
+
+/*Placeholder, might not be needed*/
+.chatBox
+{
+	margin-bottom: 1em;
+	height: 70%;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #131f29;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.collapsibleContent {
+	padding: 0.1em 0.2em 0.1em 0.8em;
+	margin-bottom: 1.5em;
+  overflow: visible;
+	border-radius: 25px;
+	background-color: #131f29;
+}

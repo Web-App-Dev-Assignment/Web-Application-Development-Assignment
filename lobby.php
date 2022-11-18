@@ -8,24 +8,47 @@
   <title>Login</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="stylesheet.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
-.error {color: #FF0000;}
 </style>
 </head>
-<body>
-    <h1>Login</h1>
+<body style="max-width: none;">
 
-    <form method="post" submit="false">
-      <label for="username">Username/Email</label>
-      <input type="username" name="username" id="username" value="" placeholder="Enter username/email.">
-
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="" placeholder="Enter password.">
-      <span class="error" id="err"></span><br><br>
-
-      <button type="button" id="login">Login</button>
-    </form>
+  <div>
+    <div class="leftColumn" style="background-color:#aaa;">
+      <h2>Column 1</h2>
+      <p>Some text..</p>
+    </div>
+    <div class="middleColumn" style="background-color:#bbb;">
+      <h2>Column 2</h2>
+      <p>Some text..</p>
+    </div>
+    <div class="rightColumn" style="background-color:#ccc;">
+      <h2>Column 3</h2>
+      <p>Some text..</p>
+    </div>
+  </div>
+  <div style="margin-right:0.3em">
+    <div class ="chat">
+      <button type="button" class="collapsible" style="max-width:none;width:100%;">Chat</button>
+      <div class="chatBox">
+        <div class="collapsibleContent">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <div class="collapsibleContent">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <div class="collapsibleContent">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+      </div>
+      <form>
+        <input type="text" id="chatInput" name="chatInput" style="width:90%;">
+      </form>
+    </div>
+  </div>
+  
 
 </body>
 </html>
@@ -37,7 +60,7 @@ $(document).ready(function()
   setInterval(function()
   {
     updateLastOnline();
-    matchMaking();
+    //matchMaking();//need to change to only match make if the player pressed matchmaking button
   }, 5000);
 
  function updateLastOnline()
@@ -71,3 +94,12 @@ $(document).ready(function()
  
 });  
 </script>
+
+<script>
+  $(document).ready(function()
+{
+  collapsible("collapsible");
+});
+</script>
+
+<script src="functions.js"></script>

@@ -1,16 +1,12 @@
-<?php
-include_once __DIR__ . "/functions.js";
-?>
-
 <!DOCTYPE HTML>  
 <html>
 <head>
   <title>Signup</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="stylesheet.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
-.error {color: #FF0000;}
 </style>
 </head>
 <body>  
@@ -274,5 +270,6 @@ include_once __DIR__ . "/functions.js";
   })
 </script>
 
+<script src="functions.js"></script>
 </body>
 </html>

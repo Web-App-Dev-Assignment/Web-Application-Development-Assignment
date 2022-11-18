@@ -15,8 +15,8 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="stylesheet.css">
 <style>
-.error {color: #FF0000;}
 </style>
 </head>
 <body>
