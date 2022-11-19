@@ -1,5 +1,23 @@
 <?php
+  $db_conn = include_once __DIR__ . "/database.php";
+  
+  session_start();
 
+  if (isset($_SESSION["user_id"]))
+  {
+    $result = isIngame($_SESSION["user_id"]);
+    console.log($result);
+    if ($result)
+    {
+      //header("Location: multiplayer.php");
+      //exit();
+    }
+  }
+  else
+  {
+    header("Location: index.php");
+    exit();
+  }
 ?>
 
 <!DOCTYPE HTML>  
@@ -29,7 +47,7 @@
       <p>Some text..</p>
     </div>
   </div>
-  <div style="margin-right:0.3em">
+  <div style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
     <div class ="chat">
       <button type="button" class="collapsible" style="max-width:none;width:100%;">Chat</button>
       <div class="chatBox">
@@ -43,9 +61,7 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </div>
       </div>
-      <form>
-        <input type="text" id="chatInput" name="chatInput" style="width:90%;">
-      </form>
+      <input type="text" id="chatInput" name="chatInput" style="width:90%;">
     </div>
   </div>
   
@@ -77,14 +93,14 @@ $(document).ready(function()
 
  function matchMaking()
   {
-    $.ajax(
-    {
+    $.ajax
+    ({
       url:"ajax_matchmaking.php",
       method:"POST",
       success:function(data)
       {
         jason = $.parseJSON(response);
-        if(jason.errormessage)
+        if(jason.successmessage)
         {
           window.location.href="multiplayer.php";
         }
@@ -99,6 +115,36 @@ $(document).ready(function()
   $(document).ready(function()
 {
   collapsible("collapsible");
+});
+</script>
+
+<script>
+$(document).ready(function() 
+{
+	$("#chatInput").keyup(function(e)
+  {
+			if(e.keyCode == 13)//the enter key
+      {
+				$.ajax
+        ({
+					type:'POST',
+					url:'ajax_insertmessage.php',
+					data:{chat_text:$("#chatInput").val()},
+					success:function()
+          {
+						$("#chatInput").val("");
+					}
+				})
+			}
+	})
+	
+	setInterval(function()
+  {
+			$(".chatBox").load("ajax_displaymessages.php");
+	},1500)
+	
+	$(".chatBox").load("ajax_displaymessages.php");
+	
 });
 </script>
 

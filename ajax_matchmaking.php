@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     $id = $user["id"];
     $stmt->execute();
 
-    $output = array("errormessage"=>"Player found.");
+    $output = array("successmessage"=>"Player found.");
     exit(json_encode($output));
   }
   //--------------------------End of matchmaking--------------------------

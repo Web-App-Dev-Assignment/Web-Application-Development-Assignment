@@ -44,7 +44,7 @@
       $.ajax
       ({
         type:'post',
-        url:'do_login.php',
+        url:'ajax_login.php',
         data:
         {
           username:$("#username").val(),

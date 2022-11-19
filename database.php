@@ -358,7 +358,7 @@ function createGameDatabase()
     $sql_table = "CREATE TABLE $game_db
     (
       index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      game_id VARCHAR(32) NOT NULL,
+      game_id VARCHAR(128),
       chess_color VARCHAR(16) NOT NULL,
       move_string VARCHAR(256) NOT NULL,
       latest_move VARCHAR(256) NOT NULL,
@@ -392,7 +392,7 @@ function createChatDatabase()
   {
     $sql_table = "CREATE TABLE $chat_db
     (
-      chat_id VARCHAR(128) NOT NULL PRIMARY KEY,
+      chat_id VARCHAR(128) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       chat_text VARCHAR(255) NOT NULL,
       chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id),
@@ -509,6 +509,99 @@ function checkOnlineStatus($user_id)
     //offline
     //return "offline";
   }
+}
+
+function insertChatMessage($chat_text, $user_id, $game_id)
+{
+  global $db_conn, $chat_db;
+
+  $sql = "INSERT INTO $game_db (chat_text, id, game_id) 
+  VALUES (?, ?, NULLIF(?,''))";
+  $stmt = $db_conn->prepare($sql);
+
+  $stmt->bind_param("sss", $chat_text, $user_id, $game_id);
+  $stmt->execute();
+}
+
+function displayMessage($game_id)//mabye write a function to differentiate you and other players?
+{
+  global $db_conn, $tbname, $chat_db;
+
+  $sql = "SELECT * FROM $chat_db
+  WHERE game_id = $game_id
+  ORDER BY chat_date DESC 
+  LIMIT 15";
+  $stmt = $db_conn->stmt_init();
+  $stmt->prepare($sql);
+  $stmt->execute();
+
+  $chats = $stmt->fetchAll();
+  if ($chats)
+  {
+    foreach ($chats as $chat) 
+    {
+      $sql = "SELECT * FROM $tbname
+      WHERE id = {chat['id']}";
+      $result = $db_conn->query($sql);
+      $user = $result->fetch_assoc();
+      if ($user)
+      {
+        $output .= '<span class="name">';
+        if ($user['name'])
+        {
+          $output .= $user['name'];
+        }
+        else
+        {
+          $output .= $user['username'];
+        }
+        $output .= ' says: ';
+        $output = '</span>';
+        $output .= '<span class="chatText">';
+        $output .= $chat['chat_text'];
+        $output = '</span>';
+      }
+    }
+    exit($output);
+  }
+}
+
+function isInGame($user_id)//mabye write a function to differentiate you and other players?
+{
+  global $db_conn, $game_db;
+  
+  try
+  {
+    $sql = "SELECT * FROM $game_db
+    WHERE id = $user_id";
+    $result = $db_conn->query($sql);
+  
+    $user = $result->fetch_assoc();
+    if($user)
+    {
+      //header("Location: multiplayer.php");
+      
+      exit($user['game_id']);//return or exit
+    }
+  }
+  catch(Throwable $e)
+  {    
+    if($db_conn->errno === 1146)//1146 Table doesn't exist
+    {
+      createGameDatabase();
+
+      $result = $db_conn->query($sql);
+  
+      $user = $result->fetch_assoc();
+      if($user)
+      {
+        //header("Location: multiplayer.php");
+        
+        exit($user['game_id']);//return or exit
+      }
+    }
+  }
+  
 }
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:

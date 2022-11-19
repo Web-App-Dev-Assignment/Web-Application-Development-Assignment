@@ -87,3 +87,5 @@ https://www.w3schools.com/cssref/pr_outline.php
 https://www.w3schools.com/cssref/sel_active.php
 https://www.w3schools.com/jsref/prop_node_parentelement.asp
 https://www.w3schools.com/jsref/prop_style_overflowy.asp
+https://www.w3schools.com/css/css3_transitions.asp
+https://stackoverflow.com/questions/24716560/do-i-need-to-escape-my-variables-if-i-use-mysqli-prepared-statements
