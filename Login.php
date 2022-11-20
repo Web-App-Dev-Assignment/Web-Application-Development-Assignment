@@ -58,8 +58,8 @@
           console.log(jason.name);
           if(!jason.errormessage)
           {
-            window.location.href="index.php";
             $("#err").text("*Login success.");
+            window.location.href="index.php";
           }
           else
           {

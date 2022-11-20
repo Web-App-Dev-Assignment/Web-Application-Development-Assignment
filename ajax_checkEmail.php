@@ -6,7 +6,8 @@
 
     if(empty($emailErr))
     {
-        exit();
+        $output = array("successmessage"=>"");
+        exit(json_encode($output));
     }
     else
     {

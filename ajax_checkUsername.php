@@ -6,7 +6,8 @@
 
     if(empty($usernameErr))
     {
-        exit();
+        $output = array("successmessage"=>$usernameErr);
+        exit(json_encode($output));
     }
     else
     {

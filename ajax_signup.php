@@ -7,8 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   try
   {
     insertToTable($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
-    //$output = array("errormessage"=>"Signup successful");
-    exit();
+    $output = array("successmessage"=>"Signup unsuccessful");
+    exit(json_encode($output));
     //exit('@0^/s&d~v~x2LiN?^signup successk+ZJ[+Nk1QK+b');
   }
   catch(Throwable $e)

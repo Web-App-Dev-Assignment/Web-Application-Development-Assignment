@@ -1,3 +1,13 @@
+<?php
+  session_start();
+
+  if (isset($_SESSION["user_id"]))
+  {
+    header("Location: index.php");
+    exit();
+  }
+?>
+
 <!DOCTYPE HTML>  
 <html>
 <head>
@@ -256,7 +266,7 @@
             //console.log(jason.testing);
             if(!jason.errormessage)
             {
-              $("#err").text("*Signup success.");
+              $("#err").text("*"+jason.successmessage);
               window.location.href="index.php";
             }
             else

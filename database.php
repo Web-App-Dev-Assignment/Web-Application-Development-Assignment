@@ -137,7 +137,7 @@ function insertToTable($name, $username, $password, $email){
   catch(Throwable $e)
   {
     // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-    debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
+    //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
   }
 }
 //--------------------------End of insertion to table--------------------------
@@ -326,7 +326,8 @@ function createMatchmakingDatabase()
     $sql_table = "CREATE TABLE $matchmaking_db
     (
       index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      id VARCHAR(128) UNIQUE FOREIGN KEY REFERENCES $tbname(id)
+      id VARCHAR(128) UNIQUE,
+      FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
     //debug_to_console("Table $game_db not found. Table $game_db created.",1);
@@ -357,12 +358,13 @@ function createGameDatabase()
   {
     $sql_table = "CREATE TABLE $game_db
     (
-      index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      game_id VARCHAR(128),
+      `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      game_id VARCHAR(128) UNIQUE,
       chess_color VARCHAR(16) NOT NULL,
       move_string VARCHAR(256) NOT NULL,
       latest_move VARCHAR(256) NOT NULL,
-      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id)
+      id VARCHAR(128),
+      FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
     //debug_to_console("Table $game_db not found. Table $game_db created.",1);
@@ -392,11 +394,13 @@ function createChatDatabase()
   {
     $sql_table = "CREATE TABLE $chat_db
     (
-      chat_id VARCHAR(128) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      chat_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
       chat_text VARCHAR(255) NOT NULL,
-      chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      id VARCHAR(128) FOREIGN KEY REFERENCES $tbname(id),
-      game_id VARCHAR(128) FOREIGN KEY REFERENCES $game_db(GameId)
+      chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      id VARCHAR(128),
+      game_id VARCHAR(128),
+      FOREIGN KEY(id) REFERENCES $tbname(id),
+      FOREIGN KEY(game_id) REFERENCES $game_db(game_id)
     )";
     $db_conn->query($sql_table);
     //debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
@@ -461,13 +465,13 @@ function fetchOtherUsers()
   }
 }
 
-function updateLastOnline()
+function updateLastOnline($user_id)
 {
   global $tbname, $db_conn;
 
   $sql = "UPDATE $tbname
   SET last_online = now() 
-  WHERE id = '{$_SESSION["user_id"]}'";
+  WHERE id = $user_id";
 
   $stmt = $db_conn->stmt_init();
   $stmt->prepare($sql);
@@ -515,91 +519,111 @@ function insertChatMessage($chat_text, $user_id, $game_id)
 {
   global $db_conn, $chat_db;
 
-  $sql = "INSERT INTO $game_db (chat_text, id, game_id) 
-  VALUES (?, ?, NULLIF(?,''))";
-  $stmt = $db_conn->prepare($sql);
+  $sql = "INSERT INTO $chat_db (chat_text, id, game_id) 
+  VALUES (?, NULLIF(?,''), NULLIF(?,''))";
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
 
-  $stmt->bind_param("sss", $chat_text, $user_id, $game_id);
-  $stmt->execute();
+    $stmt->bind_param("sss", $chat_text, $user_id, $game_id);
+    $stmt->execute();
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+  }
+  
 }
 
 function displayMessage($game_id)//mabye write a function to differentiate you and other players?
 {
   global $db_conn, $tbname, $chat_db;
-
-  $sql = "SELECT * FROM $chat_db
-  WHERE game_id = $game_id
-  ORDER BY chat_date DESC 
-  LIMIT 15";
-  $stmt = $db_conn->stmt_init();
-  $stmt->prepare($sql);
-  $stmt->execute();
-
-  $chats = $stmt->fetchAll();
-  if ($chats)
+  createChatDatabase();
+  try
   {
-    foreach ($chats as $chat) 
+    $sql = sprintf("SELECT * FROM $chat_db
+    WHERE game_id = '%s'
+    ORDER BY chat_date DESC
+    LIMIT 15", $game_id);
+    
+    $stmt = $db_conn->stmt_init();
+    $stmt->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $chats = $result->fetch_all(MYSQLI_ASSOC);
+    if ($chats)
     {
-      $sql = "SELECT * FROM $tbname
-      WHERE id = {chat['id']}";
-      $result = $db_conn->query($sql);
-      $user = $result->fetch_assoc();
-      if ($user)
+      foreach ($chats as $chat) 
       {
-        $output .= '<span class="name">';
-        if ($user['name'])
+        $sql = "SELECT * FROM $tbname
+        WHERE id = {chat['id']}";
+        $result = $db_conn->query($sql);
+        $user = $result->fetch_assoc();
+        if ($user)
         {
-          $output .= $user['name'];
+          $output .= '<span class="name">';
+          if ($user['name'])
+          {
+            $output .= $user['name'];
+          }
+          else
+          {
+            $output .= $user['username'];
+          }
+          $output .= ' says: ';
+          $output = '</span>';
+          $output .= '<span class="chatText">';
+          $output .= $chat['chat_text'];
+          $output = '</span>';
         }
-        else
-        {
-          $output .= $user['username'];
-        }
-        $output .= ' says: ';
-        $output = '</span>';
-        $output .= '<span class="chatText">';
-        $output .= $chat['chat_text'];
-        $output = '</span>';
       }
+      return $output;
     }
-    exit($output);
   }
+  catch(Throwable $e)
+  {
+    echo $db_conn->errno;
+    echo $e;
+    if($db_conn->errno === 1146)//1146 Table doesn't exist
+      {
+        createChatDatabase();
+      }
+  }
+  
 }
 
 function isInGame($user_id)//mabye write a function to differentiate you and other players?
 {
-  global $db_conn, $game_db;
-  
+  global $db_conn, $game_db, $tbname;
   try
   {
     $sql = "SELECT * FROM $game_db
     WHERE id = $user_id";
-    $result = $db_conn->query($sql);
-  
+    $stmt = $db_conn->stmt_init();
+    
+    try
+    {
+      $result = $db_conn->query($sql);
+    }
+    catch(Throwable $e)
+    {
+      if($db_conn->errno === 1146)//1146 Table doesn't exist
+      {
+        createGameDatabase();
+        $result = $db_conn->query($sql);
+      }
+      return;//do not remove this, it helps to initialize the $result outside the try catch block
+    }
     $user = $result->fetch_assoc();
     if($user)
     {
       //header("Location: multiplayer.php");
-      
-      exit($user['game_id']);//return or exit
+      //return $user['game_id'];//return or exit
     }
   }
   catch(Throwable $e)
   {    
-    if($db_conn->errno === 1146)//1146 Table doesn't exist
-    {
-      createGameDatabase();
-
-      $result = $db_conn->query($sql);
-  
-      $user = $result->fetch_assoc();
-      if($user)
-      {
-        //header("Location: multiplayer.php");
-        
-        exit($user['game_id']);//return or exit
-      }
-    }
   }
   
 }

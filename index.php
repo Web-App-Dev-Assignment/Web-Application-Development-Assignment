@@ -19,6 +19,7 @@ try
 catch(Throwable $e)
 {
   debug_to_console(test_escape_char($e), 0);
+  return;
 }
 
 

@@ -1,12 +1,13 @@
 <?php
   $db_conn = include_once __DIR__ . "/database.php";
+  include_once __DIR__ . "/functions.php";
   
   session_start();
 
   if (isset($_SESSION["user_id"]))
   {
     $result = isIngame($_SESSION["user_id"]);
-    console.log($result);
+    debug_to_console($_SESSION["user_id"],0) ;
     if ($result)
     {
       //header("Location: multiplayer.php");
@@ -83,7 +84,11 @@ $(document).ready(function()
  {
     $.ajax(
     {
+      type:'post',
       url:"ajax_updateLastOnline.php",
+      data:{
+            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
+          },
       success:function()
       {
         //if offline, cancel matchmaking code here
@@ -95,14 +100,17 @@ $(document).ready(function()
   {
     $.ajax
     ({
+      type:'post',
       url:"ajax_matchmaking.php",
-      method:"POST",
+      data:{
+            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
+          },
       success:function(data)
       {
         jason = $.parseJSON(response);
         if(jason.successmessage)
         {
-          window.location.href="multiplayer.php";
+          //window.location.href="multiplayer.php";
         }
       }
     })
@@ -128,8 +136,12 @@ $(document).ready(function()
 				$.ajax
         ({
 					type:'POST',
-					url:'ajax_insertmessage.php',
-					data:{chat_text:$("#chatInput").val()},
+					url:'ajax_insertmessages.php',
+					data:
+          {
+            chat_text:$("#chatInput").val(),
+            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
+          },
 					success:function()
           {
 						$("#chatInput").val("");
