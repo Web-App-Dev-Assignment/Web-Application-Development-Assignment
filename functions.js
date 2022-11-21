@@ -27,3 +27,15 @@ function collapsible(string)//might need to refresh the height when a text has b
     });
   }
 }
+
+function buttonVisibility(string)
+{
+  if (document.getElementById(string).style.display == "none")
+  {
+    document.getElementById(string).style.display = null;
+  }
+  else
+  {
+    document.getElementById(string).style.display = "none";
+  }
+}

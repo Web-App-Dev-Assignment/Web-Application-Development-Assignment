@@ -1,10 +1,18 @@
 .error {color: #FF0000;}
 
+.center
+{
+	margin-left: auto;
+  margin-right: auto;
+	display: block;
+}
+
 .leftColumn, .rightColumn, .middleColumn
 {
 	box-sizing: border-box;
 	float: left;
 	padding: 1em;
+	height: 100%;
 }
 
 .leftColumn
@@ -28,6 +36,7 @@
 	.leftColumn, .rightColumn, .middleColumn 
 	{
 		width: 100%;
+		height: auto;
 	}
 }
 
@@ -104,4 +113,44 @@
 .chatText
 {
 
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+html {
+  height: 100%
+}
+
+body {
+  padding: 0;
+  margin: 0 auto;
+}
+
+.darkLayer {
+  background-color: rgba(0, 0, 0, .6);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+	z-index: 9999;
 }

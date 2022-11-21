@@ -647,12 +647,111 @@ function isInGame($user_id)//mabye write a function to differentiate you and oth
     {
       //header("Location: multiplayer.php");
       //return $user['game_id'];//return or exit
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
   catch(Throwable $e)
   {    
   }
   
+}
+
+function startMatchMaking($user_id)//should call it when player presses the matchmaking button
+{
+  global $db_conn, $matchmaking_db;
+
+  $sql = "INSERT INTO $matchmaking_db (id) 
+  VALUES (?)";
+
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    if($db_conn->errno === 1146)//1146 Table doesn't exist
+    {
+      createMatchmakingDatabase();
+      $stmt = $db_conn->prepare($sql);
+    }
+    return;//might be unnecessary
+  }
+  
+  $stmt->bind_param("s", $user_id);
+  $stmt->execute();
+}
+
+function cancelMatchMaking($user_id)//should call it when the player presses the cancel matchmaking button or is offline
+{
+  global $db_conn, $matchmaking_db;
+
+  $sql = sprintf("DELETE FROM $matchmaking_db
+  WHERE id = '%s'", $user_id);
+
+  $stmt = $db_conn->prepare($sql);
+  $stmt->execute();
+}
+
+function matchMaking($user_id)
+{
+  global $db_conn, $matchmaking_db, $game_db;
+  try
+  {
+    //--------------------------Check if in game--------------------------
+    if(isInGame($user_id))//is currently ingame
+    {
+      //write code to redirect player to multiplay game here
+      $output = array("errormessage"=>"Already in game.");
+      exit(json_encode($output));
+    }
+    //--------------------------End of check if in game--------------------------
+
+    //--------------------------Matchmaking--------------------------
+    $sql = sprintf("SELECT * FROM $matchmaking_db
+    WHERE id != '%s'
+    LIMIT 1", $user_id);
+
+    $stmt = $db_conn->stmt_init();
+    $stmt->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if($user)//there is player matchmaking
+    {
+      //$user["id"]//the other user
+      //$_SESSION["user_id"]//the current user
+      $sql = sprintf("DELETE FROM $matchmaking_db
+      WHERE id IN ('%s','{$user["id"]}')", $user_id);
+      $stmt = $db_conn->stmt_init();
+      $stmt->prepare($sql);
+      $stmt->execute();
+
+      $game_id = md5(uniqid());
+      $color = array("black","white");
+      shuffle($color);
+      $id = $_SESSION["user_id"];
+      $sql = "INSERT INTO $game_db (game_id, chess_color, id) 
+      VALUES (?, ?, ?)";
+      $stmt = $db_conn->prepare($sql);
+
+      $stmt->bind_param("sss", $game_id, array_pop($color), $id);
+      $stmt->execute();
+
+      $id = $user["id"];
+      $stmt->execute();
+
+      $output = array("successmessage"=>"Player found.");
+      exit(json_encode($output));
+    }
+    //--------------------------End of matchmaking--------------------------
+  }
+  catch(Throwable $e)
+  {}
 }
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:

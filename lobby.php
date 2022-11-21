@@ -33,7 +33,10 @@
 </style>
 </head>
 <body style="max-width: none;">
-
+  <div class="darkLayer" style="display:none">
+    <div class="loader center" style="margin-top:10%;"></div>
+    <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
+  </div>
   <div>
     <div class="leftColumn" style="background-color:#aaa;">
       <h2>Column 1</h2>
@@ -42,6 +45,7 @@
     <div class="middleColumn" style="background-color:#bbb;">
       <h2>Column 2</h2>
       <p>Some text..</p>
+      <button type="button" id="matchmakingButton" class="center" style="margin-top: 20%;">Matchmaking</button>
     </div>
     <div class="rightColumn" style="background-color:#ccc;">
       <h2>Column 3</h2>
@@ -114,6 +118,18 @@ $(document).ready(function()
   $(document).ready(function()
 {
   collapsible("collapsible");
+  $("#matchmakingButton").on('click', function()
+  {
+    $("#matchmakingButton").hide();
+    $('.darkLayer').attr('style', '');
+    //$("#cancelMatchmakingButton").show();
+  })
+  $("#cancelMatchmakingButton").on('click', function()
+  {
+    $("#matchmakingButton").show();
+    $('.darkLayer').attr('style', 'display: none');
+    //$("#cancelMatchmakingButton").hide();
+  })
 });
 </script>
 
