@@ -11,6 +11,8 @@ $game_db = "game";
 $chat_db = "chat";
 $matchmaking_db = "matchmaking";
 
+$timezone = "Asia/Singapore";
+date_default_timezone_set($timezone);
 //--------------------------Connecting to host code--------------------------
 try
 {
@@ -482,27 +484,27 @@ function fetchUserLastActivity($user_id)
 {
   global $tbname, $db_conn;
 
-  $sql = "SELECT * FROM $tbname
-  WHERE id = '$user_id' 
-  ORDER BY last_online DESC 
-  LIMIT 1";
+  $sql = sprintf("SELECT * FROM $tbname
+  WHERE id = '%s'
+  LIMIT 1", $user_id);
   $stmt = $db_conn->stmt_init();
   $stmt->prepare($sql);
   $stmt->execute();
-  $result = $stmt->fetch_assoc();
-  if($result)
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+  if($user)
   {
-    return $row['last_online'];
+    return $user['last_online'];
   }
 }
 
 function checkOnlineStatus($user_id)
 {
   //$get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
-  $get_last_online = fetch_user_last_activity($user_id);
-  $timestamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
+  $get_last_online = fetchUserLastActivity($user_id);
+  $time_stamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
 
-  if($get_last_online > $timestamp)
+  if($get_last_online > $time_stamp)
   {
     //online
     return "online";
@@ -511,7 +513,7 @@ function checkOnlineStatus($user_id)
   {
     
     //offline
-    //return "offline";
+    return "offline";
   }
 }
 
@@ -565,6 +567,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
         if ($user)
         {
           $output .= '<span class=name>';
+          $status = checkOnlineStatus($chat['id']);
           if ($user['name'])
           {
             $output .= $user['name'];
@@ -573,11 +576,24 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
           {
             $output .= $user['username'];
           }
-          $output .= ' says: ';
+          //$output .= ' says: ';
+          $output .= '</span>';
+          $output .= ' ';
+          if (!$result == "offline")
+          {
+            $output .= '<span class=offlineStatus>';
+          }
+          else
+          {
+            $output .= '<span class=onlineStatus>';
+          }
+          $output .= '(' . $status . ')';
+          $output .= '<br>';
           $output .= '</span>';
           $output .= '<span class=chatText>';
           $output .= $chat['chat_text'];
-          $output .= '</span><br><hr>';
+          $output .= '</span>';
+          $output .= '<br><hr>';
           //echo $user['username'];
           //echo $chat['chat_text'];
 
