@@ -57,9 +57,11 @@
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+/*
 .active, .collapsible:hover {
-  background-color: #131f29;
+	background-color: #131f29;
 }
+*/
 
 /* Style the collapsible content. Note: hidden by default */
 .collapsibleContent {
@@ -72,10 +74,24 @@
 
 /*Style for the chat name*/
 .name{
-	color: blue;
+	color: #969696;
+}
+@media (prefers-color-scheme: light) 
+{
+	.name{
+		color: #121111;
+	}
+
+}
+@media (prefers-color-scheme: dark) 
+{
+	.name{
+		color: #969696;
+	}
 }
 
 /*Style for the chat text*/
-.chatText{
+.chatText
+{
 
 }

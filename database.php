@@ -469,9 +469,9 @@ function updateLastOnline($user_id)
 {
   global $tbname, $db_conn;
 
-  $sql = "UPDATE $tbname
+  $sql = sprintf("UPDATE $tbname
   SET last_online = now() 
-  WHERE id = $user_id";
+  WHERE id = '%s'", $user_id);
 
   $stmt = $db_conn->stmt_init();
   $stmt->prepare($sql);
@@ -542,7 +542,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
   try
   {
     $sql = sprintf("SELECT * FROM $chat_db
-    WHERE game_id = '%s'
+    WHERE game_id %s
     ORDER BY chat_date DESC
     LIMIT 15", $game_id);
     
@@ -552,17 +552,19 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
     $result = $stmt->get_result();
 
     $chats = $result->fetch_all(MYSQLI_ASSOC);
+
     if ($chats)
     {
+      $output = "";
       foreach ($chats as $chat) 
       {
         $sql = "SELECT * FROM $tbname
-        WHERE id = {chat['id']}";
+        WHERE id = '{$chat['id']}'";//'{$_SESSION["user_id"]}'
         $result = $db_conn->query($sql);
         $user = $result->fetch_assoc();
         if ($user)
         {
-          $output .= '<span class="name">';
+          $output .= '<span class=name>';
           if ($user['name'])
           {
             $output .= $user['name'];
@@ -572,12 +574,21 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
             $output .= $user['username'];
           }
           $output .= ' says: ';
-          $output = '</span>';
-          $output .= '<span class="chatText">';
+          $output .= '</span>';
+          $output .= '<span class=chatText>';
           $output .= $chat['chat_text'];
-          $output = '</span>';
+          $output .= '</span><br><hr>';
+          //echo $user['username'];
+          //echo $chat['chat_text'];
+
+          //$output = '<span class=name>' .'noname'. ' says: ' .'</spawn>';
+
+          //echo $output;
         }
       }
+      //echo "<span style=\"color:blue\">testing123</span>";
+      //echo '<span class=name >testing123</span>';
+      
       return $output;
     }
   }

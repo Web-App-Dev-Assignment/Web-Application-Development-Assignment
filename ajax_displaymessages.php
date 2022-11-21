@@ -2,5 +2,6 @@
 	$db_conn = include_once __DIR__ . "/database.php";
   
   //displayMessage($_SESSION['game_id']);
-  displayMessage(NULL);
+  $messages = displayMessage("IS NULL");
+  echo "$messages";
 ?>
