@@ -7,9 +7,9 @@ $hostusername = "root";
 $hostpassword = "";
 $dbname = "mydb";
 $tbname = "users";
-$game_db = "game";
-$chat_db = "chat";
-$matchmaking_db = "matchmaking";
+$game_tb = "game";
+$chat_tb = "chat";
+$matchmaking_tb = "matchmaking";
 
 $timezone = "Asia/Singapore";
 date_default_timezone_set($timezone);
@@ -82,8 +82,8 @@ function insertToTable($name, $username, $password, $email){
             name VARCHAR(128),
             username VARCHAR(128) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            email VARCHAR(255) UNIQUE,
-            gender VARCHAR(32),
+            email VARCHAR(255) NOT NULL UNIQUE,
+            gender ENUM ('male','female','other','prefer_not_to_say'),  
             last_online TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )";//ON INSERT or ON UPDATE, check
@@ -239,7 +239,7 @@ function usernameCondition($username)
   {
     try
     {
-      $sql = sprintf("SELECT * FROM $tbname 
+      $sql = sprintf("SELECT username FROM $tbname 
       WHERE username = '%s'",
       $db_conn->real_escape_string($_POST["username"]));
     
@@ -298,7 +298,7 @@ function emailCondition($email)
   {
     try
     {
-      $sql = sprintf("SELECT * FROM $tbname
+      $sql = sprintf("SELECT email FROM $tbname
       WHERE email = '%s'",
       $db_conn->real_escape_string($_POST["email"]));
     
@@ -319,20 +319,20 @@ function emailCondition($email)
   return $emailErr;
 }
 
-function createMatchmakingDatabase()
+function createMatchmakingTable()
 {
-  global $tbname, $db_conn, $matchmaking_db;
+  global $tbname, $db_conn, $matchmaking_tb;
 
   try
   {
-    $sql_table = "CREATE TABLE $matchmaking_db
+    $sql_table = "CREATE TABLE $matchmaking_tb
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      id VARCHAR(128) UNIQUE,
+      id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
-    //debug_to_console("Table $game_db not found. Table $game_db created.",1);
+    //debug_to_console("Table $game_tb not found. Table $game_tb created.",1);
   }
   catch(Throwable $e)
   {
@@ -353,6 +353,108 @@ function createMatchmakingDatabase()
   
 }
 
+function createGameType($game_type)
+{
+  if ($game_type === 'rock_paper_scissors')
+  {
+    $sql = sprintf("CREATE TABLE %s
+    (
+      `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      game_id VARCHAR(128) NOT NULL UNIQUE,
+      id VARCHAR(128) NOT NULL UNIQUE,
+      FOREIGN KEY(id) REFERENCES $tbname(id)
+      FOREIGN KEY(game_id) REFERENCES $game_tb(game_id)
+    )"
+    ,$game_type);
+  }
+  else if ($game_type === 'chess')
+  {
+    $sql = "";
+  }
+}
+
+function insertGameSession($game_tb, $game_type, $user_id)
+{
+  global $db_conn;
+  try
+  {
+    $sql = sprintf("INSERT INTO %s (game_id, game_type, id)
+    VALUES (?,?,?)", $game_tb);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->bind_param("sss", $game_id, $game_type , $user_id);
+    $stmt->execute();
+    
+    $sql = sprintf("INSERT INTO %s (game_id, id)
+    VALUES (?,?)", $game_type);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->bind_param("ss", $game_id, $user_id);
+    $stmt->execute();
+
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    if($db_conn->errno === 1146)//1146 Table doesn't exist
+      {
+        //createGameTable();
+        //createGameType($game_type);
+      }
+  }
+}
+
+function deleteGameSession($game_tb, $game_type, $user_id)
+{
+  global $db_conn;
+  try
+  {
+    $sql = sprintf("DELETE FROM %s INNER JOIN %s
+    WHERE id= '%s' ", $game_tb, $game_type, $user_id);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+  }
+}
+
+function createGameTable()
+{
+  global $db_conn, $tbname, $game_tb;
+
+  try
+  {
+    $sql_table = "CREATE TABLE $game_tb
+    (
+      `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      game_id VARCHAR(128) NOT NULL UNIQUE,
+      game_type ENUM('chess','rock_paper_scissors'),
+      id VARCHAR(128) NOT NULL UNIQUE,
+      FOREIGN KEY(id) REFERENCES $tbname(id)
+    )";
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+    //debug_to_console("Table $game_db not found. Table $game_db created.",1);
+  }
+  catch(Throwable $e)
+  {
+    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+    // $output = array("errormessage"=>$e);
+    // echo json_encode($output);
+    if ($db_conn->errno === 1050)//1050 duplicate table
+    {
+      //debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
+    }
+    else
+    {
+      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
+    }
+  }
+
+  
+}
+
+/*
 function createGameDatabase()
 {
   global $tbname, $db_conn, $game_db;
@@ -362,8 +464,8 @@ function createGameDatabase()
     $sql_table = "CREATE TABLE $game_db
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      game_id VARCHAR(128) UNIQUE,
-      chess_color VARCHAR(16) NOT NULL,
+      game_id VARCHAR(128) NOT NULL UNIQUE,
+      chess_color ENUM('black','white'),
       move_string VARCHAR(256) NOT NULL,
       latest_move VARCHAR(256) NOT NULL,
       id VARCHAR(128),
@@ -389,24 +491,25 @@ function createGameDatabase()
 
   
 }
+*/
 
-function createChatDatabase()
+function createChatTable()
 {
-  global $tbname, $db_conn, $game_db, $chat_db;
+  global $db_conn, $tbname,$game_tb, $chat_tb;
   try
   {
-    $sql_table = "CREATE TABLE $chat_db
+    $sql_table = "CREATE TABLE $chat_tb
     (
       chat_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
       chat_text VARCHAR(255) NOT NULL,
       chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      id VARCHAR(128),
+      id VARCHAR(128) NOT NULL,
       game_id VARCHAR(128),
       FOREIGN KEY(id) REFERENCES $tbname(id),
-      FOREIGN KEY(game_id) REFERENCES $game_db(game_id)
+      FOREIGN KEY(game_id) REFERENCES $game_tb(game_id)
     )";
     $db_conn->query($sql_table);
-    //debug_to_console("Table $chat_db not found. Table $chat_db created.",1);
+    //debug_to_console("Table $chat_tb not found. Table $chat_tb created.",1);
   }
   catch(Throwable $e)
   {
@@ -415,7 +518,7 @@ function createChatDatabase()
     // echo json_encode($output);
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
-      //debug_to_console("Table $chat_db already exists. \\nError:\\n" . test_escape_char($e),1);
+      //debug_to_console("Table $chat_tb already exists. \\nError:\\n" . test_escape_char($e),1);
     }
     else
     {
@@ -426,9 +529,9 @@ function createChatDatabase()
 
 function fetchOtherUsers()
 {
-  global $tbname, $db_conn;
+  global $db_conn, $tbname;
 
-  $sql = "SELECT * FROM $tbname
+  $sql = "SELECT `name`, username FROM $tbname
   WHERE id != '{$_SESSION["user_id"]}'";
 
   $result = $db_conn->query($sql);
@@ -470,7 +573,7 @@ function fetchOtherUsers()
 
 function updateLastOnline($user_id)
 {
-  global $tbname, $db_conn;
+  global $db_conn, $tbname;
 
   $sql = sprintf("UPDATE $tbname
   SET last_online = now() 
@@ -485,7 +588,7 @@ function fetchUserLastActivity($table_name, $user_id)
 {
   global $db_conn;
 
-  $sql = sprintf("SELECT * FROM %s
+  $sql = sprintf("SELECT last_online FROM %s
   WHERE id = '%s'
   LIMIT 1", $table_name, $user_id);
   $stmt = $db_conn->stmt_init();
@@ -520,9 +623,9 @@ function checkOnlineStatus($table_name, $user_id)
 
 function insertChatMessage($chat_text, $user_id, $game_id)
 {
-  global $db_conn, $chat_db;
+  global $db_conn, $chat_tb;
 
-  $sql = "INSERT INTO $chat_db (chat_text, id, game_id) 
+  $sql = "INSERT INTO $chat_tb (chat_text, id, game_id) 
   VALUES (?, NULLIF(?,''), NULLIF(?,''))";
   try
   {
@@ -540,11 +643,10 @@ function insertChatMessage($chat_text, $user_id, $game_id)
 
 function displayMessage($game_id)//mabye write a function to differentiate you and other players?
 {
-  global $db_conn, $tbname, $chat_db;
-  createChatDatabase();
+  global $db_conn, $tbname, $chat_tb;
   try
   {
-    $sql = sprintf("SELECT * FROM $chat_db
+    $sql = sprintf("SELECT id FROM $chat_tb
     WHERE game_id %s
     ORDER BY chat_date DESC
     LIMIT 15", $game_id);
@@ -561,7 +663,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
       $output = "";
       foreach ($chats as $chat) 
       {
-        $sql = "SELECT * FROM $tbname
+        $sql = "SELECT `name`, username FROM $tbname
         WHERE id = '{$chat['id']}'";//'{$_SESSION["user_id"]}'
         $result = $db_conn->query($sql);
         $user = $result->fetch_assoc();
@@ -615,7 +717,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
     echo $e;
     if($db_conn->errno === 1146)//1146 Table doesn't exist
       {
-        createChatDatabase();
+        createChatTable();
       }
   }
   
@@ -623,10 +725,10 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
 
 function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
 {
-  global $db_conn, $game_db, $tbname;
+  global $db_conn, $game_tb, $tbname;
   try
   {
-    $sql = sprintf("SELECT * FROM %s
+    $sql = sprintf("SELECT id FROM %s
     WHERE id = '%s'", $table_name, $user_id);
     $stmt = $db_conn->stmt_init();
     
@@ -636,9 +738,9 @@ function isInTable($table_name, $user_id)//mabye write a function to differentia
     }
     catch(Throwable $e)
     {
-      if($db_conn->errno === 1146 && $table_name === $game_db)//1146 Table doesn't exist
+      if($db_conn->errno === 1146 && $table_name === $game_tb)//1146 Table doesn't exist
       {
-        createGameDatabase();
+        createGameTable();
         $result = $db_conn->query($sql);
       }
       return;//do not remove this, it helps to initialize the $result outside the try catch block
@@ -664,10 +766,10 @@ function isInTable($table_name, $user_id)//mabye write a function to differentia
 
 function startMatchMaking($user_id)//should call it when player presses the matchmaking button
 {
-  global $db_conn, $matchmaking_db, $game_db;
+  global $db_conn, $matchmaking_tb, $game_tb;
 
   //--------------------------Check if matchmaking--------------------------
-  if(isInTable($matchmaking_db, $user_id))//is currently matchmaking
+  if(isInTable($matchmaking_tb, $user_id))//is currently matchmaking
   {
     //write code to deal with already matchmaking here.//resume? cancel then restart the process?
     $output = array("errormessage"=>"Already matchmaking.");
@@ -675,7 +777,7 @@ function startMatchMaking($user_id)//should call it when player presses the matc
   }
   //--------------------------End of check if matchmaking--------------------------
   //--------------------------Check if in game--------------------------
-  else if(isInTable($game_db, $user_id))//is currently ingame
+  else if(isInTable($game_tb, $user_id))//is currently ingame
   {
     //write code to redirect player to multiplay game here
     $output = array("errormessage"=>"Already in game.");
@@ -684,7 +786,7 @@ function startMatchMaking($user_id)//should call it when player presses the matc
   //--------------------------End of check if in game--------------------------
   
   
-  $sql = "INSERT INTO $matchmaking_db (id) 
+  $sql = "INSERT INTO $matchmaking_tb (id) 
   VALUES (?)";
 
   try
@@ -697,7 +799,7 @@ function startMatchMaking($user_id)//should call it when player presses the matc
     //echo $e;
     if($db_conn->errno === 1146)//1146 Table doesn't exist
     {
-      createMatchmakingDatabase();
+      createMatchmakingTable();
       $stmt = $db_conn->prepare($sql);
     }
   }
@@ -708,9 +810,9 @@ function startMatchMaking($user_id)//should call it when player presses the matc
 
 function cancelMatchMaking($user_id)//should call it when the player presses the cancel matchmaking button or is offline
 {
-  global $db_conn, $matchmaking_db;
+  global $db_conn, $matchmaking_tb;
 
-  $sql = sprintf("DELETE FROM $matchmaking_db
+  $sql = sprintf("DELETE FROM $matchmaking_tb
   WHERE id = '%s'", $user_id);
 
   try
@@ -726,13 +828,13 @@ function cancelMatchMaking($user_id)//should call it when the player presses the
 
 function matchMaking($user_id)
 {
-  global $db_conn, $matchmaking_db, $game_db;
+  global $db_conn, $matchmaking_tb, $game_tb;
   try
   {
     
 
     //--------------------------Matchmaking--------------------------
-    $sql = sprintf("SELECT * FROM $matchmaking_db
+    $sql = sprintf("SELECT id FROM $matchmaking_tb
     WHERE id != '%s'
     LIMIT 1", $user_id);
 
@@ -746,7 +848,7 @@ function matchMaking($user_id)
     {
       //$user["id"]//the other user
       //$_SESSION["user_id"]//the current user
-      $sql = sprintf("DELETE FROM $matchmaking_db
+      $sql = sprintf("DELETE FROM $matchmaking_tb
       WHERE id IN ('%s','{$user["id"]}')", $user_id);
       $stmt = $db_conn->stmt_init();
       $stmt->prepare($sql);
@@ -756,7 +858,7 @@ function matchMaking($user_id)
       $color = array("black","white");
       shuffle($color);
       $id = $_SESSION["user_id"];
-      $sql = "INSERT INTO $game_db (game_id, chess_color, id) 
+      $sql = "INSERT INTO $game_tb (game_id, chess_color, id) 
       VALUES (?, ?, ?)";
       $stmt = $db_conn->prepare($sql);
 
