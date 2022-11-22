@@ -107,3 +107,7 @@ https://www.w3schools.com/jsref/prop_style_display.asp
 https://stackoverflow.com/questions/19581763/jquery-to-change-style-attribute-of-a-div-class
 https://www.w3schools.com/jquery/jquery_hide_show.asp
 https://www.w3schools.com/css/css_align.asp
+https://stackoverflow.com/questions/17653652/how-to-get-top-most-div-parent-class
+https://www.php.net/manual/en/function.sprintf.php
+https://www.youtube.com/watch?v=6Gbzr56M2iI
+https://www.webslesson.info/2018/07/live-chat-system-in-php-using-ajax-jquery.html

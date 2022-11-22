@@ -327,7 +327,7 @@ function createMatchmakingDatabase()
   {
     $sql_table = "CREATE TABLE $matchmaking_db
     (
-      index int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
       id VARCHAR(128) UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
@@ -336,6 +336,7 @@ function createMatchmakingDatabase()
   }
   catch(Throwable $e)
   {
+    //echo $e;
     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     // $output = array("errormessage"=>$e);
     // echo json_encode($output);
@@ -480,13 +481,13 @@ function updateLastOnline($user_id)
   $stmt->execute();
 }
 
-function fetchUserLastActivity($user_id)
+function fetchUserLastActivity($table_name, $user_id)
 {
-  global $tbname, $db_conn;
+  global $db_conn;
 
-  $sql = sprintf("SELECT * FROM $tbname
+  $sql = sprintf("SELECT * FROM %s
   WHERE id = '%s'
-  LIMIT 1", $user_id);
+  LIMIT 1", $table_name, $user_id);
   $stmt = $db_conn->stmt_init();
   $stmt->prepare($sql);
   $stmt->execute();
@@ -498,10 +499,10 @@ function fetchUserLastActivity($user_id)
   }
 }
 
-function checkOnlineStatus($user_id)
+function checkOnlineStatus($table_name, $user_id)
 {
   //$get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
-  $get_last_online = fetchUserLastActivity($user_id);
+  $get_last_online = fetchUserLastActivity($table_name, $user_id);
   $time_stamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
 
   if($get_last_online > $time_stamp)
@@ -567,7 +568,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
         if ($user)
         {
           $output .= '<span class=name>';
-          $status = checkOnlineStatus($chat['id']);
+          $status = checkOnlineStatus($tbname, $chat['id']);
           if ($user['name'])
           {
             $output .= $user['name'];
@@ -579,7 +580,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
           //$output .= ' says: ';
           $output .= '</span>';
           $output .= ' ';
-          if (!$result == "offline")
+          if ($status === "offline")
           {
             $output .= '<span class=offlineStatus>';
           }
@@ -620,13 +621,13 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
   
 }
 
-function isInGame($user_id)//mabye write a function to differentiate you and other players?
+function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
 {
   global $db_conn, $game_db, $tbname;
   try
   {
-    $sql = "SELECT * FROM $game_db
-    WHERE id = $user_id";
+    $sql = sprintf("SELECT * FROM %s
+    WHERE id = '%s'", $table_name, $user_id);
     $stmt = $db_conn->stmt_init();
     
     try
@@ -635,7 +636,7 @@ function isInGame($user_id)//mabye write a function to differentiate you and oth
     }
     catch(Throwable $e)
     {
-      if($db_conn->errno === 1146)//1146 Table doesn't exist
+      if($db_conn->errno === 1146 && $table_name === $game_db)//1146 Table doesn't exist
       {
         createGameDatabase();
         $result = $db_conn->query($sql);
@@ -655,15 +656,34 @@ function isInGame($user_id)//mabye write a function to differentiate you and oth
     }
   }
   catch(Throwable $e)
-  {    
+  {
+    //echo $e;
   }
   
 }
 
 function startMatchMaking($user_id)//should call it when player presses the matchmaking button
 {
-  global $db_conn, $matchmaking_db;
+  global $db_conn, $matchmaking_db, $game_db;
 
+  //--------------------------Check if matchmaking--------------------------
+  if(isInTable($matchmaking_db, $user_id))//is currently matchmaking
+  {
+    //write code to deal with already matchmaking here.//resume? cancel then restart the process?
+    $output = array("errormessage"=>"Already matchmaking.");
+    exit(json_encode($output));
+  }
+  //--------------------------End of check if matchmaking--------------------------
+  //--------------------------Check if in game--------------------------
+  else if(isInTable($game_db, $user_id))//is currently ingame
+  {
+    //write code to redirect player to multiplay game here
+    $output = array("errormessage"=>"Already in game.");
+    exit(json_encode($output));
+  }
+  //--------------------------End of check if in game--------------------------
+  
+  
   $sql = "INSERT INTO $matchmaking_db (id) 
   VALUES (?)";
 
@@ -673,12 +693,13 @@ function startMatchMaking($user_id)//should call it when player presses the matc
   }
   catch(Throwable $e)
   {
+    //echo $db_conn->errno;
+    //echo $e;
     if($db_conn->errno === 1146)//1146 Table doesn't exist
     {
       createMatchmakingDatabase();
       $stmt = $db_conn->prepare($sql);
     }
-    return;//might be unnecessary
   }
   
   $stmt->bind_param("s", $user_id);
@@ -692,7 +713,14 @@ function cancelMatchMaking($user_id)//should call it when the player presses the
   $sql = sprintf("DELETE FROM $matchmaking_db
   WHERE id = '%s'", $user_id);
 
-  $stmt = $db_conn->prepare($sql);
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    //echo $e;
+  }
   $stmt->execute();
 }
 
@@ -701,14 +729,7 @@ function matchMaking($user_id)
   global $db_conn, $matchmaking_db, $game_db;
   try
   {
-    //--------------------------Check if in game--------------------------
-    if(isInGame($user_id))//is currently ingame
-    {
-      //write code to redirect player to multiplay game here
-      $output = array("errormessage"=>"Already in game.");
-      exit(json_encode($output));
-    }
-    //--------------------------End of check if in game--------------------------
+    
 
     //--------------------------Matchmaking--------------------------
     $sql = sprintf("SELECT * FROM $matchmaking_db

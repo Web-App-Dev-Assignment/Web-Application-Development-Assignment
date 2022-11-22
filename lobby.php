@@ -6,7 +6,7 @@
 
   if (isset($_SESSION["user_id"]))
   {
-    $result = isIngame($_SESSION["user_id"]);
+    $result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
     debug_to_console($_SESSION["user_id"],0) ;
     if ($result)
     {
@@ -52,12 +52,12 @@
       <p>Some text..</p>
     </div>
   </div>
-  <div style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
+  <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
     <div class ="chat">
-      <button type="button" class="collapsible" style="max-width:none;width:100%;">Chat</button>
+      <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
       <div class="chatBox">
       </div>
-      <input type="text" id="chatInput" name="chatInput" style="width:90%;">
+      <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
     </div>
   </div>
   
@@ -117,18 +117,70 @@ $(document).ready(function()
 <script>
   $(document).ready(function()
 {
-  collapsible("collapsible");
+  //collapsible("collapsible");
+  $("#chatButton").on('click', function()
+  { 
+    console.log("button pressed");
+    var chatSetting = $(this).closest('.chatSetting')[0];
+    //chatSetting = chatSetting.get()[0];
+    //console.log(chatSetting);
+    if (chatSetting.style.height)
+    {
+      console.log("1");
+      console.log($('.chatSetting').css('style'));
+      //console.log($('.chatSetting').atrr('height'));
+      $('.chatSetting').attr('style', '');
+      $('.chatBox').attr('style', '');
+      //sibling.style.overflowY = null;
+    } 
+    else 
+    {
+      console.log("2");
+      console.log($('.chatSetting').css('style'));
+      $('.chatSetting').attr('style', 'height:50%');
+      $('.chatBox').attr('style', 'overflow-y:scroll');
+    } 
+  })
+
   $("#matchmakingButton").on('click', function()
-  {
+  { 
     $("#matchmakingButton").hide();
     $('.darkLayer').attr('style', '');
     //$("#cancelMatchmakingButton").show();
+
+    $.ajax
+    ({
+      type:'POST',
+      url:'ajax_startMatchMaking.php',
+      data:
+      {
+        user_id:<?php echo json_encode($_SESSION["user_id"]);?>
+      },
+      success:function()
+      {
+        
+      }
+    })
   })
   $("#cancelMatchmakingButton").on('click', function()
   {
     $("#matchmakingButton").show();
     $('.darkLayer').attr('style', 'display: none');
     //$("#cancelMatchmakingButton").hide();
+
+    $.ajax
+    ({
+      type:'POST',
+      url:'ajax_cancelMatchMaking.php',
+      data:
+      {
+        user_id:<?php echo json_encode($_SESSION["user_id"]);?>
+      },
+      success:function()
+      {
+        
+      }
+    })
   })
 });
 </script>
