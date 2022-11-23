@@ -360,6 +360,9 @@ function createGameType($game_type)
     $sql = sprintf("CREATE TABLE %s
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      health UNSIGNED TINYINT NOT NULL DEFAULT 3,
+      `move` ENUM('rock','paper','scissors'),
+      player ENUM('player1','player2'),
       game_id VARCHAR(128) NOT NULL UNIQUE,
       id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
@@ -428,7 +431,7 @@ function createGameTable()
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
       game_id VARCHAR(128) NOT NULL UNIQUE,
-      game_type ENUM('chess','rock_paper_scissors'),
+      game_type ENUM('chess','rock_paper_scissors', 'tick_tack_toe'),
       id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
@@ -646,7 +649,7 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
   global $db_conn, $tbname, $chat_tb;
   try
   {
-    $sql = sprintf("SELECT id FROM $chat_tb
+    $sql = sprintf("SELECT id, chat_text FROM $chat_tb
     WHERE game_id %s
     ORDER BY chat_date DESC
     LIMIT 15", $game_id);

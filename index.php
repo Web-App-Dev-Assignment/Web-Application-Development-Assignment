@@ -48,10 +48,14 @@ catch(Throwable $e)
       <?php elseif (!empty($user["username"])): ?>
         <?= htmlspecialchars($user["username"])?>
       <?php endif; ?>
-       </p>
-      <p><a href="logout.php">Log out</a></p>
+       </p><br>
+       <button onclick="document.location='lobby.php'">Lobby</button><br>
+       <button onclick="document.location='logout.php'">Log out</button><br>
+      <!---<p><a href="logout.php">Log out</a></p>--->
     <?php else: ?>
-            <p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>
+      <button onclick="document.location='login.php'">Log in</button><br>
+      <button onclick="document.location='signup.php'">Signup</button><br>
+            <!---<p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>--->
     <?php endif; ?>
 
 </body>

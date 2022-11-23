@@ -31,7 +31,8 @@
       <span class="error" id="err"></span><br><br>
 
       <button type="button" id="login">Login</button>
-    </form>
+    </form><br>
+      <button onclick="document.location='index.php'">Back</button><br>
 
 </body>
 </html>

@@ -57,6 +57,7 @@
   <br>
   <span class="error" id="err"></span>
 </form>
+<button onclick="document.location='index.php'">Back</button><br>
 
 <script>
   $(document).ready(function(){
