@@ -1,5 +1,5 @@
 <?php
-$db_conn = include_once __DIR__ . "/database.php";
+include_once __DIR__ . "\\..\\php\\chat.php";
 
 	if(isset($_POST['chat_text']))
   {

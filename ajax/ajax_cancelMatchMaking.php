@@ -1,5 +1,5 @@
 <?php
-$db_conn = require_once __DIR__ . "/database.php";
+include_once __DIR__ . "\\..\\php\\matchmaking.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
