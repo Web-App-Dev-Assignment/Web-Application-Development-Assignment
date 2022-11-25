@@ -127,3 +127,7 @@ https://dev.mysql.com/doc/refman/8.0/en/delete.html
 https://www.w3schools.com/sql/sql_default.asp
 https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16
 https://www.w3schools.com/html/html_links.asp
+https://www.databasestar.com/sql-boolean-data-type/#SQL_Server_Boolean
+https://stackoverflow.com/questions/30754/performance-vs-readability
+https://www.w3schools.com/mysql/mysql_and_or.asp
+https://stackoverflow.com/questions/21813741/mysql-query-decrease-value-by-1
