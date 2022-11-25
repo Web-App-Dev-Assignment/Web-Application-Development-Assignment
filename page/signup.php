@@ -14,7 +14,7 @@
   <title>Signup</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="../css/stylesheet.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 </style>
@@ -90,7 +90,7 @@
       $.ajax
       ({
         type:'post',
-        url:'ajax_checkUsername.php',
+        url:'../ajax/ajax_checkUsername.php',
         data:
         {
           username:$("#username").val()
@@ -166,7 +166,7 @@
       $.ajax
       ({
         type:'post',
-        url:'ajax_checkEmail.php',
+        url:'../ajax/ajax_checkEmail.php',
         data:
         {
           email:$("#email").val()
@@ -251,7 +251,7 @@
         $.ajax
         ({
           type:'post',
-          url:'ajax_signup.php',
+          url:'../ajax/ajax_signup.php',
           data:
           {
             name:$("#name").val(),
@@ -281,6 +281,6 @@
   })
 </script>
 
-<script src="functions.js"></script>
+<script src="../javascript/functions.js"></script>
 </body>
 </html>

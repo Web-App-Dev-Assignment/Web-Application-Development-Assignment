@@ -15,7 +15,7 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="../css/stylesheet.css">
 <style>
 </style>
 </head>
@@ -45,7 +45,7 @@
       $.ajax
       ({
         type:'post',
-        url:'ajax_login.php',
+        url:'../ajax/ajax_login.php',
         data:
         {
           username:$("#username").val(),

@@ -1,11 +1,12 @@
 <?php
-  $db_conn = include_once __DIR__ . "/database.php";
-  include_once __DIR__ . "/functions.php";
+  include_once __DIR__ . "\\..\\php\\functions.php";
   
   session_start();
 
   if (isset($_SESSION["user_id"]))
   {
+    include_once __DIR__ . "\\..\\php\\database.php";
+    
     $result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
     debug_to_console($_SESSION["user_id"],0) ;
     if ($result)
@@ -27,7 +28,7 @@
   <title>Login</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="../css/stylesheet.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 </style>
@@ -80,7 +81,7 @@ $(document).ready(function()
     $.ajax(
     {
       type:'post',
-      url:"ajax_updateLastOnline.php",
+      url:"../ajax/ajax_updateLastOnline.php",
       data:{
             user_id:<?php echo json_encode($_SESSION["user_id"]);?>
           },
@@ -96,7 +97,7 @@ $(document).ready(function()
     $.ajax
     ({
       type:'post',
-      url:"ajax_matchmaking.php",
+      url:"../ajax/ajax_matchmaking.php",
       data:{
             user_id:<?php echo json_encode($_SESSION["user_id"]);?>
           },
@@ -151,7 +152,7 @@ $(document).ready(function()
     $.ajax
     ({
       type:'POST',
-      url:'ajax_startMatchMaking.php',
+      url:'../ajax/ajax_startMatchMaking.php',
       data:
       {
         user_id:<?php echo json_encode($_SESSION["user_id"]);?>
@@ -171,7 +172,7 @@ $(document).ready(function()
     $.ajax
     ({
       type:'POST',
-      url:'ajax_cancelMatchMaking.php',
+      url:'../ajax/ajax_cancelMatchMaking.php',
       data:
       {
         user_id:<?php echo json_encode($_SESSION["user_id"]);?>
@@ -195,7 +196,7 @@ $(document).ready(function()
 				$.ajax
         ({
 					type:'POST',
-					url:'ajax_insertmessages.php',
+					url:'../ajax/ajax_insertmessages.php',
 					data:
           {
             chat_text:$("#chatInput").val(),
@@ -211,12 +212,12 @@ $(document).ready(function()
 	
 	setInterval(function()
   {
-			$(".chatBox").load("ajax_displaymessages.php");
+			$(".chatBox").load("../ajax/ajax_displaymessages.php");
 	},1500)
 	
-	$(".chatBox").load("ajax_displaymessages.php");
+	$(".chatBox").load("../ajax/ajax_displaymessages.php");
 	
 });
 </script>
 
-<script src="functions.js"></script>
+<script src="../javascript/functions.js"></script>
