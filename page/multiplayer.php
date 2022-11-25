@@ -1,5 +1,7 @@
 <?php
-include_once __DIR__ . "/functions.php";
+//placeholder page; ignore
+
+include_once __DIR__ . "/php/functions.php";
 
 session_start();
 
@@ -7,7 +9,8 @@ try
 {
   if (isset($_SESSION["user_id"]))
   {
-      $db_conn = include_once __DIR__ . "/database.php";
+      include_once __DIR__ . "/php/database.php";
+
       $sql = "SELECT * FROM $tbname
       WHERE id = '{$_SESSION["user_id"]}'";
   
@@ -38,6 +41,7 @@ catch(Throwable $e)
   <title>Home</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="/css/stylesheet.css">
 <style>
 .error {color: #FF0000;}
 </style>

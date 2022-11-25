@@ -1,30 +1,35 @@
 <?php
-include_once __DIR__ . "/functions.php";
+  include_once __DIR__ . "\\..\\php\\functions.php";
 
-session_start();
+  //$projectFolderName = explode('/', $_SERVER['PHP_SELF'])[1];
+  //echo $projectFolderName;
+  //echo getcwd();
 
-try
-{
-  if (isset($_SESSION["user_id"]))
+  session_start();
+
+  try
   {
-      $db_conn = include_once __DIR__ . "/database.php";
-      $sql = "SELECT * FROM $tbname
-      WHERE id = '{$_SESSION["user_id"]}'";
-  
-      $result = $db_conn->query($sql);
-  
-      $user = $result->fetch_assoc();
+    if (isset($_SESSION["user_id"]))
+    {
+      include_once __DIR__ . "\\..\\php\\database.php";
+        
+        $sql = "SELECT * FROM $tbname
+        WHERE id = '{$_SESSION["user_id"]}'";
+    
+        $result = $db_conn->query($sql);
+    
+        $user = $result->fetch_assoc();
+    }
   }
-}
-catch(Throwable $e)
-{
-  debug_to_console(test_escape_char($e), 0);
-  return;
-}
+  catch(Throwable $e)
+  {
+    debug_to_console(test_escape_char($e), 0);
+    return;
+  }
 
 
-//print_r($_SESSION);
-//debug_to_console(, 0);
+  //print_r($_SESSION);
+  //debug_to_console(, 0);
 
 ?>
 
@@ -34,8 +39,8 @@ catch(Throwable $e)
   <title>Home</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="../css/stylesheet.css">
 <style>
-.error {color: #FF0000;}
 </style>
 </head>
 <body>
