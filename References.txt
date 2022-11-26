@@ -133,3 +133,4 @@ https://www.w3schools.com/mysql/mysql_and_or.asp
 https://stackoverflow.com/questions/21813741/mysql-query-decrease-value-by-1
 https://stackoverflow.com/questions/64552020/how-to-get-root-directory-folder-name-in-php-instead-of-path
 https://stackoverflow.com/questions/10162277/php-get-the-root-of-the-file
+https://stackoverflow.com/questions/16437173/stop-setinterval

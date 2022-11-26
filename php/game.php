@@ -34,7 +34,7 @@ function createGameTable()
     $sql_table = "CREATE TABLE $game_tb
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      game_id VARCHAR(128) NOT NULL UNIQUE,
+      game_id VARCHAR(128) NOT NULL,
       game_type ENUM('chess','rock_paper_scissors', 'tick_tack_toe'),
       id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
@@ -101,6 +101,40 @@ function deleteGameSession($game_tb, $game_type, $user_id)
   catch(Throwable $e)
   {
     echo $e;
+  }
+}
+
+function getGameSession($user_id)
+{
+  global $db_conn, $game_tb;
+
+  $sql = sprintf("SELECT game_type FROM $game_tb
+  WHERE id = '%s'
+  LIMIT 1", $user_id);
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    return;
+  }
+  
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+  return $user['game_type'];
+}
+
+function redirectGameSession($user_id)
+{
+  //$_SESSION['game_type'] = getGameSession($user_id);
+  $result = getGameSession($user_id);
+
+  if (isset($result))
+  {
+    header('Location: '.$result.'.php');
+    exit();
   }
 }
 ?>
