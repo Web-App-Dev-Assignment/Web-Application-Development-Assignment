@@ -181,7 +181,7 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
       
       $id = $user_id;
       $player = array_pop($players);
-      $stmt->bind_param("sss", $game_id, array_pop($players), $id);
+      $stmt->bind_param("sss", $game_id, $player, $id);
       $stmt->execute();
 
       $id = $user["id"];

@@ -17,7 +17,7 @@
 <!DOCTYPE HTML>  
 <html>
 <head>
-  <title>Login</title>
+  <title>Rock Paper Scissors</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <link rel="stylesheet" href="../css/stylesheet.css">
