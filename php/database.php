@@ -7,9 +7,9 @@ $hostusername = "root";
 $hostpassword = "";
 $dbname = "mydb";
 $tbname = "users";
-$game_tb = "game";
+$game_tb = "game_table";
 $chat_tb = "chat";
-$matchmaking_tb = "matchmaking";
+$matchmaking_tb = "matchmaking_table";
 
 $timezone = "Asia/Singapore";
 date_default_timezone_set($timezone);

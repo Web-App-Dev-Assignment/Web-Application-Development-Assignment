@@ -23,6 +23,16 @@ function createGameType($game_type)
   {
     $sql = "";
   }
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
+  $stmt->execute();
 }
 
 function createGameTable()
@@ -39,12 +49,13 @@ function createGameTable()
       id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
-    $stmt = $db_conn->prepare($sql);
+    $stmt = $db_conn->prepare($sql_table);
     $stmt->execute();
     //debug_to_console("Table $game_db not found. Table $game_db created.",1);
   }
   catch(Throwable $e)
   {
+    echo $e;
     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     // $output = array("errormessage"=>$e);
     // echo json_encode($output);
@@ -123,7 +134,10 @@ function getGameSession($user_id)
   $stmt->execute();
   $result = $stmt->get_result();
   $user = $result->fetch_assoc();
-  return $user['game_type'];
+  if (isset($user))
+  {
+    return $user['game_type'];
+  }
 }
 
 function redirectGameSession($user_id)

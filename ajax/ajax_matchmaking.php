@@ -3,7 +3,7 @@ include_once __DIR__ . "\\..\\php\\matchmaking.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
-  $game_type = matchMaking($_POST['user_id']);
+  $game_type = matchMaking($_POST['user_id'], $_POST['game_type']);
   if(!empty($game_type))
   {
     $output = array("gametype"=>$game_type);

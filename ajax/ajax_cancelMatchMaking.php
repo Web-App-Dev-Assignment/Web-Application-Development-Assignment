@@ -7,12 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   if(empty($errMsg))
   {
     $output = array("successmessage"=>$errMsg);
-    exit(json_encode($errMsg));
+    exit(json_encode($output));
   }
   else
   {
     $output = array("errormessage"=>$errMsg);
-    exit(json_encode($errMsg));
+    exit(json_encode($output));
   }
 }
   

@@ -134,3 +134,6 @@ https://stackoverflow.com/questions/21813741/mysql-query-decrease-value-by-1
 https://stackoverflow.com/questions/64552020/how-to-get-root-directory-folder-name-in-php-instead-of-path
 https://stackoverflow.com/questions/10162277/php-get-the-root-of-the-file
 https://stackoverflow.com/questions/16437173/stop-setinterval
+https://stackoverflow.com/questions/4467044/proper-way-to-catch-exception-from-json-parse
+https://www.samanthaming.com/tidbits/15-4-ways-to-combine-strings/
+https://api.jquery.com/jquery.parsejson/

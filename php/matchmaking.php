@@ -1,23 +1,26 @@
 <?php
 require_once __DIR__ . "/database.php";
+require_once __DIR__ . "/game.php";
 
 function createMatchmakingTable()
 {
-  global $tbname, $db_conn, $matchmaking_tb;
+  global $tbname, $db_conn, $matchmaking_tb, $game_tb;
 
   try
   {
     $sql_table = "CREATE TABLE $matchmaking_tb
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      game_type ENUM('rock_paper_scissors', 'tick_tack_toe')
+      game_type ENUM('chess','rock_paper_scissors', 'tick_tack_toe'),
       id VARCHAR(128) NOT NULL UNIQUE,
+      game_id VARCHAR(128) NOT NULL,
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
   }
   catch(Throwable $e)
   {
+    echo $e;
     if ($db_conn->errno === 1050)//1050 duplicate table
     {
     }
@@ -30,7 +33,7 @@ function createMatchmakingTable()
 function startMatchMaking($user_id, $game_type)//should call it when player presses the matchmaking button
 {
   global $db_conn, $matchmaking_tb, $game_tb;
-
+  //createMatchmakingTable();
   //$errMsg = "";
   //--------------------------Check if matchmaking--------------------------
   if(isInTable($matchmaking_tb, $user_id))//is currently matchmaking; don't do anything? just exit()
@@ -56,7 +59,11 @@ function startMatchMaking($user_id, $game_type)//should call it when player pres
   
   $sql = "INSERT INTO $matchmaking_tb (id, game_type) 
   VALUES (?,?)";
-
+  // $sql = "INSERT INTO $matchmaking_tb (id, game_type) 
+  // VALUES ($user_id, $game_type)";
+  // $db_conn->query($sql);
+  // return;
+  //$stmt = $db_conn->prepare($sql);
   try
   {
     $stmt = $db_conn->prepare($sql);
@@ -70,10 +77,12 @@ function startMatchMaking($user_id, $game_type)//should call it when player pres
       createMatchmakingTable();
       $stmt = $db_conn->prepare($sql);
     }
+    return;
   }
   
   $stmt->bind_param("ss", $user_id, $game_type);
   $stmt->execute();
+  //return $errMsg;
 }
 
 function cancelMatchMaking($user_id)//should call it when the player presses the cancel matchmaking button or is offline
@@ -89,8 +98,9 @@ function cancelMatchMaking($user_id)//should call it when the player presses the
   }
   catch(Throwable $e)
   {
-    return $e;
-    //echo $e;
+    //return $e;
+    echo $e;
+    return;
   }
   $stmt->execute();
 }
@@ -184,7 +194,7 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
 
 function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
 {
-  global $db_conn, $game_tb, $tbname;
+  global $db_conn, $game_tb, $tbname, $matchmaking_tb;
   try
   {
     $sql = sprintf("SELECT id FROM %s
@@ -200,6 +210,11 @@ function isInTable($table_name, $user_id)//mabye write a function to differentia
       if($db_conn->errno === 1146 && $table_name === $game_tb)//1146 Table doesn't exist
       {
         createGameTable();
+        $stmt->prepare($sql);
+      }
+      else if($db_conn->errno === 1146 && $table_name === $matchmaking_tb)//1146 Table doesn't exist
+      {
+        createMatchmakingTable();
         $stmt->prepare($sql);
       }
       return;//do not remove this, it helps to initialize the $result outside the try catch block
