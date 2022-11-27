@@ -1,3 +1,9 @@
+html , body
+{
+	height:100%;
+	width:100%;
+}
+
 .error {color: #FF0000;}
 
 .center
@@ -49,12 +55,14 @@
   right: 0;
 	transition: height 0.2s ease-out;
 	margin-right: 0.3em;
-	background-color:#192833;
+	background-color:#102838;
 	z-index: 9999;
 }
 
 .chat
 {
+	height: 100%;
+	width: 100%;
 	/*
 	position:fixed;
 	height: 3em;
@@ -102,8 +110,12 @@
 .chatInput
 {
 	width:100%;
+	padding-left: 0;
+	padding-right: 0;
+	/*
 	margin-left: auto;
   margin-right: auto;
+	*/
 }
 
 

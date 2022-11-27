@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/functions.php";
+include_once __DIR__ . "/function.php";
 //Under the xampp control panel, ensure that the module Apache and MySQL has been started
 //Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
 $host = "localhost";

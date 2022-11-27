@@ -1,19 +1,3 @@
-<?php
-  include_once __DIR__ . "\\..\\php\\function.php";
-
-  session_start();
-
-  if (isset($_SESSION["user_id"]))
-  {
-    include_once __DIR__ . "\\..\\php\\chat.php";
-  }
-  else
-  {
-    header("Location: index.php");
-    exit();
-  }
-?>
-
 <!DOCTYPE HTML>  
 <html>
 <head>
@@ -26,9 +10,24 @@
 </style>
 </head>
 <body style="max-width: none;">
+  <div class="darkLayer" style="display:none">
+    <div class="loader center" style="margin-top:10%;"></div>
+    <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
   </div>
   <div>
-    <p>Some text here</p>
+    <div class="leftColumn" style="background-color:#aaa;">
+      <h2>Column 1</h2>
+      <p>Some text..</p>
+    </div>
+    <div class="middleColumn" style="background-color:#bbb;">
+      <h2>Column 2</h2>
+      <p>Some text..</p>
+      <button type="button" id="matchmakingButton" class="center" style="margin-top: 20%;">Matchmaking</button>
+    </div>
+    <div class="rightColumn" style="background-color:#ccc;">
+      <h2>Column 3</h2>
+      <p>Some text..</p>
+    </div>
   </div>
   <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
     <div class ="chat">
@@ -42,24 +41,3 @@
 
 </body>
 </html>
-
-<script>
-$(document).ready(function() 
-{
-	$("#chatInput").keyup(function(e)
-  {
-			if(e.keyCode == 13)//the enter key
-      {
-				insertMessage($_SESSION["game_id"]);
-			}
-	})
-	
-	setInterval(function()
-  {
-			displayMessage('='.$_SESSION["game_id"]);
-	},1500)
-	
-	displayMessage('='.$_SESSION["game_id"]);
-	
-});
-</script>

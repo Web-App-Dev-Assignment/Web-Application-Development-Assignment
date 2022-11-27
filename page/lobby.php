@@ -1,11 +1,11 @@
 <?php
-  include_once __DIR__ . "\\..\\php\\functions.php";
+  include_once __DIR__ . "\\..\\php\\function.php";
 
   session_start();
 
   if (isset($_SESSION["user_id"]))
   {
-    //include_once __DIR__ . "\\..\\php\\matchmaking.php";  
+    include_once __DIR__ . "\\..\\php\\matchmaking.php";  
     include_once __DIR__ . "\\..\\php\\game.php";
 
     //$result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
@@ -36,7 +36,7 @@
     <div class="loader center" style="margin-top:10%;"></div>
     <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
   </div>
-  <div>
+  <div style="height:100%;width:100%;">
     <div class="leftColumn" style="background-color:#aaa;">
       <h2>Column 1</h2>
       <p>Some text..</p>
@@ -96,118 +96,15 @@ $(document).ready(function()
       }
     })
  }
-
- function startMatchMaking()
- {
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_startMatchMaking.php',
-      data:
-      {
-        user_id:<?php echo json_encode($_SESSION["user_id"]);?>,
-        game_type:$('#game_type').val()
-      },
-      success:function(response)
-      {
-        jason = $.parseJSON(response);
-        if(!jason.errormessage)
-        {
-          matchmaking = setInterval(matchMaking,1500);  
-        }
-        else if(jason.errormessage === "Already matchmaking.")
-        {
-
-        }
-        else
-        {
-
-        }
-      }
-    })
- }
- function cancelMatchMaking()
- {
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_cancelMatchMaking.php',
-      data:
-      {
-        user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-      },
-      success:function(response)
-      {
-        jason = $.parseJSON(response);
-        if(!jason.errormessage)
-        {}
-        clearInterval(matchmaking);
-      }
-    })
- }
-
- function matchMaking()
-  {
-    $.ajax
-    ({
-      type:'post',
-      url:"../ajax/ajax_matchmaking.php",
-      data:{
-            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-          },
-      success:function(data)
-      {
-        jason = $.parseJSON(response);
-        if(jason.gametype)
-        {
-          window.location.href= jason.gametype.".php";
-        }
-      }
-    })
-  }
-
-  function insertMessage()
-  {
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_insertmessages.php',
-      data:
-      {
-        chat_text:$("#chatInput").val(),
-        user_id:<?php echo json_encode($_SESSION["user_id"]);?>,
-        game_type:NULL,
-      },
-      success:function()
-      {
-        $("#chatInput").val("");
-      }
-    })
-  }
-
-  function displayMessage()
-  {
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_displayMessage.php',
-      data:
-      {
-        game_type:NULL,
-      }
-    })
-  }
  
 });  
 </script>
 
 <script>
-  var matchmaking;
   $(document).ready(function()
   {
     $("#chatButton").on('click', function()
     { 
-      console.log("button pressed");
       var chatSetting = $(this).closest('.chatSetting')[0];
       if (chatSetting.style.height)
       {
@@ -216,8 +113,6 @@ $(document).ready(function()
       } 
       else 
       {
-        console.log("2");
-        console.log($('.chatSetting').css('style'));
         $('.chatSetting').attr('style', 'height:50%');
         $('.chatBox').attr('style', 'overflow-y:scroll');
       } 
@@ -225,12 +120,12 @@ $(document).ready(function()
 
     $("#matchmakingButton").on('click', function()
     { 
-      if(!empty($('#game_type').val()))
+      if($('#game_type').val())
       {
         $("#matchmakingButton").hide();
         $('.darkLayer').attr('style', '');
 
-        startMatchMaking();
+        startMatchMaking(<?php echo json_encode($_SESSION["user_id"]);?>, $('#game_type').val());
       }
       else
       {
@@ -242,7 +137,7 @@ $(document).ready(function()
       $("#matchmakingButton").show();
       $('.darkLayer').attr('style', 'display: none');
 
-      cancelMatchMaking();
+      cancelMatchMaking(<?php echo json_encode($_SESSION["user_id"]);?>);
     })
   });
 </script>
@@ -254,18 +149,30 @@ $(document).ready(function()
   {
 			if(e.keyCode == 13)//the enter key
       {
-				insertMessage();
+				insertMessage($("#chatInput").val(), <?php echo json_encode($_SESSION["user_id"]);?>, '');
 			}
 	})
 	
 	setInterval(function()
   {
-			displayMessage();
+    //$(".chatBox").html(displayMessage("IS NULL"));
+    $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:"IS NULL"
+    }
+    );
 	},1500)
 	
-	displayMessage();
+	$(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:"IS NULL"
+    }
+    );
 	
 });
+
 </script>
 
-<script src="../javascript/functions.js"></script>
+<script src="../javascript/function.js"></script>
+<script src="../javascript/chat.js"></script>
+<script src="../javascript/matchmaking.js"></script>

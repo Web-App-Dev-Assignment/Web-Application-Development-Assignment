@@ -1,5 +1,5 @@
 <?php
-  include_once __DIR__ . "\\..\\php\\functions.php";
+  include_once __DIR__ . "\\..\\php\\function.php";
 
   //$projectFolderName = explode('/', $_SERVER['PHP_SELF'])[1];
   //echo $projectFolderName;
