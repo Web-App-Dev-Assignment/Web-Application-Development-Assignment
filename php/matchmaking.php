@@ -113,9 +113,9 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
     if(isInTable($game_tb, $user_id))//is currently ingame, redirect user to the game
     {
       //write code to redirect player to multiplay game here
-      $sql = sprintf("SELECT game_type FROM %s
+      $sql = sprintf("SELECT game_id FROM %s
       WHERE id = '%s'
-      LIMIT 1", $game_tb, $user_id);
+      LIMIT 1", $game_type, $user_id);
 
       $stmt = $db_conn->stmt_init();
       $stmt->prepare($sql);
@@ -125,7 +125,9 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
 
       if($user)
       {
-        return $user['game_type'];
+        $msg = "Opponent found.";
+        return $msg;
+        //return $user['game_type'];
         //$_SESSION['game_type'] = $user['game_type'];
         //exit();
         //header('Location: ../page/'.$user['game_type'].'.php');
@@ -160,15 +162,30 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
       $game_id = md5(uniqid());
       $players = array("player1","player2");
       shuffle($players);
-      $id = $user_id;
       $sql = "INSERT INTO $game_type (game_id, player, id) 
       VALUES (?, ?, ?)";
-      $stmt = $db_conn->prepare($sql);
-
+      try
+      {
+        $stmt = $db_conn->prepare($sql);
+      }
+      catch(Throwable $e)
+      {
+        echo $e;
+        if($db_conn->errno === 1146)//1146 Table doesn't exist
+        {
+          createGameType($game_type);
+          $stmt = $db_conn->prepare($sql);
+        }
+        //return;
+      }
+      
+      $id = $user_id;
+      $player = array_pop($players);
       $stmt->bind_param("sss", $game_id, array_pop($players), $id);
       $stmt->execute();
 
       $id = $user["id"];
+      $player = array_pop($players);
       $stmt->execute();
 
 
@@ -189,7 +206,9 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
     //--------------------------End of matchmaking--------------------------
   }
   catch(Throwable $e)
-  {}
+  {
+    echo $e;
+  }
 }
 
 function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
@@ -235,7 +254,7 @@ function isInTable($table_name, $user_id)//mabye write a function to differentia
   }
   catch(Throwable $e)
   {
-    //echo $e;
+    echo $e;
   }
   
 }

@@ -74,7 +74,7 @@
 <script>  
 $(document).ready(function()
 {
-
+  updateLastOnline();
   setInterval(function()
   {
     updateLastOnline();

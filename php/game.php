@@ -3,25 +3,30 @@ require_once __DIR__ . "/database.php";
 
 function createGameType($game_type)
 {
+  global $db_conn, $tbname, $game_tb;
   if ($game_type === 'rock_paper_scissors')
   {
     $sql = sprintf("CREATE TABLE %s
     (
       `index` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      health UNSIGNED TINYINT NOT NULL DEFAULT 3,
+      health TINYINT UNSIGNED NOT NULL DEFAULT 3,
       `move` ENUM('rock','paper','scissors') DEFAULT NULL,
       `is_checked` BIT(1) DEFAULT 0,
       player ENUM('player1','player2'),
       game_id VARCHAR(128) NOT NULL,
       id VARCHAR(128) NOT NULL UNIQUE,
       FOREIGN KEY(id) REFERENCES $tbname(id)
-      FOREIGN KEY(game_id) REFERENCES $game_tb(game_id)
     )"
     ,$game_type);
   }
   else if ($game_type === 'chess')
   {
     $sql = "";
+  }
+  else
+  {
+    $msg = "Game type doesn't exist.";
+    return $msg;
   }
   try
   {

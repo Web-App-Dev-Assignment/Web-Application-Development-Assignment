@@ -79,19 +79,18 @@ function matchMaking(user_id, game_type)
         },
     success:function(response)
     {
-      console.log("matchmaking");
-      // try
-      // {
-      //   jason = $.parseJSON(response);
-      //   if(jason.gametype)
-      //   {
-      //     window.location.href= jason.gametype+".php";
-      //   }
-      // }
-      // catch(err)
-      // {
-      //   console.error(err);
-      // }
+      try
+      {
+        jason = $.parseJSON(response);
+        if(jason.gametype)
+        {
+          window.location.href= jason.gametype+".php";
+        }
+      }
+      catch(err)
+      {
+        console.error(err);
+      }
     }
   })
 }
