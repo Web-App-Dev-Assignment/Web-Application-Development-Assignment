@@ -137,3 +137,8 @@ https://stackoverflow.com/questions/16437173/stop-setinterval
 https://stackoverflow.com/questions/4467044/proper-way-to-catch-exception-from-json-parse
 https://www.samanthaming.com/tidbits/15-4-ways-to-combine-strings/
 https://api.jquery.com/jquery.parsejson/
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+https://stackoverflow.com/questions/13483331/make-buttons-the-same-width-without-specifying-the-exact-size
+https://stackoverflow.com/questions/49680484/how-to-add-one-event-listener-for-all-buttons
+https://javascript.info/bubbling-and-capturing
+https://www.w3schools.com/js/js_arrow_function.asp

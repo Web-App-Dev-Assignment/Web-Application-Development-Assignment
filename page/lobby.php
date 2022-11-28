@@ -5,7 +5,7 @@
 
   if (isset($_SESSION["user_id"]))
   {
-    include_once __DIR__ . "\\..\\php\\matchmaking.php";  
+    //include_once __DIR__ . "\\..\\php\\matchmaking.php";  
     include_once __DIR__ . "\\..\\php\\game.php";
 
     //$result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
@@ -74,28 +74,14 @@
 <script>  
 $(document).ready(function()
 {
-  updateLastOnline();
+  updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
   setInterval(function()
   {
-    updateLastOnline();
+    updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
     //matchMaking();//need to change to only match make if the player pressed matchmaking button
   }, 5000);
 
- function updateLastOnline()
- {
-    $.ajax(
-    {
-      type:'post',
-      url:"../ajax/ajax_updateLastOnline.php",
-      data:{
-            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-          },
-      success:function()
-      {
-        //if offline, cancel matchmaking code here
-      }
-    })
- }
+ 
  
 });  
 </script>
@@ -153,26 +139,23 @@ $(document).ready(function()
 			}
 	})
 	
+  $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:"IS NULL"
+    });
 	setInterval(function()
   {
     //$(".chatBox").html(displayMessage("IS NULL"));
     $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
       game_id:"IS NULL"
-    }
-    );
+    });
 	},1500)
-	
-	$(".chatBox").load("../ajax/ajax_displaymessage.php",
-    {
-      game_id:"IS NULL"
-    }
-    );
-	
 });
 
 </script>
 
 <script src="../javascript/function.js"></script>
+<script src="../javascript/onlinestatus.js"></script>
 <script src="../javascript/chat.js"></script>
 <script src="../javascript/matchmaking.js"></script>

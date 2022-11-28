@@ -120,7 +120,7 @@ function deleteGameSession($game_tb, $game_type, $user_id)
   }
 }
 
-function getGameSession($user_id)
+function getGameType($user_id)
 {
   global $db_conn, $game_tb;
 
@@ -133,6 +133,7 @@ function getGameSession($user_id)
   }
   catch(Throwable $e)
   {
+    echo $e;
     return;
   }
   
@@ -145,13 +146,39 @@ function getGameSession($user_id)
   }
 }
 
+function getGameId($user_id)
+{
+  global $db_conn, $game_tb;
+
+  $sql = sprintf("SELECT game_id FROM $game_tb
+  WHERE id = '%s'
+  LIMIT 1", $user_id);
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
+  
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+  if (isset($user))
+  {
+    return $user['game_id'];
+  }
+}
+
 function redirectGameSession($user_id)
 {
-  //$_SESSION['game_type'] = getGameSession($user_id);
-  $result = getGameSession($user_id);
+  $result = getGameType($user_id);
 
   if (isset($result))
   {
+    $_SESSION['game_id'] = getGameId($user_id);
     header('Location: '.$result.'.php');
     exit();
   }

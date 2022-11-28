@@ -1,32 +1,61 @@
 <?php
 require_once __DIR__ . "/database.php";
 
-function decreaseHP($game_type, $value)
+$game_type = 'rock_paper_scissors';
+function decreaseHP($user_id, $move)
 {
-  global $db_conn;
+  global $db_conn, $game_type;
 
   $sql = sprintf("UPDATE %s 
-  SET health = health-%s", $game_type, $value);
-  $stmt = $db_conn->prepare($sql);
+  SET health = health-%s", $game_type, $move);
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
   $stmt->execute();
 }
 
-function updateGame($game_type, $game_id, $user_id)
+function setMove($user_id, $move)
 {
-  if ($game_type === 'rock_paper_scissors')
+  global $db_conn, $game_type;
+
+  $sql = sprintf("UPDATE %s
+  SET `move` = %s
+  WHERE id = '%s'", $game_type, $move, $user_id);
+  try
   {
-    //if is_checked is false, continue, if true, return
-    //check if both made a move
-    //if both made a move, then check for the move and perform conditions accordingly
-    //if updated, set the is_checked to 1
-    //after both players is_check is set to 1, reset the move to NULL and is_checked to 0
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
+  $stmt->execute();
+}
 
-    // $sql = sprintf("SELECT `move` FROM %s
-    // WHERE game_id = '%s' AND NOT `move` = NULL
-    // LIMIT 2"
-    // , $game_type, $game_id);
+function rockPaperScissors($user_id, $game_id)
+{
+  global $db_conn, $game_type;
 
-    $sql = sprintf("SELECT COUNT(is_checked) FROM %s
+  //if is_checked is false, continue, if true, return
+  //check if both made a move
+  //if both made a move, then check for the move and perform conditions accordingly
+  //if updated, set the is_checked to 1
+  //after both players is_check is set to 1, reset the move to NULL and is_checked to 0
+
+  // $sql = sprintf("SELECT `move` FROM %s
+  // WHERE game_id = '%s' AND NOT `move` = NULL
+  // LIMIT 2"
+  // , $game_type, $game_id);
+  try
+  {
+    $sql = sprintf("SELECT COUNT(is_checked) FROM $game_type
     WHERE id = '%s' AND is_checked = 1
     LIMIT 1"
     , $user_id);
@@ -40,7 +69,7 @@ function updateGame($game_type, $game_id, $user_id)
     }
 
     $sql = sprintf("SELECT COUNT(`move`) FROM %s
-    WHERE game_id = '%s' AND NOT `move` = NULL
+    WHERE game_id = '%s' AND NOT `move` IS NULL
     LIMIT 2"
     , $game_type, $game_id);
     $stmt = $db_conn->prepare($sql);
@@ -57,7 +86,7 @@ function updateGame($game_type, $game_id, $user_id)
       exit();
     }
 
-    $sql = sprintf("SELECT * FROM %s
+    $sql = sprintf("SELECT id, `move` FROM %s
     WHERE game_id = %s
     LIMIT 2"
     , $game_type, $game_id);
@@ -87,8 +116,8 @@ function updateGame($game_type, $game_id, $user_id)
     // $other_user = $result->fetch_assoc();
 
     $sql = sprintf("UPDATE %s
-    SET is_checked = %s"
-    , $game_type, $value);
+    SET is_checked = 1"
+    , $game_type);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
 
@@ -175,8 +204,13 @@ function updateGame($game_type, $game_id, $user_id)
       , $game_type ,$game_id);
     }
 
-    $output = array("GameStatus"=>$message);
-    exit(json_encode($output));
+    return $message;
+    //$output = array("GameStatus"=>$message);
+    //exit(json_encode($output));
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
   }
 }
 ?>

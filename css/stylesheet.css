@@ -4,6 +4,12 @@ html , body
 	width:100%;
 }
 
+body
+{
+  padding: 0;
+  margin: 0 auto;
+}
+
 .error {color: #FF0000;}
 
 .center
@@ -151,21 +157,31 @@ html , body
   100% { transform: rotate(360deg); }
 }
 
-html {
-  height: 100%
-}
-
-body {
-  padding: 0;
-  margin: 0 auto;
-}
-
 .darkLayer {
   background-color: rgba(0, 0, 0, .6);
   height: 100%;
   width: 100%;
   position: fixed;
 	z-index: 9998;
+}
+
+.rps 
+{
+	display:block;
+	text-align: center;
+	font-size: 5em;
+	width:20%;
+	height:fit-content;
+}
+
+#rpsWrapper
+{
+	display:flex;
+	justify-content: center;
+	gap: 5em;
+	height: 50%;
+	align-items: flex-end;
+
 }
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */

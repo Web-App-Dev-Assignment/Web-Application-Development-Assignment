@@ -3,9 +3,9 @@
 
   session_start();
 
-  if (isset($_SESSION["user_id"]))
+  if (isset($_SESSION["user_id"]) && isset($_SESSION['game_id']))
   {
-    include_once __DIR__ . "\\..\\php\\chat.php";
+    //include_once __DIR__ . "\\..\\php\\chat.php";
   }
   else
   {
@@ -27,8 +27,11 @@
 </head>
 <body style="max-width: none;">
   </div>
-  <div>
+  <div style="height:100%;width:100%;">
     <p>Some text here</p>
+    <button type="button" id="rock" style="display:flex;">✊</button>
+    <button type="button" id="paper" style="display:flex;">🖐</button>
+    <button type="button" id="scissors" style="display:flex;">✌</button>
   </div>
   <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
     <div class ="chat">
@@ -46,20 +49,52 @@
 <script>
 $(document).ready(function() 
 {
-	$("#chatInput").keyup(function(e)
+	updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
+  setInterval(function()
+  {
+    updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
+  }, 5000);
+  
+  $("#chatInput").keyup(function(e)
   {
 			if(e.keyCode == 13)//the enter key
       {
 				insertMessage($_SESSION["game_id"]);
 			}
 	})
-	
+
+  $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:'='.$_SESSION["game_id"]
+    }
+    );
 	setInterval(function()
   {
-			displayMessage('='.$_SESSION["game_id"]);
+    //$(".chatBox").html(displayMessage("IS NULL"));
+    $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:'='.$_SESSION["game_id"]
+    }
+    );
 	},1500)
 	
-	displayMessage('='.$_SESSION["game_id"]);
-	
+  $("#chatButton").on('click', function()
+    { 
+      var chatSetting = $(this).closest('.chatSetting')[0];
+      if (chatSetting.style.height)
+      {
+        $('.chatSetting').attr('style', '');
+        $('.chatBox').attr('style', '');
+      } 
+      else 
+      {
+        $('.chatSetting').attr('style', 'height:50%');
+        $('.chatBox').attr('style', 'overflow-y:scroll');
+      } 
+    })
 });
 </script>
+
+<script src="../javascript/function.js"></script>
+<script src="../javascript/onlinestatus.js"></script>
+<script src="../javascript/chat.js"></script>
