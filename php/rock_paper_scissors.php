@@ -39,6 +39,34 @@ function setMove($user_id, $move)
   $stmt->execute();
 }
 
+function isReady($user_id)
+{
+  global $db_conn, $game_type;
+
+  $sql = sprintf("SELECT COUNT(id) FROM %s
+  WHERE id = '%s' AND is_checked = 0"
+  , $game_type, $user_id);
+  try
+  {
+    $stmt = $db_conn->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
+  $stmt->execute();
+  $count = $stmt->get_result();
+  if($count === 1)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 function rockPaperScissors($user_id, $game_id)
 {
   global $db_conn, $game_type;
@@ -124,7 +152,7 @@ function rockPaperScissors($user_id, $game_id)
     if($user['move'] === $other_user['move'])
     {
       //draw
-      $message = "draw";
+      $message = "Draw";
     }
     else if($user['move'] === 'rock')
     {

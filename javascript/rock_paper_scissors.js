@@ -12,6 +12,8 @@ function setMove(user_id, game_id, move)
         },
     success:function(response)
     {
+      console.log(move + " set");
+      $("#rpsWrapper").hide();
       interval = setInterval(function()
           { 
             rock_paper_scissors(user_id, game_id)}
@@ -32,7 +34,7 @@ function setMove(user_id, game_id, move)
   })
 }
 
-function rock_paper_scissors(user_id, game_id, move)
+function rock_paper_scissors(user_id, game_id)
 {
   $.ajax
   ({
@@ -40,16 +42,80 @@ function rock_paper_scissors(user_id, game_id, move)
     url:"../ajax/ajax_rock_paper_scissors.php",
     data:{
           user_id:user_id,
-          game_id:game_id,
-          move:move
+          game_id:game_id
         },
     success:function(response)
     {
       try
       {
         jason = $.parseJSON(response);
-        if(jason.gametype)
+        switch(jason.gameStatus)
         {
+          case "Win":
+            console.log("Win");
+            break;
+          case "Lose":
+            console.log("Lose");
+            break;
+          case "Win match":
+            console.log("Win match");
+            break;
+          case "Lose match":
+            console.log("Lose match");
+            break;
+          default:
+            break;
+        }
+        
+        
+        //if(jason.gameStatus === "Win")
+        if(jason.gameStatus)
+        {
+          clearInterval(interval);
+          //ready();
+          interval = setInterval(function()
+          { 
+            isReady(user_id)}
+            ,1500);  
+          //window.location.href= jason.gametype+".php";
+        }
+        // else if(jason.gameStatus === "Lose")
+        // {
+        //   clearInterval(interval);
+        //   //ready();
+        //   interval = setInterval(function()
+        //   { 
+        //     isReady(user_id)}
+        //     ,1500); 
+        //   //window.location.href= jason.gametype+".php";
+        // }
+      }
+      catch(err)
+      {
+        console.error(err);
+      }
+    }
+  })
+}
+
+function isReady()
+{
+  $.ajax
+  ({
+    type:'post',
+    url:"../ajax/ajax_is_ready_rps.php",
+    data:{
+          user_id:user_id
+        },
+    success:function(response)
+    {
+      try
+      {
+        jason = $.parseJSON(response);
+        if(jason.isReady)
+        {
+          $("#rpsWrapper").show();
+          //resume()
           clearInterval(interval);
           //window.location.href= jason.gametype+".php";
         }
