@@ -1,4 +1,4 @@
-var matchMaking;
+var matchmaking;
 
 function startMatchMaking(user_id, game_type)
 {

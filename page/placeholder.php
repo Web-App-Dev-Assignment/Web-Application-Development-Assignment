@@ -27,6 +27,9 @@
 </style>
 </head>
 <body style="max-width: none;">
+  <div class="darkLayer" style="display:none">
+    <div class="loader center" style="margin-top:10%;"></div>
+    <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
   </div>
   <div style="height:100%;width:100%;">
     <p>Some text here</p>

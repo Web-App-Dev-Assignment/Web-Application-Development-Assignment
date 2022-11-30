@@ -14,6 +14,7 @@ function setMove(user_id, game_id, move)
     {
       console.log(move + " set");
       $("#rpsWrapper").hide();
+      $('.darkLayer').attr('style', '');
       interval = setInterval(function()
           { 
             rock_paper_scissors(user_id, game_id)}
@@ -115,6 +116,7 @@ function isReady()
         if(jason.isReady)
         {
           $("#rpsWrapper").show();
+          $('.darkLayer').attr('style', 'display: none');
           //resume()
           clearInterval(interval);
           //window.location.href= jason.gametype+".php";

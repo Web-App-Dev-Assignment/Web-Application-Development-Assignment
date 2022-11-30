@@ -8,9 +8,7 @@
     //include_once __DIR__ . "\\..\\php\\matchmaking.php";  
     include_once __DIR__ . "\\..\\php\\game.php";
 
-    //$result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
     redirectGameSession($_SESSION["user_id"]);//redirect the player to game page if they are in a game session
-    //$_SESSION['matchmaking'];
     //if matchmaking then resume/cancel?
   }
   else
@@ -78,11 +76,7 @@ $(document).ready(function()
   setInterval(function()
   {
     updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
-    //matchMaking();//need to change to only match make if the player pressed matchmaking button
   }, 5000);
-
- 
- 
 });  
 </script>
 
@@ -145,7 +139,6 @@ $(document).ready(function()
     });
 	setInterval(function()
   {
-    //$(".chatBox").html(displayMessage("IS NULL"));
     $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
       game_id:"IS NULL"
