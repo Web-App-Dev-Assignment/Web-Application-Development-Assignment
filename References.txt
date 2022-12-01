@@ -142,3 +142,4 @@ https://stackoverflow.com/questions/13483331/make-buttons-the-same-width-without
 https://stackoverflow.com/questions/49680484/how-to-add-one-event-listener-for-all-buttons
 https://javascript.info/bubbling-and-capturing
 https://www.w3schools.com/js/js_arrow_function.asp
+https://dev.mysql.com/doc/refman/8.0/en/commands-out-of-sync.html

@@ -2,6 +2,7 @@
   include_once __DIR__ . "\\..\\php\\function.php";
 
   session_start();
+  //$_SESSION['game_id'] = "0123456789"; 
 
   if (isset($_SESSION["user_id"]) && !empty($_SESSION['game_id']))
   //if(isset($_SESSION["user_id"]))
@@ -109,7 +110,7 @@ $(document).ready(function()
       return;
     }
 
-    setMove($_SESSION["user_id"], $_SESSION["game_id"], event.target.id);
+    setMove(<?php echo json_encode($_SESSION["user_id"]);?>, <?php echo json_encode($_SESSION["game_id"]);?>, event.target.id);
     //console.dir(event.target.id);
   })
 

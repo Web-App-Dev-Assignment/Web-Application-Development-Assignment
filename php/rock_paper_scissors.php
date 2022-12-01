@@ -25,7 +25,7 @@ function setMove($user_id, $move)
   global $db_conn, $game_type;
 
   $sql = sprintf("UPDATE %s
-  SET `move` = %s
+  SET `move` = '%s'
   WHERE id = '%s'", $game_type, $move, $user_id);
   try
   {
@@ -89,9 +89,10 @@ function rockPaperScissors($user_id, $game_id)
     , $user_id);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
-    $count = $stmt->get_result();
-
-    if($count === 1)//is_checked = true
+    $stmt->bind_result($result);
+    $stmt->fetch();
+    //echo $count;
+    if($result === 1)//is_checked = true
     {
       exit();//if updated, don't do anything; wait for the other player to be updated
     }
@@ -100,19 +101,42 @@ function rockPaperScissors($user_id, $game_id)
     WHERE game_id = '%s' AND NOT `move` IS NULL
     LIMIT 2"
     , $game_type, $game_id);
+    // $sql = sprintf("SELECT `move` FROM %s
+    // WHERE game_id = '%s' AND NOT `move` IS NULL
+    // LIMIT 2"
+    // , $game_type, $game_id);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
+    $stmt->bind_result($result);
+    $stmt->fetch();
+
+    // while ($stmt->fetch())
+    // {
+    //   echo gettype($result);
+    //   echo $result;
+    // }
+
+
+    // $result = $stmt->fetch();
+    // $count = $count->rowCount();
 
     //$result = $stmt->get_result();
-    //$count = $stmt->rowCount();
-
-    $count = $stmt->get_result();
-
-    if($count < 2)//not every player made a move
+    // $count = $result->fetch_assoc();
+    //$result = (int)$result;
+    // echo gettype($count);
+    // echo $count;
+    if($result < 2)//not every player made a move
     {
       //write a function to tell who selected and to select move
+      echo "less than 2";
       exit();
     }
+    else
+    {
+      echo "more than 2";
+      exit();
+    }
+    //$stmt->free_result();
 
     $sql = sprintf("SELECT id, `move` FROM %s
     WHERE game_id = %s
