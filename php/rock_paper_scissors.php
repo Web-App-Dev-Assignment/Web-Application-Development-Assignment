@@ -57,8 +57,9 @@ function isReady($user_id)
     return;
   }
   $stmt->execute();
-  $count = $stmt->get_result();
-  if($count === 1)
+  $stmt->bind_result($result);
+  $stmt->fetch();
+  if($result === 1)
   {
     return true;
   }
@@ -71,6 +72,7 @@ function isReady($user_id)
 function rockPaperScissors($user_id, $game_id)
 {
   global $db_conn, $game_type;
+  // $message = "";
 
   //if is_checked is false, continue, if true, return
   //check if both made a move
@@ -82,6 +84,8 @@ function rockPaperScissors($user_id, $game_id)
   // WHERE game_id = '%s' AND NOT `move` = NULL
   // LIMIT 2"
   // , $game_type, $game_id);
+  // echo "1 ";
+  
   try
   {
     $sql = sprintf("SELECT COUNT(is_checked) FROM $game_type
@@ -96,9 +100,11 @@ function rockPaperScissors($user_id, $game_id)
     //echo $count;
     if($result === 1)//is_checked = true
     {
-      exit();//if updated, don't do anything; wait for the other player to be updated
+      return "";
+      //exit();//if updated, don't do anything; wait for the other player to be updated
     }
-
+    // echo "2 ";
+    
     $sql = sprintf("SELECT COUNT(`move`) FROM %s
     WHERE game_id = '%s' AND NOT `move` IS NULL
     LIMIT 2"
@@ -114,8 +120,10 @@ function rockPaperScissors($user_id, $game_id)
     {
       //write a function to tell who selected and to select move
       // echo "less than 2";
-      exit();
+      //exit();
+      return "";
     }
+    // echo "3 ";
 
     $sql = sprintf("SELECT id, `move` FROM %s
     WHERE game_id = '%s'
@@ -220,8 +228,9 @@ function rockPaperScissors($user_id, $game_id)
     }
 
     $sql = sprintf("UPDATE %s
-    SET is_checked = 1"
-    , $game_type);
+    SET is_checked = 1
+    WHERE id = '%s'"
+    , $game_type, $user_id);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
     
@@ -246,7 +255,9 @@ function rockPaperScissors($user_id, $game_id)
       $stmt->execute();
     }
 
-    echo $message;
+    //echo $message;
+    // echo "testing";
+    // return "testing";
     return $message;
     //$output = array("GameStatus"=>$message);
     //exit(json_encode($output));

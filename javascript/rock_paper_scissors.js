@@ -12,6 +12,7 @@ function setMove(user_id, game_id, move)
         },
     success:function(response)
     {
+      console.log(response);
       console.log(move + " set");
       $("#rpsWrapper").hide();
       $('.darkLayer').attr('style', '');
@@ -47,29 +48,33 @@ function rock_paper_scissors(user_id, game_id)
         },
     success:function(response)
     {
+      console.log(response);
       try
       {
+        // console.log(response);
         jason = $.parseJSON(response);
-        switch(jason.gameStatus)
-        {
-          case "Win":
-            console.log("Win");
-            break;
-          case "Lose":
-            console.log("Lose");
-            break;
-          case "Win match":
-            console.log("Win match");
-            break;
-          case "Lose match":
-            console.log("Lose match");
-            break;
-          default:
-            break;
-        }
+        //console.log(jason.gameStatus);
+        // switch(jason.gameStatus)
+        // {
+        //   case "Win":
+        //     //console.log("Win");
+        //     break;
+        //   case "Lose":
+        //     //console.log("Lose");
+        //     break;
+        //   case "Win match":
+        //     // console.log("Win match");
+        //     break;
+        //   case "Lose match":
+        //     // console.log("Lose match");
+        //     break;
+        //   default:
+        //     break;
+        // }
         
         
         //if(jason.gameStatus === "Win")
+        
         if(jason.gameStatus)
         {
           clearInterval(interval);
@@ -80,6 +85,7 @@ function rock_paper_scissors(user_id, game_id)
             ,1500);  
           //window.location.href= jason.gametype+".php";
         }
+        
         // else if(jason.gameStatus === "Lose")
         // {
         //   clearInterval(interval);
@@ -99,7 +105,7 @@ function rock_paper_scissors(user_id, game_id)
   })
 }
 
-function isReady()
+function isReady(user_id)
 {
   $.ajax
   ({
