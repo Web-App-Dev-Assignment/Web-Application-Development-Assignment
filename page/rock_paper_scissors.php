@@ -76,14 +76,14 @@ $(document).ready(function()
 
   $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
-      game_id:'='+<?php echo json_encode($_SESSION["game_id"]);?>
+      game_id:'='+'<?php echo json_encode($_SESSION["game_id"]);?>'
       //game_id:"IS NULL"
     });
 	setInterval(function()
   {
     $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
-      game_id:'='+<?php echo json_encode($_SESSION["game_id"]);?>
+      game_id:'='+'<?php echo json_encode($_SESSION["game_id"]);?>'
       //game_id:"IS NULL"
     });
 	},1500)
