@@ -146,3 +146,8 @@ https://dev.mysql.com/doc/refman/8.0/en/commands-out-of-sync.html
 https://www.php.net/manual/en/mysqli-stmt.bind-result.php
 https://stackoverflow.com/questions/37911621/mysql-select-count-returns-true
 https://www.w3schools.com/php/php_arrays_associative.asp
+https://www.w3schools.com/js/js_timing.asp
+https://www.w3schools.com/cssref/pr_gen_content.php
+https://www.youtube.com/watch?v=GhxNhdf0liA
+https://usefulangle.com/post/226/javascript-get-pseudo-element-css-value
+https://stackoverflow.com/questions/38872290/how-to-get-pseudo-element

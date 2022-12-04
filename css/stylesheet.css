@@ -146,6 +146,17 @@ body
   animation: spin 2s linear infinite;
 }
 
+.gameText{
+	text-align: center;
+	margin-top: 10%;
+	font-size: xx-large;
+}
+
+.animatedDots:before{
+	content: '';
+	animation: loadingTextAnim 2s linear infinite;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
@@ -157,11 +168,21 @@ body
   100% { transform: rotate(360deg); }
 }
 
+@keyframes loadingTextAnim {
+	0%{content: '';}
+	25%{content: '.';}
+	50%{content: '..';}
+	75%{content: '...';}
+	100%{content: '....';}
+}
+
 .darkLayer {
   background-color: rgba(0, 0, 0, .6);
   height: 100%;
   width: 100%;
   position: fixed;
+	top: 0;
+	left: 0;
 	z-index: 9998;
 }
 

@@ -30,13 +30,13 @@
 </head>
 <body style="max-width: none;">
 
-  <div class="darkLayer" style="display:none">
-    <div class="loader center" style="margin-top:10%;"></div>
-    <p id="loadingText" class="center" style="margin-top: 10%;">Waiting for opponent to make a move.</p>
+  <div id="darkLayer" class="darkLayer" style="display:none">
+    <!---<div class="loader center" style="margin-top:10%;"></div>--->
+    <p id="gameText" class="gameText" style="">Waiting for opponent to make a move<span id="animatedDots" class="animatedDots" ></span></p>
   </div>
 
   <div style="height:100%;width:100%;">
-    <p id="gameText">Make a move.</p>
+    <!---<p id="gameText">Make a move.</p>--->
     <div id="rpsWrapper">
       <button type="button" class="rps" id="rock">✊</button>
       <button type="button" class="rps" id="paper">🖐</button>
@@ -113,7 +113,6 @@ $(document).ready(function()
     setMove(<?php echo json_encode($_SESSION["user_id"]);?>, <?php echo json_encode($_SESSION["game_id"]);?>, event.target.id);
     //console.dir(event.target.id);
   })
-
 });
 
 

@@ -15,7 +15,12 @@ function setMove(user_id, game_id, move)
       console.log(response);
       console.log(move + " set");
       $("#rpsWrapper").hide();
-      $('.darkLayer').attr('style', '');
+      $("#darkLayer").show();
+      document.getElementById("gameText").innerHTML = "Waiting for opponent to make a move"+ '<span id="animatedDots" class="animatedDots" ></span>';
+      //$('#gameText').text('Waiting for opponent to make a move' + '<span id="animatedDots" class="animatedDots" ></span>');
+      //$('.darkLayer').attr('style', '');
+      //$('#gameText').text("Waiting for opponent to make a move");
+      //$('#animatedDots').show();
       interval = setInterval(function()
           { 
             rock_paper_scissors(user_id, game_id)}
@@ -78,11 +83,20 @@ function rock_paper_scissors(user_id, game_id)
         if(jason.gameStatus)
         {
           clearInterval(interval);
-          //ready();
-          interval = setInterval(function()
-          { 
-            isReady(user_id)}
-            ,1500);  
+          $('#gameText').text(jason.gameStatus);
+
+          //need to set message to show if win or lose
+
+          setTimeout(function()
+          {
+            interval = setInterval(function()
+            { 
+              isReady(user_id)
+            }
+              ,1500);  
+          }
+            , 3000);
+          
           //window.location.href= jason.gametype+".php";
         }
         
@@ -122,7 +136,9 @@ function isReady(user_id)
         if(jason.isReady)
         {
           $("#rpsWrapper").show();
-          $('.darkLayer').attr('style', 'display: none');
+          $("#darkLayer").hide();
+          
+          //$('.darkLayer').attr('style', 'display: none');
           //resume()
           clearInterval(interval);
           //window.location.href= jason.gametype+".php";
