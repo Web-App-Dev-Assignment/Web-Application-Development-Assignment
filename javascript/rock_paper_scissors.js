@@ -82,6 +82,15 @@ function rock_paper_scissors(user_id, game_id)
         
         if(jason.gameStatus)
         {
+          if(jason.gameStatus === "Win match." || jason.gameStatus === "Lose match.")
+          {
+            redirect = true;
+          }
+          else
+          {
+            redirect = false;
+          }
+          
           clearInterval(interval);
           $('#gameText').text(jason.gameStatus);
 
@@ -91,7 +100,7 @@ function rock_paper_scissors(user_id, game_id)
           {
             interval = setInterval(function()
             { 
-              isReady(user_id)
+              isReady(user_id,redirect)
             }
               ,1500);  
           }
@@ -119,14 +128,15 @@ function rock_paper_scissors(user_id, game_id)
   })
 }
 
-function isReady(user_id)
+function isReady(user_id,redirect)
 {
   $.ajax
   ({
     type:'post',
     url:"../ajax/ajax_is_ready_rps.php",
     data:{
-          user_id:user_id
+          user_id:user_id,
+          redirect:redirect
         },
     success:function(response)
     {
@@ -135,13 +145,16 @@ function isReady(user_id)
         jason = $.parseJSON(response);
         if(jason.isReady)
         {
-          $("#rpsWrapper").show();
-          $("#darkLayer").hide();
-          
-          //$('.darkLayer').attr('style', 'display: none');
-          //resume()
-          clearInterval(interval);
-          //window.location.href= jason.gametype+".php";
+          if(!redirect)
+          {
+            $("#rpsWrapper").show();
+            $("#darkLayer").hide();
+            clearInterval(interval);
+          }
+          else
+          {
+            window.location.href= 'lobby'+'.php';
+          }
         }
       }
       catch(err)
