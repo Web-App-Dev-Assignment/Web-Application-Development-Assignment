@@ -13,8 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
     else
     {
-      // include_once __DIR__ . "\\..\\php\\game.php";
+      include_once __DIR__ . "\\..\\php\\game.php";
       // deleteGameSession($_POST['user_id']);
+      deleteUserGameRecord('game_table', $_POST['user_id']);
       unset($_SESSION['game_id']);
       $redirect=true;
       //$_SESSION['game_id'] = '';

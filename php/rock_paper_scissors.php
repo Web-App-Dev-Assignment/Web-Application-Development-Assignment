@@ -125,7 +125,9 @@ function checkMatch($user_id, $game_id)
     if($result)
     {
       include_once __DIR__ . "\\..\\php\\game.php";
-      deleteGameSessions($game_id);
+      deleteGameType($game_type, $game_id);
+      //deleteGameSessions($game_id);
+      //mabye delete the chat message or not for logs?
     }
     
     if($loser['id'] !== $user_id)

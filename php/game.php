@@ -104,6 +104,40 @@ function insertGameSession($game_tb, $game_type, $user_id)
   }
 }
 
+function deleteUserGameRecord($game_tb, $user_id)
+{
+  global $db_conn;
+
+  try
+  {
+    $sql = sprintf("DELETE FROM %s
+    WHERE id = '%s'", $game_tb, $user_id);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+  }
+}
+
+function deleteGameType($game_type, $game_id)
+{
+  global $db_conn;
+
+  try
+  {
+    $sql = sprintf("DELETE FROM %s
+    WHERE game_id = '%s'", $game_type, $game_id);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+  }
+}
+
 function deleteGameSession($user_id)//delete the data from game and game type
 {
   global $db_conn, $game_tb;
