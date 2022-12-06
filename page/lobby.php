@@ -35,13 +35,13 @@
     <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
   </div>
   <div style="height:100%;width:100%;">
-    <div class="leftColumn" style="background-color:#aaa;">
-      <h2>Column 1</h2>
-      <p>Some text..</p>
+    <div class="leftColumn">
+      <!---<h2>Column 1</h2>
+      <p>Some text..</p>--->
     </div>
-    <div class="middleColumn" style="background-color:#bbb;">
-      <h2>Column 2</h2>
-      <p>Some text..</p>
+    <div class="middleColumn">
+      <!---<h2>Column 2</h2>
+      <p>Some text..</p>--->
       <button type="button" id="matchmakingButton" class="center" style="margin-top: 20%;">Matchmaking</button>
     </div>
     <div class="rightColumn">
