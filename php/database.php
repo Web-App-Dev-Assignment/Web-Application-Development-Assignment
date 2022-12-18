@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/functions.php";
+include_once __DIR__ . "/function.php";
 //Under the xampp control panel, ensure that the module Apache and MySQL has been started
 //Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
 $host = "localhost";
@@ -7,9 +7,9 @@ $hostusername = "root";
 $hostpassword = "";
 $dbname = "mydb";
 $tbname = "users";
-$game_tb = "game";
+$game_tb = "game_table";
 $chat_tb = "chat";
-$matchmaking_tb = "matchmaking";
+$matchmaking_tb = "matchmaking_table";
 
 $timezone = "Asia/Singapore";
 date_default_timezone_set($timezone);
@@ -50,49 +50,6 @@ catch(Throwable $e)
   }
 }
 //--------------------------End of connecting to database code--------------------------
-
-function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
-{
-  global $db_conn, $game_tb, $tbname;
-  try
-  {
-    $sql = sprintf("SELECT id FROM %s
-    WHERE id = '%s'", $table_name, $user_id);
-    $stmt = $db_conn->stmt_init();
-    
-    try
-    {
-      $result = $db_conn->query($sql);
-    }
-    catch(Throwable $e)
-    {
-      if($db_conn->errno === 1146 && $table_name === $game_tb)//1146 Table doesn't exist
-      {
-        createGameTable();
-        $result = $db_conn->query($sql);
-      }
-      return;//do not remove this, it helps to initialize the $result outside the try catch block
-    }
-    $user = $result->fetch_assoc();
-    if($user)
-    {
-      //header("Location: multiplayer.php");
-      //return $user['game_id'];//return or exit
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  catch(Throwable $e)
-  {
-    //echo $e;
-  }
-  
-}
-
-
 
 //The connection will be closed automatically when the script ends. To close the connection before, use the following:
 //$stmt->close();

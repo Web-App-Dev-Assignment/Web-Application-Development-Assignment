@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "\\..\\php\\functions.php";
+include_once __DIR__ . "\\..\\php\\function.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {

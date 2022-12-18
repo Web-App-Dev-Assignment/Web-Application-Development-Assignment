@@ -17,7 +17,7 @@ function createUserTable()
     reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )";//ON INSERT or ON UPDATE, check
   $db_conn->query($sql_table);
-  $stmt->prepare($sql);
+  //$stmt->prepare($sql);
 }
 
 //format of the username condition

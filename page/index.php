@@ -1,5 +1,5 @@
 <?php
-  include_once __DIR__ . "\\..\\php\\functions.php";
+  include_once __DIR__ . "\\..\\php\\function.php";
 
   //$projectFolderName = explode('/', $_SERVER['PHP_SELF'])[1];
   //echo $projectFolderName;
@@ -12,7 +12,7 @@
     if (isset($_SESSION["user_id"]))
     {
       include_once __DIR__ . "\\..\\php\\database.php";
-        
+      
         $sql = "SELECT * FROM $tbname
         WHERE id = '{$_SESSION["user_id"]}'";
     

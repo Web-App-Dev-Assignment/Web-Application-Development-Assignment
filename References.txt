@@ -126,9 +126,6 @@ https://www.javatpoint.com/mysql-enum
 https://dev.mysql.com/doc/refman/8.0/en/delete.html
 https://www.w3schools.com/sql/sql_default.asp
 https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16
-<<<<<<< Updated upstream
-https://www.w3schools.com/html/html_links.asp
-=======
 https://www.w3schools.com/html/html_links.asp
 https://www.databasestar.com/sql-boolean-data-type/#SQL_Server_Boolean
 https://stackoverflow.com/questions/30754/performance-vs-readability
@@ -136,4 +133,23 @@ https://www.w3schools.com/mysql/mysql_and_or.asp
 https://stackoverflow.com/questions/21813741/mysql-query-decrease-value-by-1
 https://stackoverflow.com/questions/64552020/how-to-get-root-directory-folder-name-in-php-instead-of-path
 https://stackoverflow.com/questions/10162277/php-get-the-root-of-the-file
->>>>>>> Stashed changes
+https://stackoverflow.com/questions/16437173/stop-setinterval
+https://stackoverflow.com/questions/4467044/proper-way-to-catch-exception-from-json-parse
+https://www.samanthaming.com/tidbits/15-4-ways-to-combine-strings/
+https://api.jquery.com/jquery.parsejson/
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+https://stackoverflow.com/questions/13483331/make-buttons-the-same-width-without-specifying-the-exact-size
+https://stackoverflow.com/questions/49680484/how-to-add-one-event-listener-for-all-buttons
+https://javascript.info/bubbling-and-capturing
+https://www.w3schools.com/js/js_arrow_function.asp
+https://dev.mysql.com/doc/refman/8.0/en/commands-out-of-sync.html
+https://www.php.net/manual/en/mysqli-stmt.bind-result.php
+https://stackoverflow.com/questions/37911621/mysql-select-count-returns-true
+https://www.w3schools.com/php/php_arrays_associative.asp
+https://www.w3schools.com/js/js_timing.asp
+https://www.w3schools.com/cssref/pr_gen_content.php
+https://www.youtube.com/watch?v=GhxNhdf0liA
+https://usefulangle.com/post/226/javascript-get-pseudo-element-css-value
+https://stackoverflow.com/questions/38872290/how-to-get-pseudo-element
+https://stackoverflow.com/questions/37586585/php-unset-session-variable
+https://stackoverflow.com/questions/7674058/sprintf-repeating-arguments

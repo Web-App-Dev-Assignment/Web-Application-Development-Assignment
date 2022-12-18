@@ -1,19 +1,15 @@
 <?php
-  include_once __DIR__ . "\\..\\php\\functions.php";
-  
+  include_once __DIR__ . "\\..\\php\\function.php";
+
   session_start();
 
   if (isset($_SESSION["user_id"]))
   {
-    include_once __DIR__ . "\\..\\php\\database.php";
-    
-    $result = isInTable("game", $_SESSION["user_id"]);//check if player is in game
-    debug_to_console($_SESSION["user_id"],0) ;
-    if ($result)
-    {
-      //header("Location: multiplayer.php");
-      //exit();
-    }
+    //include_once __DIR__ . "\\..\\php\\matchmaking.php";  
+    include_once __DIR__ . "\\..\\php\\game.php";
+
+    redirectGameSession($_SESSION["user_id"]);//redirect the player to game page if they are in a game session
+    //if matchmaking then resume/cancel?
   }
   else
   {
@@ -25,7 +21,7 @@
 <!DOCTYPE HTML>  
 <html>
 <head>
-  <title>Login</title>
+  <title>Lobby</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <link rel="stylesheet" href="../css/stylesheet.css">
@@ -38,19 +34,26 @@
     <div class="loader center" style="margin-top:10%;"></div>
     <button type="button" id="cancelMatchmakingButton" class="center" style="margin-top: 10%;">Cancel Matchmaking</button>
   </div>
-  <div>
-    <div class="leftColumn" style="background-color:#aaa;">
-      <h2>Column 1</h2>
-      <p>Some text..</p>
+  <div style="height:100%;width:100%;">
+    <div class="leftColumn">
+      <!---<h2>Column 1</h2>
+      <p>Some text..</p>--->
     </div>
-    <div class="middleColumn" style="background-color:#bbb;">
-      <h2>Column 2</h2>
-      <p>Some text..</p>
+    <div class="middleColumn">
+      <!---<h2>Column 2</h2>
+      <p>Some text..</p>--->
       <button type="button" id="matchmakingButton" class="center" style="margin-top: 20%;">Matchmaking</button>
     </div>
-    <div class="rightColumn" style="background-color:#ccc;">
-      <h2>Column 3</h2>
-      <p>Some text..</p>
+    <div class="rightColumn">
+      <form method="post" submit="false">
+      <label for="cars">Choose a game:</label>
+      <select name="game_type" id="game_type">
+        <optgroup label="Game Type">
+          <option value="rock_paper_scissors">Rock Paper Scissors</option>
+          <option value="tick_tack_toe">Tick Tack Toe</option>
+        </optgroup>
+      </select>
+      </form><br>
     </div>
   </div>
   <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
@@ -69,121 +72,54 @@
 <script>  
 $(document).ready(function()
 {
-
+  updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
   setInterval(function()
   {
-    updateLastOnline();
-    //matchMaking();//need to change to only match make if the player pressed matchmaking button
+    updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
   }, 5000);
-
- function updateLastOnline()
- {
-    $.ajax(
-    {
-      type:'post',
-      url:"../ajax/ajax_updateLastOnline.php",
-      data:{
-            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-          },
-      success:function()
-      {
-        //if offline, cancel matchmaking code here
-      }
-    })
- }
-
- function matchMaking()
-  {
-    $.ajax
-    ({
-      type:'post',
-      url:"../ajax/ajax_matchmaking.php",
-      data:{
-            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-          },
-      success:function(data)
-      {
-        jason = $.parseJSON(response);
-        if(jason.successmessage)
-        {
-          //window.location.href="multiplayer.php";
-        }
-      }
-    })
-  }
- 
 });  
 </script>
 
 <script>
   $(document).ready(function()
-{
-  //collapsible("collapsible");
-  $("#chatButton").on('click', function()
-  { 
-    console.log("button pressed");
-    var chatSetting = $(this).closest('.chatSetting')[0];
-    //chatSetting = chatSetting.get()[0];
-    //console.log(chatSetting);
-    if (chatSetting.style.height)
-    {
-      console.log("1");
-      console.log($('.chatSetting').css('style'));
-      //console.log($('.chatSetting').atrr('height'));
-      $('.chatSetting').attr('style', '');
-      $('.chatBox').attr('style', '');
-      //sibling.style.overflowY = null;
-    } 
-    else 
-    {
-      console.log("2");
-      console.log($('.chatSetting').css('style'));
-      $('.chatSetting').attr('style', 'height:50%');
-      $('.chatBox').attr('style', 'overflow-y:scroll');
-    } 
-  })
-
-  $("#matchmakingButton").on('click', function()
-  { 
-    $("#matchmakingButton").hide();
-    $('.darkLayer').attr('style', '');
-    //$("#cancelMatchmakingButton").show();
-
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_startMatchMaking.php',
-      data:
-      {
-        user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-      },
-      success:function()
-      {
-        
-      }
-    })
-  })
-  $("#cancelMatchmakingButton").on('click', function()
   {
-    $("#matchmakingButton").show();
-    $('.darkLayer').attr('style', 'display: none');
-    //$("#cancelMatchmakingButton").hide();
+    $("#chatButton").on('click', function()
+    { 
+      var chatSetting = $(this).closest('.chatSetting')[0];
+      if (chatSetting.style.height)
+      {
+        $('.chatSetting').attr('style', '');
+        $('.chatBox').attr('style', '');
+      } 
+      else 
+      {
+        $('.chatSetting').attr('style', 'height:50%');
+        $('.chatBox').attr('style', 'overflow-y:scroll');
+      } 
+    })
 
-    $.ajax
-    ({
-      type:'POST',
-      url:'../ajax/ajax_cancelMatchMaking.php',
-      data:
+    $("#matchmakingButton").on('click', function()
+    { 
+      if($('#game_type').val())
       {
-        user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-      },
-      success:function()
+        $("#matchmakingButton").hide();
+        $('.darkLayer').attr('style', '');
+
+        startMatchMaking(<?php echo json_encode($_SESSION["user_id"]);?>, $('#game_type').val());
+      }
+      else
       {
-        
+        $("#matchmakingErr").text("*Please choose a game type to start matchmaking.");
       }
     })
-  })
-});
+    $("#cancelMatchmakingButton").on('click', function()
+    {
+      $("#matchmakingButton").show();
+      $('.darkLayer').attr('style', 'display: none');
+
+      cancelMatchMaking(<?php echo json_encode($_SESSION["user_id"]);?>);
+    })
+  });
 </script>
 
 <script>
@@ -193,31 +129,26 @@ $(document).ready(function()
   {
 			if(e.keyCode == 13)//the enter key
       {
-				$.ajax
-        ({
-					type:'POST',
-					url:'../ajax/ajax_insertmessages.php',
-					data:
-          {
-            chat_text:$("#chatInput").val(),
-            user_id:<?php echo json_encode($_SESSION["user_id"]);?>
-          },
-					success:function()
-          {
-						$("#chatInput").val("");
-					}
-				})
+				insertMessage($("#chatInput").val(), <?php echo json_encode($_SESSION["user_id"]);?>, '');
 			}
 	})
 	
+  $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:"IS NULL"
+    });
 	setInterval(function()
   {
-			$(".chatBox").load("../ajax/ajax_displaymessages.php");
+    $(".chatBox").load("../ajax/ajax_displaymessage.php",
+    {
+      game_id:"IS NULL"
+    });
 	},1500)
-	
-	$(".chatBox").load("../ajax/ajax_displaymessages.php");
-	
 });
+
 </script>
 
-<script src="../javascript/functions.js"></script>
+<script src="../javascript/function.js"></script>
+<script src="../javascript/onlinestatus.js"></script>
+<script src="../javascript/chat.js"></script>
+<script src="../javascript/matchmaking.js"></script>

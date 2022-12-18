@@ -1,7 +1,7 @@
 <?php
 //placeholder page; ignore
 
-include_once __DIR__ . "/php/functions.php";
+include_once __DIR__ . "/php/function.php";
 
 session_start();
 

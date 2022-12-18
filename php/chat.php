@@ -14,8 +14,7 @@ function createChatTable()
       chat_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       id VARCHAR(128) NOT NULL,
       game_id VARCHAR(128),
-      FOREIGN KEY(id) REFERENCES $tbname(id),
-      FOREIGN KEY(game_id) REFERENCES $game_tb(game_id)
+      FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
     //debug_to_console("Table $chat_tb not found. Table $chat_tb created.",1);

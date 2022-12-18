@@ -54,7 +54,16 @@ function updateLastOnline($user_id)
   WHERE id = '%s'", $user_id);
 
   $stmt = $db_conn->stmt_init();
-  $stmt->prepare($sql);
+  try
+  {
+    $stmt->prepare($sql);
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+    return;
+  }
+  
   $stmt->execute();
 }
 
