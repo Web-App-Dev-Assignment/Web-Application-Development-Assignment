@@ -1,13 +1,13 @@
 <?php
-//include_once __DIR__ . "\\..\\php\\functions.php";
+//include_once __DIR__ . "\\..\\php\\function.php";
 include_once __DIR__ . "\\..\\php\\signup.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
   try
   {
-    createUser($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"]);
-    $output = array("successmessage"=>"Signup unsuccessful");
+    createUser($_POST["name"], $_POST["username"], $_POST["password"], $_POST["email"], $_POST["gender"]);
+    $output = array("successmessage"=>"Signup successful");
     exit(json_encode($output));
     //exit('@0^/s&d~v~x2LiN?^signup successk+ZJ[+Nk1QK+b');
   }

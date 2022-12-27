@@ -36,6 +36,7 @@
   </div>
   <div style="height:100%;width:100%;">
     <div class="leftColumn">
+    <span onclick="document.location='index.php'" style="font-family:symbols; cursor:pointer; font-size:xx-large;">&#xE91E;</span>
       <!---<h2>Column 1</h2>
       <p>Some text..</p>--->
     </div>

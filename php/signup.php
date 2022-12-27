@@ -3,16 +3,17 @@ include_once __DIR__ . '/database.php';
 
 function createUserTable()
 {
-  global $db_conn;
+  global $tbname, $db_conn;
   
   $sql_table = "CREATE TABLE $tbname
   (
     id VARCHAR(128) NOT NULL PRIMARY KEY,
-    name VARCHAR(128),
+    `name` VARCHAR(128),
     username VARCHAR(128) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    gender ENUM ('male','female','other','prefer_not_to_say'),  
+    `password` VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    gender ENUM ('male','female','other','prefer_not_to_say'),
+    `role` ENUM ('user','admin') NOT NULL,
     last_online TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )";//ON INSERT or ON UPDATE, check
@@ -116,15 +117,15 @@ function emailCondition($email)
 }
 
 //--------------------------Inserting to the table--------------------------
-function createUser($name, $username, $password, $email){
+function createUser($name, $username, $password, $email, $gender){
   
   try
   {
     global $tbname, $db_conn;
     $id = md5(uniqid());
     $hash = password_hash($password,PASSWORD_ARGON2ID);
-    $sql = "INSERT INTO $tbname (id,name ,username, password, email)
-    VALUES ( ?, NULLIF(?,''), ?, ?, NULLIF(?,''))";
+    $sql = "INSERT INTO $tbname (id,`name` ,username, `password`, email, gender, `role`)
+    VALUES ( ?, NULLIF(?,''), ?, ?, NULLIF(?,''), ?, ?)";
     $stmt = $db_conn->stmt_init();
 
     try
@@ -132,7 +133,7 @@ function createUser($name, $username, $password, $email){
       $stmt->prepare($sql);
     }
     catch(Throwable $e){
-      // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+       debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
       // debug_to_console("Error preparing the SQL code. \\nError:\\n" . test_escape_char($e),1);
       
       if($db_conn->errno === 1146)//1146 Table doesn't exist
@@ -161,8 +162,10 @@ function createUser($name, $username, $password, $email){
         // debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
       }
     }
+    $role = 'user';
 
-    $stmt->bind_param("sssss", $id, $name, $username, $hash, $email);
+    $stmt->bind_param("sssssss", $id, $name, $username, $hash, $email, $gender, $role);
+    //$stmt->bind_param("sssssss", $id, $name, $username, $hash, $email, $gender, 'user');
 
     try
     {
@@ -173,7 +176,7 @@ function createUser($name, $username, $password, $email){
     }
     catch(Throwable $e)
     {
-      // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+       debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
       if($db_conn->errno === 1062)//1062 duplicate Unique information
       {
         // debug_to_console("Duplicate Unique entry. \\nError:\\n" . test_escape_char($e),1);
@@ -190,7 +193,7 @@ function createUser($name, $username, $password, $email){
   }
   catch(Throwable $e)
   {
-    // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
+     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
     //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
   }
 }

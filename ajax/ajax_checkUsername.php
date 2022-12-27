@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "\\..\\php\\functions.php";
+include_once __DIR__ . "\\..\\php\\function.php";
 include_once __DIR__ . "\\..\\php\\signup.php";
 
 $usernameErr = usernameCondition($_POST["username"]);

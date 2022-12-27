@@ -97,8 +97,9 @@
         },
         success:function(response)
         {
-          jason = $.parseJSON(response);
           console.log(response);
+          jason = $.parseJSON(response);
+          //console.log(response);
           if(!jason.errormessage)//redundant
           {
             $("#usernameErr").text("");
@@ -281,6 +282,6 @@
   })
 </script>
 
-<script src="../javascript/functions.js"></script>
+<script src="../javascript/function.js"></script>
 </body>
 </html>

@@ -153,3 +153,12 @@ https://usefulangle.com/post/226/javascript-get-pseudo-element-css-value
 https://stackoverflow.com/questions/38872290/how-to-get-pseudo-element
 https://stackoverflow.com/questions/37586585/php-unset-session-variable
 https://stackoverflow.com/questions/7674058/sprintf-repeating-arguments
+https://fonts.google.com/icons
+https://fonts.google.com/noto/specimen/Noto+Sans
+https://www.fontspace.com/logopixies-font-f40772
+https://www.fontspace.com/fairymuffinroundpop-font-f34503
+https://stackoverflow.com/questions/1696619/displaying-unicode-symbols-in-html
+https://stackoverflow.com/questions/9913293/change-text-on-hover-then-return-to-the-previous-text
+https://stackoverflow.com/questions/1526688/get-table-column-names-in-mysql
+https://stackoverflow.com/questions/9257505/using-braces-with-dynamic-variable-names-in-php
+https://stackoverflow.com/questions/4165195/mysql-query-to-get-column-names

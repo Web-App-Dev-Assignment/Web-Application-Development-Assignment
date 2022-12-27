@@ -1,3 +1,13 @@
+@font-face {
+  font-family: NotoSans-Regular;
+  src: url('../fonts/NotoSans/NotoSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: symbols;
+  src: url('../fonts/combined.ttf');
+}
+
 html , body
 {
 	height:100%;
@@ -201,8 +211,26 @@ body
 	justify-content: center;
 	gap: 5vw;
 	height: 50%;
-	align-itvws: flex-end;
+	align-items: flex-end;
 
+}
+
+.buttonWrapper
+{
+	display:flex;
+	justify-content: center;
+	gap: 1vw;
+	align-items: flex-end;
+
+}
+
+#lobbyButton:hover #lobbySpan {
+  display: none
+}
+
+#lobbyButton:hover:before {
+  font-family:symbols;
+  content: '\E919';/*&#xE919;*/
 }
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */

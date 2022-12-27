@@ -7,7 +7,7 @@ function login($username_email, $password)
   
   $loginErr = "";
   
-  $sql = "SELECT id, `password` FROM $tbname 
+  $sql = "SELECT id, `password`, `role` FROM $tbname 
   WHERE ";
 
   if(filter_var($username_email, FILTER_VALIDATE_EMAIL))
@@ -45,6 +45,7 @@ function login($username_email, $password)
       session_start();
       session_regenerate_id();//prevent session fixation attack
       $_SESSION["user_id"] = $user["id"];
+      $_SESSION["role"] = $user["role"];
     }
     else
     {
