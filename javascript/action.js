@@ -1,0 +1,21 @@
+function action(table, unique_column, unique_value, column, value, action)
+{
+  $.ajax
+  ({
+    type:'POST',
+    url:'../ajax/ajax_action.php',
+    data:
+    {
+      action:action,
+      table:table,
+      unique_column:unique_column,
+      unique_value:unique_value,
+      column:column,
+      value:value
+    },
+    success:function()
+    {
+      //$("#chatInput").val("");
+    }
+  })
+}

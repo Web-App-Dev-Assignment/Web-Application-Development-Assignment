@@ -43,13 +43,13 @@
     </header>
     <tr>
       <td>
-          <input type='checkbox' name='checkbox' value='100001' />
+          <input type='checkbox' name='checkbox' value='123' />
       </td>
     </tr>
 
     <tr>
       <td>
-          <input type='checkbox' name='checkbox' value='100002' />
+          <input type='checkbox' name='checkbox' value='456' />
       </td>
     </tr>
   </table>
@@ -70,6 +70,7 @@
   $stmt->execute();
   $results = $stmt->get_result();
   $results = $results->fetch_all(MYSQLI_ASSOC);
+  //print_r($results);
   //$stmt->bind_result($result);
   //$row = $smtm->array($result);
 
@@ -85,8 +86,10 @@
 
   // echo $users[0]["COLUMN_NAME"];
   //print_r($results);
-  $column_name = [];
+  
 
+  //store the column names
+  $column_name = [];
   foreach($results as $result)
   {
     foreach($result as $resul)
@@ -94,8 +97,11 @@
       array_push($column_name,$resul);
     }
   }
+
+  //Generate the table
   $output = "
-  <table>
+  <table id='users'>
+    <caption style='text-align:center;'>users</caption>
     <header>
       <tr>
         <td></td>";
@@ -118,46 +124,69 @@
     {
       $output .="
       <tr>
-      <td></td>
+      <td>
+        <div class='clickable delete'><span class='symbol'>&#xE922;</span><span style='color:red;'>delete</span></div>
+      </td>
       ";
-      // for ($i=0; $i < count($column_name) ; $i++) { 
-      //   $output .= "<td style='text-align:center;>";
-      //   if (!empty($result[$column_name[$i]]))
-      //   {
-      //     $output .= $result[$column_name[$i]];
-      //   }
-      //   else
-      //   {
-      //     $output .= "NULL";
-      //   }
-      //   $output .= "</td>";
-      // }
       foreach($column_name as $col)
       {
-        //echo "<script>console.log('$result[$col]');</script>";
-        $output .= "<td style='text-align:center;'>" . $result[$col] . "</td>";
+        $data = $result[$col];
+        if(empty($data))
+        {
+          $data = 'NULL';
+        }
+        $output .= "<td style='text-align:center;'>" . $data . "</td>";
       }
       $output .="</tr>";
-      //echo $result[$column_name[0]] . "<br>";
-      
-
-      // $i = 2;
-      // echo $column_name[$i] . " " ;
-      // echo $result[$column_name[$i]] . "<br>";
     }
 
     $output .="</table>";
     echo $output;
 
-    // for ($i=0; $i < strlen($column_name) ; $i++) { 
-    //   $sql = "SELECT * FROM $tbname WHERE `role`='user'";
-    // }
+    //Find the primary key
+    //$sql = "DESCRIBE `sessions`;";
+    $sql = "DESCRIBE $tbname;";
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->get_result();
+    $results = $results->fetch_all(MYSQLI_ASSOC);
+    //print_r($results);
+    $i=2;
+    foreach ($results as $result)
+    {
+      if ($result['Key']==='PRI')
+      {
+        //$primary_key = $result['Field'];
+        $primary_key = array('index'=>$i, 'field'=>$result['Field']);
+        echo "<br>Primary Key is " . $result['Field'] . "index is " . $primary_key['index'];
+        break;
+      }
+      $i++;
+    }
+
+    //Find tables in the database
+    $sql = "SHOW TABLES FROM $dbname;";
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->get_result();
+    $results = $results->fetch_all(MYSQLI_ASSOC);
 
     
 
-//  echo $users;
-  //echo "$result";
-  //echo "$row";
+    //store the table names
+    $table_name = [];
+    foreach($results as $result)
+    {
+      foreach($result as $resul)
+      {
+        array_push($table_name,$resul);
+        echo "<br>" . $resul;
+      }
+    }
+
+    
+
+
 // foreach ($_POST['checkbox'] as $checkbox) {
 
 //   //$condition = $_POST['condition'][$delete];
@@ -165,3 +194,105 @@
 // }
 //checkbox,username,action
 ?>
+
+<script>
+  //console.log($("#delete").closest('tr').find('td:nth-child(3)').text());
+  //var $row = $(this).closest("tr");
+  $(".delete").click(function() 
+  {
+    var row = $(this).closest("tr");
+    var table = $(this).closest("table");
+    var primarycolumn = row.find('td:nth-child(<?php echo $primary_key['index']?>)');
+    var primarytext = primarycolumn.text();
+    row.remove();
+    action('delete', 'users', <?php echo json_encode($primary_key['field'])?> , textval, '', '');
+    console.log(primarytext);
+    console.log($(this.parentNode).index());
+
+  //   row.find('td:nth-child(<?php //echo $primary_key['index']?>)').each(function() 
+  //   {
+  //     var textval = $(this).text(); // this will be the text of each <td>
+  //     console.log(textval);
+  //     console.log(table.find("caption").text());
+  //     row.remove();
+  //     //action('delete', 'users', <?php //echo json_encode($primary_key['field'])?> , textval, '', '');
+  //  });
+});
+
+document.querySelectorAll("#users tr:nth-child(1n+2) td:nth-child(1n+2)").forEach(function(node){
+	
+  
+
+  var input;
+  var prevInput;
+  node.ondblclick=function(){
+    prevInput = this.innerHTML;
+    input=document.createElement("textArea");
+		input.value=prevInput;
+		input.onblur=function(){
+      console.log("0");
+			this.parentNode.innerHTML=this.val;
+		}
+		this.innerHTML="";
+		this.appendChild(input);
+		input.focus();
+
+    // $(this).keypress(function (e) 
+    // {
+    //   if(e.which === 13 && !e.shiftKey) {
+    //       e.preventDefault();
+    //       console.log("enter pressed.");
+    //       input.blur();
+      
+    //       //$(this).closest("form").submit();
+    //   }
+    //   // else if(e.key === "Escape")
+    //   // {
+    //   //   console.log('esc pressed.');;
+    //   //   input.blur();
+    //   // }
+    // });
+
+	}
+
+  $(node).on('keydown' , function (e) 
+  {
+    if(e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        console.log("enter pressed.");
+        
+        input.onblur=function(){
+          //console.log("1");
+          var columnIndex = $(this.parentNode).index();
+          var table = $(this).closest("table");
+
+          //table.remove();
+
+          var columnText = $(table).find('th:nth-child('+(columnIndex+1)+')').text();
+          //console.log($(table).closest("tr").find('td:nth-child(3)'));
+          console.log(columnText + " index is " + $(this.parentNode).index() + " value is " + this.value);
+			    this.parentNode.innerHTML=this.value;
+
+          var primarycolumn = row.find('td:nth-child(<?php echo $primary_key['index']?>)');
+          var primarytext = primarycolumn.text();
+          action('update', 'users', <?php echo json_encode($primary_key['field'])?> , primarytext, columnText, this.value);
+        }
+
+        input.blur();
+    }
+    else if(e.key === "Escape")
+    {
+      console.log('esc pressed.');;
+      
+      input.onblur=function(){
+        console.log("2");
+        this.parentNode.innerHTML=prevInput;
+      }
+      input.blur();
+    }
+  });
+});
+
+</script>
+
+<script src="../javascript/action.js"></script>

@@ -162,3 +162,15 @@ https://stackoverflow.com/questions/9913293/change-text-on-hover-then-return-to-
 https://stackoverflow.com/questions/1526688/get-table-column-names-in-mysql
 https://stackoverflow.com/questions/9257505/using-braces-with-dynamic-variable-names-in-php
 https://stackoverflow.com/questions/4165195/mysql-query-to-get-column-names
+https://stackoverflow.com/questions/14460421/get-the-contents-of-a-table-row-with-a-button-click
+https://stackoverflow.com/questions/9898610/displaying-all-table-names-in-php-from-mysql-database
+https://stackoverflow.com/questions/48977986/editing-form-by-double-clicking-element
+https://api.jquery.com/nth-child-selector/
+https://www.w3schools.com/jquery/sel_nthchild.asp
+https://stackoverflow.com/questions/497094/how-do-i-find-out-which-dom-element-has-the-focus
+https://api.jquery.com/keyup/
+https://stackoverflow.com/questions/1160008/which-keycode-for-escape-key-with-jquery
+https://stackoverflow.com/questions/585396/how-to-prevent-enter-keypress-to-submit-a-web-form
+https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press-with-pure-js-or-jquery
+https://www.w3schools.com/jsref/met_document_createelement.asp
+https://api.jquery.com/index/

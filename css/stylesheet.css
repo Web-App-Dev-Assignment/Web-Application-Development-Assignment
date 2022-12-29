@@ -8,6 +8,15 @@
   src: url('../fonts/combined.ttf');
 }
 
+.symbol
+{
+  font-family: symbols;
+}
+.clickable
+{
+  cursor:pointer;
+}
+
 html , body
 {
 	height:100%;
