@@ -174,3 +174,7 @@ https://stackoverflow.com/questions/585396/how-to-prevent-enter-keypress-to-subm
 https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press-with-pure-js-or-jquery
 https://www.w3schools.com/jsref/met_document_createelement.asp
 https://api.jquery.com/index/
+https://stackoverflow.com/questions/3373763/how-to-find-if-div-with-specific-id-exists-in-jquery
+https://stackoverflow.com/questions/9422974/createelement-with-id
+https://stackoverflow.com/questions/6031660/is-it-possible-to-load-new-javascript-files-with-ajax
+https://stackoverflow.com/questions/40734813/inject-external-html-js-into-a-page

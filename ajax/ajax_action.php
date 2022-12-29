@@ -11,6 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     case 'update':
       update($_POST['table'], $_POST['unique_column'], $_POST['unique_value'], $_POST['column'], $_POST['value']);
       break;
+    case 'generate_table':
+      exit(generateTable($_POST['table']));
+      break;
     default:
       break;
   }
