@@ -67,16 +67,6 @@ function generateTable(action, table)
         s.text = jason.script;
         document.getElementsByTagName('body')[0].appendChild(s);
       }
-      
-
-      //table.appendChild("testing");
-      //eval(jason.script);
-      //var edit_script = $("#edit_script");
-      //console.log(jason.script);
-      //document.getElementById("#edit_script").innerHTML(""+jason.script+"");
-      //console.log(jason.script);
-      //document.innerHTML(response);
-      //$("#chatInput").val("");
     }
   })
 }
@@ -90,7 +80,7 @@ function addDeleteListener(table_name, class_name, unique_index, unique_field)
     var unique_column = row.find('td:nth-child('+unique_index+')');
     var unique_text = unique_column.text();
     row.remove();
-    //action('delete', table, unique_field , unique_text, '', '');
+    action('delete', table, unique_field , unique_text, '', '');
     console.log(unique_text);
 });
 }
@@ -116,10 +106,8 @@ function addUpdateListener(table_name, unique_index, unique_field)
         var row = $(this).closest("tr");
         var unique_column = row.find('td:nth-child('+unique_index+')');
         var unique_text = unique_column.text();
-        // console.log(unique_field + " is " + unique_text);
 
-        //console.log(column_field + " index is " + $(this.parentNode).index() + " value is " + this.value);
-        //action('delete', table, unique_field , unique_text, column_field, this.value);
+        action('delete', table, unique_field , unique_text, column_field, this.value);
 
         this.parentNode.innerHTML=this.value;
       }
@@ -144,10 +132,8 @@ function addUpdateListener(table_name, unique_index, unique_field)
             var row = $(this).closest("tr");
             var unique_column = row.find('td:nth-child('+unique_index+')');
             var unique_text = unique_column.text();
-            // console.log(unique_field + " is " + unique_text);
 
-            //console.log(column_field + " index is " + $(this.parentNode).index() + " value is " + this.value);
-            //action('delete', table, unique_field , unique_text, column_field, this.value);
+            action('delete', table, unique_field , unique_text, column_field, this.value);
 
             this.parentNode.innerHTML=this.value;
           }
