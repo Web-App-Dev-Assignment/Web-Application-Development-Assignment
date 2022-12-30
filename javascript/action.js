@@ -20,7 +20,7 @@ function action(action, table_name, unique_column, unique_value, column, value)
   })
 }
 
-function generateTable(action, table)
+function generateTable(action, table_name)
 {
   $.ajax
   ({
@@ -29,13 +29,13 @@ function generateTable(action, table)
     data:
     {
       action:action,
-      table:table
+      table_name:table_name
     },
     success:function(response)
     {
       //console.log(response);
       jason = $.parseJSON(response);
-      console.log(jason.table);
+      //console.log(jason.table);
       var table = $("#edit_table");
       //var table = $("#table");
       //$(table).html(jason.table);
@@ -76,18 +76,20 @@ function addDeleteListener(table_name, class_name, unique_index, unique_field)
   $(class_name).click(function() 
   {
     var row = $(this).closest("tr");
+    //var table_id = '#'+table_name;
     var table = $(this).closest(table_name);
     var unique_column = row.find('td:nth-child('+unique_index+')');
     var unique_text = unique_column.text();
     row.remove();
-    action('delete', table, unique_field , unique_text, '', '');
+    action('delete', table_name, unique_field , unique_text, '', '');
     console.log(unique_text);
 });
 }
 
 function addUpdateListener(table_name, unique_index, unique_field)
 {
-  document.querySelectorAll(table_name+" tr:nth-child(1n+2) td:nth-child(1n+2)").forEach(function(node){
+  var table_id = '#'+table_name;
+  document.querySelectorAll(table_id+" tr:nth-child(1n+2) td:nth-child(1n+2)").forEach(function(node){
 	
     var input;
     var prev_input;
@@ -100,14 +102,25 @@ function addUpdateListener(table_name, unique_index, unique_field)
       {
         console.log("0");
         var column_index = $(this.parentNode).index();
-        var table = $(this).closest(table_name);
+        //var table_id = '#'+table_name;
+        var table = $(this).closest(table_id);
         var column_field = $(table).find('th:nth-child('+(column_index+1)+')').text();
 
         var row = $(this).closest("tr");
         var unique_column = row.find('td:nth-child('+unique_index+')');
-        var unique_text = unique_column.text();
 
-        action('delete', table, unique_field , unique_text, column_field, this.value);
+        var unique_text;
+        if(unique_field != column_field)
+        {
+          unique_text = unique_column.text();
+        }
+        else
+        {
+          unique_text = this.value;
+          //console.log(unique_field + " = " + column_field);
+        }
+
+        action('update', table_name, unique_field , prev_input, column_field, this.value);
 
         this.parentNode.innerHTML=this.value;
       }
@@ -120,20 +133,40 @@ function addUpdateListener(table_name, unique_index, unique_field)
     {
       if(e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          console.log("enter pressed.");
+          //console.log("enter pressed.");
           
           input.onblur=function(){
             console.log("1");
 
             var column_index = $(this.parentNode).index();
-            var table = $(this).closest(table_name);
+            //var table_id = '#'+table_name;
+            var table = $(this).closest(table_id);
             var column_field = $(table).find('th:nth-child('+(column_index+1)+')').text();
 
             var row = $(this).closest("tr");
             var unique_column = row.find('td:nth-child('+unique_index+')');
-            var unique_text = unique_column.text();
 
-            action('delete', table, unique_field , unique_text, column_field, this.value);
+            /*
+            var text_area = unique_column.find('textarea');
+            if (text_area.length != 0)
+            {
+              console.log(text_area.val());
+            }
+            */
+            var unique_text;
+            if(unique_field != column_field)
+            {
+              unique_text = unique_column.text();
+            }
+            else
+            {
+              unique_text = this.value;
+              //console.log(unique_field + " = " + column_field);
+            }
+            
+            console.log("Index is " + unique_index + " ,table name is " + table_id + " ,unique_text is " + unique_text + " ,text value is " + this.value);
+
+            action('update', table_name, unique_field , prev_input, column_field, this.value);
 
             this.parentNode.innerHTML=this.value;
           }

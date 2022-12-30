@@ -14,9 +14,19 @@ function update($table, $unique_column, $unique_value, $column, $value)
 {
   global $db_conn;
 
-  $sql = "UPDATE $table SET $column = '$value' WHERE $unique_column = '$unique_value'";
-  $stmt = $db_conn->prepare($sql);
-  $stmt->execute();
+  //$sql = "UPDATE $table SET $column = '$value' WHERE $unique_column = '$unique_value'";
+  try
+  {
+    $sql = sprintf("UPDATE `%s` SET `%s` = '%s' WHERE `%s` = '%s'", $table, $column, $value, $unique_column, $unique_value);
+    $stmt = $db_conn->prepare($sql);
+    $stmt->execute();
+    echo $sql;
+  }
+  catch(Throwable $e)
+  {
+    echo $e;
+  }
+  
 }
 
 function generateTable($table_name)
@@ -43,7 +53,6 @@ function generateTable($table_name)
   $output = "
   <table id='$table_name'>
     <caption style='text-align:center;'>$table_name</caption>
-    <header>
       <tr>
         <td></td>";
   foreach($column_name as $col)
@@ -52,8 +61,7 @@ function generateTable($table_name)
     //echo $col . "<br>";
   }
   $output .= "
-    </tr>
-  </header>";
+    </tr>";
 
   //$sql = "SELECT * FROM $table_name WHERE `role`='user'";
   $sql = "SELECT * FROM $table_name";
@@ -107,8 +115,8 @@ function generateTable($table_name)
 
   $script = '$(document).ready(function() 
   {
-    addDeleteListener(' . '"#' . $table_name . '", ".delete", ' . $primary_key["index"] . ', ' . json_encode($primary_key['field']) . ')
-    addUpdateListener(' . '"#' . $table_name . '", ' . $primary_key['index'] . ',  ' . json_encode($primary_key['field']) . ')
+    addDeleteListener(' . '"' . $table_name . '", ".delete", ' . $primary_key["index"] . ', ' . json_encode($primary_key['field']) . ')
+    addUpdateListener(' . '"' . $table_name . '", ' . $primary_key['index'] . ',  ' . json_encode($primary_key['field']) . ')
   });';
 
   echo (json_encode(array('table' => $output, 'script' => $script)));
