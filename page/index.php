@@ -63,7 +63,7 @@
       </p><br>
       <button class="buttonWrapper" id="lobbyButton" onclick="document.location='lobby.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE91A;</span>Lobby</button><br>
       <?php if($_SESSION["role"]==="admin"):?>
-        <button class="buttonWrapper" onclick="document.location='player.php'"><span style="font-family:symbols;">&#xE921;</span>Players</button><br>
+        <button class="buttonWrapper" onclick="document.location='admin_function.php'"><span style="font-family:symbols;">&#xE914;</span>Admin</button><br>
       <?php endif; ?>
       <button class="buttonWrapper" onclick="document.location='logout.php'"><span style="font-family:symbols;">&#xE917;</span>Log out</button><br>
     <!---<p><a href="logout.php">Log out</a></p>--->

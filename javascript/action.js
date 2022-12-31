@@ -76,7 +76,6 @@ function addDeleteListener(table_name, class_name, unique_index, unique_field)
   $(class_name).click(function() 
   {
     var row = $(this).closest("tr");
-    //var table_id = '#'+table_name;
     var table = $(this).closest(table_name);
     var unique_column = row.find('td:nth-child('+unique_index+')');
     var unique_text = unique_column.text();
@@ -102,7 +101,6 @@ function addUpdateListener(table_name, unique_index, unique_field)
       {
         console.log("0");
         var column_index = $(this.parentNode).index();
-        //var table_id = '#'+table_name;
         var table = $(this).closest(table_id);
         var column_field = $(table).find('th:nth-child('+(column_index+1)+')').text();
 
@@ -117,7 +115,6 @@ function addUpdateListener(table_name, unique_index, unique_field)
         else
         {
           unique_text = this.value;
-          //console.log(unique_field + " = " + column_field);
         }
 
         action('update', table_name, unique_field , prev_input, column_field, this.value);

@@ -20,7 +20,7 @@ function update($table, $unique_column, $unique_value, $column, $value)
     $sql = sprintf("UPDATE `%s` SET `%s` = '%s' WHERE `%s` = '%s'", $table, $column, $value, $unique_column, $unique_value);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
-    echo $sql;
+    //echo $sql;
   }
   catch(Throwable $e)
   {
@@ -134,7 +134,7 @@ function generateButtons()
   
   //store the table names
   $table_name = [];
-  $output = "";
+  $output = "<div class='generatedButtons'>";
   foreach($results as $result)
   {
     foreach($result as $resul)
@@ -144,6 +144,7 @@ function generateButtons()
       //echo "<br>" . $resul;
     }
   }
+  $output .= "</div>";
   echo $output;
 }
 ?>

@@ -1,9 +1,9 @@
 <?php
-
-// if(!isset($_SESSION["user_id"]) && $_SESSION["role"] !== "admin")
-// {
-//   header("Location: index.php");
-// }
+session_start();
+if(!isset($_SESSION["user_id"]) && $_SESSION["role"] !== "admin")
+{
+  header("Location: index.php");
+}
 
 ?>
 
@@ -19,6 +19,8 @@
 </style>
 </head>
 <body style="max-width: none;">
+
+  <span class="clickable symbol" onclick="document.location='index.php'" style=" font-size:xx-large;">&#xE91E;</span>
 
 <?php
   include_once __DIR__ . "\\..\\php\\action.php";
