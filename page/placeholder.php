@@ -1,19 +1,32 @@
 <?php
   include_once __DIR__ . "\\..\\php\\function.php";
 
-  session_start();
-  $_SESSION['game_id'] = "0123456789"; 
+  include_once __DIR__ . "\\..\\php\\database.php";
 
-  if (isset($_SESSION["user_id"]) && !empty($_SESSION['game_id']))
-  //if(isset($_SESSION["user_id"]))
+  $sql = "SELECT * FROM users";
+
+  $results = $db_conn -> query($sql);
+  //$row = mysqli_fetch_array($results);
+  //$column = array_keys($row);
+  print_r($results);
+  //print_r($column);
+  //print_r($row);
+  echo "<br><br>";
+  $result = mysqli_fetch_all($results, MYSQLI_NUM);
+  // Process all rows
+  //while($row = mysqli_fetch_array($results, MYSQLI_NUM)) 
+  foreach ($result as $resul) 
   {
-    //include_once __DIR__ . "\\..\\php\\chat.php";
-    //debug_to_console($_SESSION['game_id'],0);
-  }
-  else
-  {
-    header("Location: index.php");
-    exit();
+    //echo $row['column_name']; // Print a single column data
+    echo print_r($resul);       // Print the entire row data
+    echo "<br><br>";
+    $columns = array_keys($resul);
+    echo print_r($columns);       // Print the entire row data
+    echo "<br><br>";
+    // foreach ($columns as $column) {
+    //   //echo $row[$column] . "<br>";
+    // }
+    echo "<hr>";
   }
 ?>
 
@@ -28,98 +41,11 @@
 <style>
 </style>
 </head>
-<body style="max-width: none;">
+<body>
 
-  <div class="darkLayer" style="display:none">
-    <div class="loader center" style="margin-top:10%;"></div>
-    <p id="loadingText" class="center" style="margin-top: 10%;">Waiting for opponent to make a move.</p>
-  </div>
+  <div>
 
-  <div style="height:100%;width:100%;">
-    <p id="gameText">Make a move.</p>
-    <div id="rpsWrapper">
-      <button type="button" class="rps" id="rock">✊</button>
-      <button type="button" class="rps" id="paper">🖐</button>
-      <button type="button" class="rps" id="scissors">✌</button>
-    </div>
-  </div>
-
-  <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
-    <div class ="chat">
-      <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
-      <div class="chatBox">
-      </div>
-      <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
-    </div>
   </div>
   
 </body>
 </html>
-
-<script>
-$(document).ready(function() 
-{
-	updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
-  setInterval(function()
-  {
-    updateLastOnline(<?php echo json_encode($_SESSION["user_id"]);?>);
-  }, 5000);
-  
-  $("#chatInput").keyup(function(e)
-  {
-			if(e.keyCode == 13)//the enter key
-      {
-				insertMessage($("#chatInput").val(), <?php echo json_encode($_SESSION["user_id"]);?>, <?php echo json_encode($_SESSION["game_id"]);?>);
-        //insertMessage($("#chatInput").val(), <?php //echo json_encode($_SESSION["user_id"]);?>, '');
-			}
-	})
-
-  $(".chatBox").load("../ajax/ajax_displaymessage.php",
-    {
-      game_id:'='+<?php echo json_encode($_SESSION["game_id"]);?>
-      //game_id:"IS NULL"
-    });
-	setInterval(function()
-  {
-    $(".chatBox").load("../ajax/ajax_displaymessage.php",
-    {
-      game_id:'='+<?php echo json_encode($_SESSION["game_id"]);?>
-      //game_id:"IS NULL"
-    });
-	},1500)
-	
-  $("#chatButton").on('click', function()
-    { 
-      var chatSetting = $(this).closest('.chatSetting')[0];
-      if (chatSetting.style.height)
-      {
-        $('.chatSetting').attr('style', '');
-        $('.chatBox').attr('style', '');
-      } 
-      else 
-      {
-        $('.chatSetting').attr('style', 'height:50%');
-        $('.chatBox').attr('style', 'overflow-y:scroll');
-      } 
-    })
-
-  const wrapper = document.getElementById('rpsWrapper');
-  wrapper.addEventListener('click', (event) => {
-    const isButton = event.target.nodeName === 'BUTTON';
-    if (!isButton) {
-      return;
-    }
-
-    setMove($_SESSION["user_id"], $_SESSION["game_id"], event.target.id);
-    //console.dir(event.target.id);
-  })
-
-});
-
-
-</script>
-
-<script src="../javascript/function.js"></script>
-<script src="../javascript/onlinestatus.js"></script>
-<script src="../javascript/chat.js"></script>
-<script src="../javascript/rock_paper_scissors.js"></script>
