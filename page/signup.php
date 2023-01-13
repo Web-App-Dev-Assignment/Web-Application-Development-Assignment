@@ -21,7 +21,7 @@
 </head>
 <body>  
 <h2>Signup</h2>
-<p><span class="error">* required field</span></p>
+<!---<p><span class="error">* required field</span></p>--->
 <form method="post" submit="false">
   <label for="name">Name:</label>
   <input type="text" name="name" id="name" value="" placeholder="Enter your name.">
