@@ -68,8 +68,10 @@
       <button class="buttonWrapper" onclick="document.location='logout.php'"><span style="font-family:symbols;">&#xE917;</span>Log out</button><br>
     <!---<p><a href="logout.php">Log out</a></p>--->
   <?php else: ?>
-    <button onclick="document.location='login.php'">Log in</button><br>
-    <button onclick="document.location='signup.php'">Signup</button><br>
+    <button class="buttonWrapper" onclick="document.location='login.php'"><span style="font-family:symbols;">&#xE916;</span>Log in</button><br>
+    <button class="buttonWrapper" onclick="document.location='signup.php'"><span style="font-family:symbols;">&#xE913;</span>Sign up</button><br>
+    <!---<button onclick="document.location='login.php'">Log in</button><br>
+    <button onclick="document.location='signup.php'">Sign up</button><br>--->
           <!---<p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>--->
   <?php endif; ?>
 
