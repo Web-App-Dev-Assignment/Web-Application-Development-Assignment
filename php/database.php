@@ -1,6 +1,9 @@
 <?php
 include_once __DIR__ . "/function.php";
 //Under the xampp control panel, ensure that the module Apache and MySQL has been started
+
+//To connect to the localhost from another device, make sure that the localhost and device are connected to the same network. Also make sure that the localhost's firewall is disabled.
+
 //Refer to the xampp control panel, Start MySQL -> admin -> privilages/user accounts
 $host = "localhost";
 $hostusername = "root";
