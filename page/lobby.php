@@ -51,7 +51,7 @@
       <select name="game_type" id="game_type">
         <optgroup label="Game Type">
           <option value="rock_paper_scissors">Rock Paper Scissors</option>
-          <option value="tick_tack_toe">Tick Tack Toe</option>
+          <!---<option value="tick_tack_toe">Tick Tack Toe</option>--->
         </optgroup>
       </select>
       </form><br>
