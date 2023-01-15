@@ -62,7 +62,8 @@
     <?php endif; ?>
       </p><br>
       <button class="buttonWrapper" id="lobbyButton" onclick="document.location='lobby.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE91A;</span>Lobby</button><br>
-      <button class="buttonWrapper" onclick="document.location='shared_screen.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE921;</span>Shared Screen Games</button><br>
+      <button class="buttonWrapper" onclick="document.location='single_player_game.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE920;</span>Single Player Game</button><br>
+      <!---<button class="buttonWrapper" onclick="document.location='shared_screen.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE921;</span>Shared Screen Games</button><br>--->
       <?php if($_SESSION["role"]==="admin"):?>
         <button class="buttonWrapper" onclick="document.location='admin_function.php'"><span style="font-family:symbols;">&#xE914;</span>Admin</button><br>
       <?php endif; ?>
