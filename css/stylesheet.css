@@ -75,8 +75,11 @@ body
 
 .chatSetting
 {
-	position:fixed;
-	height: 2vw;
+	display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position:fixed;
+	height: 5%;
 	padding: 1vw;
 	max-height: 50%;
 	width: 20%;
@@ -86,11 +89,13 @@ body
 	margin-right: 0.3vw;
 	background-color:#102838;
 	z-index: 9999;
+  font-size: 1em;
+  font-size: 2vh;
 }
 
 .chat
 {
-	height: 100%;
+	height: 70%;
 	width: 100%;
 	/*
 	position:fixed;
@@ -107,8 +112,9 @@ body
 /*Placeholder, might not be needed*/
 .chatBox
 {
-	margin-bottom: 1vw;
-	height: 70%;
+	margin-bottom: 0.1em;
+  margin-bottom: 1vw;
+	height: 100%;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
