@@ -234,10 +234,17 @@ body
 
 }
 
+.buttonContainer
+{
+  display:flex;
+  flex-direction: column;
+  width: 30%;
+}
+
 .buttonWrapper
 {
 	display:flex;
-	justify-content: center;
+	justify-content: left;
 	gap: 1vw;
 	align-items: flex-end;
 

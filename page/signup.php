@@ -54,13 +54,16 @@
   <span class="error" id="genderErr"></span>
   <br><br>
   <!---<button type="button" id="signup">Signup</button>--->
-  <button class="buttonWrapper" type="button" id="signup"><span style="font-family:symbols;">&#xE913;</span>Signup</button><br>
+  <div class="buttonContainer">
+    <button class="buttonWrapper" type="button" id="signup"><span style="font-family:symbols;">&#xE913;</span>Signup</button><br>
+  </div>
   <br>
   <span class="error" id="err"></span>
 </form>
 <!---<button onclick="document.location='index.php'">Back</button><br>--->
-<button class="buttonWrapper" onclick="document.location='index.php'"><span style="font-family:symbols;">&#xE900;</span>Back</button><br>
-
+<div class="buttonContainer">
+  <button class="buttonWrapper" onclick="document.location='index.php'"><span style="font-family:symbols;">&#xE900;</span>Back</button><br>
+</div>
 <script>
   $(document).ready(function(){
     $('#name').keyup(function()
