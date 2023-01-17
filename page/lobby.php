@@ -57,13 +57,14 @@
       </form><br>
     </div>
   </div>
+  
   <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
-    <div class ="chat">
-      <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
-      <div class="chatBox">
+    <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
+      <div class ="chat">
+        <div class="chatBox">
+        </div>
       </div>
-      <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
-    </div>
+    <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
   </div>
   
 

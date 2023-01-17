@@ -252,7 +252,7 @@ function getGameId($user_id)
   }
   catch(Throwable $e)
   {
-    echo $e;
+    //echo $e;
     return;
   }
   
