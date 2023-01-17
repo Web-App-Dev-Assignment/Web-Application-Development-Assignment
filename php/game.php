@@ -200,7 +200,7 @@ function getGameType($user_id)
   }
   catch(Throwable $e)
   {
-    echo $e;
+    //echo $e;
     return;
   }
   
@@ -226,7 +226,7 @@ function getGameTypes($game_id)
   }
   catch(Throwable $e)
   {
-    echo $e;
+    //echo $e;
     return;
   }
   

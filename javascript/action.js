@@ -117,7 +117,7 @@ function addUpdateListener(table_name, unique_index, unique_field)
           unique_text = this.value;
         }
 
-        action('update', table_name, unique_field , prev_input, column_field, this.value);
+        action('update', table_name, unique_field , unique_text, column_field, this.value);
 
         this.parentNode.innerHTML=this.value;
       }
@@ -161,9 +161,11 @@ function addUpdateListener(table_name, unique_index, unique_field)
               //console.log(unique_field + " = " + column_field);
             }
             
-            console.log("Index is " + unique_index + " ,table name is " + table_id + " ,unique_text is " + unique_text + " ,text value is " + this.value);
+            //console.log("Index is " + unique_index + " ,table name is " + table_id + " ,unique_text is " + unique_text + " ,text value is " + this.value);
+            //console.log("Unique field is " + unique_field + " ,table name is " + table_name + ' ,prev_input ' + prev_input + ', column_field ' + column_field + ',text value is ' + this.value);
+            //console.log("Table name is " + table_name + " . Unique field is " + unique_field + ' ,prev_input ' + prev_input + ', column_field ' + column_field + ',text value is ' + this.value);
 
-            action('update', table_name, unique_field , prev_input, column_field, this.value);
+            action('update', table_name, unique_field , unique_text, column_field, this.value);
 
             this.parentNode.innerHTML=this.value;
           }
