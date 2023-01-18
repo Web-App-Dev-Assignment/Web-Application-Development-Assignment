@@ -12,31 +12,13 @@ function setMove(user_id, game_id, move)
         },
     success:function(response)
     {
-      console.log(response);
-      console.log(move + " set");
       $("#rpsWrapper").hide();
       $("#darkLayer").show();
       document.getElementById("gameText").innerHTML = "Waiting for opponent to make a move"+ '<span id="animatedDots" class="animatedDots" ></span>';
-      //$('#gameText').text('Waiting for opponent to make a move' + '<span id="animatedDots" class="animatedDots" ></span>');
-      //$('.darkLayer').attr('style', '');
-      //$('#gameText').text("Waiting for opponent to make a move");
-      //$('#animatedDots').show();
       interval = setInterval(function()
           { 
             rock_paper_scissors(user_id, game_id)}
             ,1500);  
-      // try
-      // {
-      //   jason = $.parseJSON(response);
-      //   if(jason.gametype)
-      //   {
-      //     window.location.href= jason.gametype+".php";
-      //   }
-      // }
-      // catch(err)
-      // {
-      //   console.error(err);
-      // }
     }
   })
 }
@@ -56,45 +38,12 @@ function rock_paper_scissors(user_id, game_id)
       console.log(response);
       try
       {
-        // console.log(response);
         jason = $.parseJSON(response);
-        //console.log(jason.gameStatus);
-        // switch(jason.gameStatus)
-        // {
-        //   case "Win":
-        //     //console.log("Win");
-        //     break;
-        //   case "Lose":
-        //     //console.log("Lose");
-        //     break;
-        //   case "Win match":
-        //     // console.log("Win match");
-        //     break;
-        //   case "Lose match":
-        //     // console.log("Lose match");
-        //     break;
-        //   default:
-        //     break;
-        // }
-        
-        
-        //if(jason.gameStatus === "Win")
         
         if(jason.gameStatus)
-        {
-          // if(jason.gameStatus === "Win match." || jason.gameStatus === "Lose match.")
-          // {
-          //   redirect = true;
-          // }
-          // else
-          // {
-          //   redirect = false;
-          // }
-          
+        {          
           clearInterval(interval);
           $('#gameText').text(jason.gameStatus);
-
-          //need to set message to show if win or lose
 
           setTimeout(function()
           {
@@ -106,19 +55,8 @@ function rock_paper_scissors(user_id, game_id)
           }
             , 3000);
           
-          //window.location.href= jason.gametype+".php";
         }
         
-        // else if(jason.gameStatus === "Lose")
-        // {
-        //   clearInterval(interval);
-        //   //ready();
-        //   interval = setInterval(function()
-        //   { 
-        //     isReady(user_id)}
-        //     ,1500); 
-        //   //window.location.href= jason.gametype+".php";
-        // }
       }
       catch(err)
       {

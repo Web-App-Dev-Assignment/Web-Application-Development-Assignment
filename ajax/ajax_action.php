@@ -17,18 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     default:
       break;
   }
-  
-  // $errMsg = cancelMatchMaking($_POST['user_id']);
-  // if(empty($errMsg))
-  // {
-  //   $output = array("successmessage"=>$errMsg);
-  //   exit(json_encode($output));
-  // }
-  // else
-  // {
-  //   $output = array("errormessage"=>$errMsg);
-  //   exit(json_encode($output));
-  // }
 }
   
 ?>

@@ -21,7 +21,6 @@
 </head>
 <body>  
 <h2>Signup</h2>
-<!---<p><span class="error">* required field</span></p>--->
 <form method="post" submit="false">
   <label for="name">Name:</label>
   <input type="text" name="name" id="name" value="" placeholder="Enter your name.">
@@ -53,14 +52,12 @@
   <br>
   <span class="error" id="genderErr"></span>
   <br><br>
-  <!---<button type="button" id="signup">Signup</button>--->
   <div class="buttonContainer">
     <button class="buttonWrapper" type="button" id="signup"><span style="font-family:symbols;">&#xE913;</span>Signup</button><br>
   </div>
   <br>
   <span class="error" id="err"></span>
 </form>
-<!---<button onclick="document.location='index.php'">Back</button><br>--->
 <div class="buttonContainer">
   <button class="buttonWrapper" onclick="document.location='index.php'"><span style="font-family:symbols;">&#xE900;</span>Back</button><br>
 </div>
@@ -102,9 +99,7 @@
         },
         success:function(response)
         {
-          console.log(response);
           jason = $.parseJSON(response);
-          //console.log(response);
           if(!jason.errormessage)//redundant
           {
             $("#usernameErr").text("");
@@ -180,7 +175,6 @@
         success:function(response)
         {
           jason = $.parseJSON(response);
-          console.log(response);
           if(!jason.errormessage)
           {
             $("#emailErr").text("");
@@ -204,10 +198,6 @@
 <script>
   function checkGenderValue() 
   {
-    if(!$('gender').val()) 
-    { 
-      console.log("it's checked"); 
-    }
     var radioButton = document.getElementsByName('gender');
       
     for(i = 0; i < radioButton.length; i++) 
@@ -228,7 +218,6 @@
     {
       if($("#nameErr").text() || $("#usernameErr").text() || $("#passwordErr").text() || $("#passwordConfirmationErr").text() || $("#emailErr").text())
       {
-        console.log("error");
         return;
       }
       else if(!$("#username").val())
@@ -269,8 +258,6 @@
           success:function(response)
           {
             jason = $.parseJSON(response);
-            console.log(response);
-            //console.log(jason.testing);
             if(!jason.errormessage)
             {
               $("#err").text("*"+jason.successmessage);

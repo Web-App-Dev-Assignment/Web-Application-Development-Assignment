@@ -14,13 +14,11 @@ function update($table, $unique_column, $unique_value, $column, $value)
 {
   global $db_conn;
 
-  //$sql = "UPDATE $table SET $column = '$value' WHERE $unique_column = '$unique_value'";
   try
   {
     $sql = sprintf("UPDATE `%s` SET `%s` = '%s' WHERE `%s` = '%s'", $table, $column, $value, $unique_column, $unique_value);
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
-    //echo $sql;
   }
   catch(Throwable $e)
   {
@@ -58,18 +56,15 @@ function generateTable($table_name)
   foreach($column_name as $col)
   {
     $output .= "<th style='text-align:center;'>".$col."</th>";
-    //echo $col . "<br>";
   }
   $output .= "
     </tr>";
 
-  //$sql = "SELECT * FROM $table_name WHERE `role`='user'";
   $sql = "SELECT * FROM $table_name";
 
   $stmt = $db_conn->prepare($sql);
   $stmt->execute();
   $results = $stmt->get_result();
-  //print_r($results);
   while($result = $results->fetch_assoc())
   {
     $output .="
@@ -91,7 +86,6 @@ function generateTable($table_name)
   }
 
   $output .="</table>";
-  //echo $output;
 
   //Find the primary key
   $sql = "DESCRIBE $table_name;";
@@ -99,15 +93,12 @@ function generateTable($table_name)
   $stmt->execute();
   $results = $stmt->get_result();
   $results = $results->fetch_all(MYSQLI_ASSOC);
-  //print_r($results);
   $i=2;
   foreach ($results as $result)
   {
     if ($result['Key']==='PRI')
     {
-      //$primary_key = $result['Field'];
       $primary_key = array('index'=>$i, 'field'=>$result['Field']);
-      //echo "<br>Primary Key is " . $result['Field'] . "index is " . $primary_key['index'];
       break;
     }
     $i++;
@@ -141,7 +132,6 @@ function generateButtons()
     {
       array_push($table_name,$resul);
       $output .= "<button id=$resul onclick=\"generateTable('generate_table', this.id)\">$resul</button><br>";
-      //echo "<br>" . $resul;
     }
   }
   $output .= "</div>";

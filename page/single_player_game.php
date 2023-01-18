@@ -3,11 +3,7 @@
 
   session_start();
 
-  if (isset($_SESSION["user_id"]))
-  {
-
-  }
-  else
+  if (!isset($_SESSION["user_id"]))
   {
     header("Location: index.php");
     exit();
@@ -17,7 +13,7 @@
 <!DOCTYPE HTML>  
 <html>
 <head>
-  <title>Shared Screen Game</title>
+  <title>Single player game</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <link rel="stylesheet" href="../css/stylesheet.css">
@@ -29,12 +25,8 @@
   <div style="height:100%;width:100%;">
     <div class="leftColumn">
     <span class="clickable symbol" onclick="document.location='index.php'" style=" font-size:xx-large;">&#xE91E;</span>
-      <!---<h2>Column 1</h2>
-      <p>Some text..</p>--->
     </div>
     <div class="middleColumn">
-      <!---<h2>Column 2</h2>
-      <p>Some text..</p>--->
       <button type="button" id="startGameButton" class="center" style="margin-top: 20%;">Start Game</button>
     </div>
     <div class="rightColumn">
@@ -43,8 +35,6 @@
       <select name="game_type" id="game_type">
         <optgroup label="Game Type">
           <option value="ShootingGame">Shooting Game</option>
-          <!---<option value="rock_paper_scissors">Rock Paper Scissors</option>--->
-          <!---<option value="tick_tack_toe">Tick Tack Toe</option>--->
         </optgroup>
       </select>
       </form><br>
@@ -62,7 +52,6 @@ $(document).ready(function()
       if($('#game_type').val())
       {
         document.location= $('#game_type').val() + '.php';
-        //window.location.href= $('#game_type').val() + '.php';
       }
       else
       {

@@ -21,57 +21,36 @@ function createMatchmakingTable()
   catch(Throwable $e)
   {
     echo $e;
-    if ($db_conn->errno === 1050)//1050 duplicate table
-    {
-    }
-    else
-    {
-    }
   }
 }
 
 function startMatchMaking($user_id, $game_type)//should call it when player presses the matchmaking button
 {
   global $db_conn, $matchmaking_tb, $game_tb;
-  //createMatchmakingTable();
-  //$errMsg = "";
   //--------------------------Check if matchmaking--------------------------
-  if(isInTable($matchmaking_tb, $user_id))//is currently matchmaking; don't do anything? just exit()
+  if(isInTable($matchmaking_tb, $user_id))//is currently matchmaking; don't do anything
   {
-    //write code to deal with already matchmaking here.//resume? cancel then restart the process?
     $errMsg = "Already matchmaking.";
     return $errMsg;
-    // $output = array("errormessage"=>"Already matchmaking.");
-    // exit(json_encode($output));
   }
   //--------------------------End of check if matchmaking--------------------------
   //--------------------------Check if in game--------------------------
   else if(isInTable($game_tb, $user_id))//is currently ingame
   {
-    //write code to redirect player to multiplay game here
     $errMsg = "Already in game.";
     return $errMsg;
-    // $output = array("errormessage"=>"Already in game.");
-    // exit(json_encode($output));
   }
   //--------------------------End of check if in game--------------------------
   
   
   $sql = "INSERT INTO $matchmaking_tb (id, game_type) 
   VALUES (?,?)";
-  // $sql = "INSERT INTO $matchmaking_tb (id, game_type) 
-  // VALUES ($user_id, $game_type)";
-  // $db_conn->query($sql);
-  // return;
-  //$stmt = $db_conn->prepare($sql);
   try
   {
     $stmt = $db_conn->prepare($sql);
   }
   catch(Throwable $e)
   {
-    //echo $db_conn->errno;
-    //echo $e;
     if($db_conn->errno === 1146)//1146 Table doesn't exist
     {
       createMatchmakingTable();
@@ -82,7 +61,6 @@ function startMatchMaking($user_id, $game_type)//should call it when player pres
   
   $stmt->bind_param("ss", $user_id, $game_type);
   $stmt->execute();
-  //return $errMsg;
 }
 
 function cancelMatchMaking($user_id)//should call it when the player presses the cancel matchmaking button or is offline
@@ -98,7 +76,6 @@ function cancelMatchMaking($user_id)//should call it when the player presses the
   }
   catch(Throwable $e)
   {
-    //return $e;
     echo $e;
     return;
   }
@@ -112,7 +89,7 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
   {
     if(isInTable($game_tb, $user_id))//is currently ingame, redirect user to the game
     {
-      //write code to redirect player to multiplay game here
+      //To redirect player to multiplayer game
       $sql = sprintf("SELECT game_id FROM %s
       WHERE id = '%s'
       LIMIT 1", $game_type, $user_id);
@@ -127,10 +104,6 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
       {
         $msg = "Opponent found.";
         return $msg;
-        //return $user['game_type'];
-        //$_SESSION['game_type'] = $user['game_type'];
-        //exit();
-        //header('Location: ../page/'.$user['game_type'].'.php');
       }
     }
     
@@ -176,7 +149,6 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
           createGameType($game_type);
           $stmt = $db_conn->prepare($sql);
         }
-        //return;
       }
       
       $id = $user_id;
@@ -199,9 +171,6 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
 
       $id = $user_id;
       $stmt->execute();
-
-      //$output = array("successmessage"=>"Player found.");
-      //exit(json_encode($output));
     }
     //--------------------------End of matchmaking--------------------------
   }
@@ -211,7 +180,7 @@ function matchMaking($user_id, $game_type)//check if we are in game or if someon
   }
 }
 
-function isInTable($table_name, $user_id)//mabye write a function to differentiate you and other players?
+function isInTable($table_name, $user_id)
 {
   global $db_conn, $game_tb, $tbname, $matchmaking_tb;
   try
@@ -243,8 +212,6 @@ function isInTable($table_name, $user_id)//mabye write a function to differentia
     $user = $result->fetch_assoc();
     if($user)
     {
-      //header("Location: ../page/rock_paper_scissors.php");
-      //return $user['game_id'];//return or exit
       return true;
     }
     else

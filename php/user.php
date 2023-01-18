@@ -32,7 +32,6 @@ function updateUser($id, $name, $username, $password, $email)//updateTable
   }
   catch(Throwable $e)
   {
-    // debug_to_console(test_escape_char($e), 0);
   }
 }
 //--------------------------End of update to table--------------------------
@@ -47,18 +46,9 @@ function retrieveCurrentUserData()
     {
       return $user;
     }
-
-    // if (isset($_SESSION["user_id"]))
-    // {
-    //   $sql = "SELECT * FROM $tbname WHERE id = {$_SESSION["user_id"]}";
-    //   $result = $db_conn->query($sql);
-  
-    //   $user = $result->fetch_assoc();
-    // }
   }
   catch(Throwable $e)
   {
-    // debug_to_console(test_escape_char($e), 0);
   }
 }
 //--------------------------End Retrieving current user data--------------------------
@@ -72,12 +62,10 @@ function deleteUserAccount()
       $sql = "DELETE FROM $tbname WHERE id = {$_SESSION["user_id"]}";
       $db_conn->query($sql);
       session_destroy();
-      //header("Location: index.php");
     }
   }
   catch(Throwable $e)
   {
-    // debug_to_console(test_escape_char($e), 0);
   }
 }
 ?>

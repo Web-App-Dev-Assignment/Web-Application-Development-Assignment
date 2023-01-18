@@ -87,7 +87,6 @@ function fetchUserLastActivity($table_name, $user_id)
 
 function checkOnlineStatus($table_name, $user_id)
 {
-  //$get_last_online = fetch_user_last_activity($_SESSION["user_id"]);
   $get_last_online = fetchUserLastActivity($table_name, $user_id);
   $time_stamp = date('Y-m-d H:i:s', strtotime('- 10 second'));
 
@@ -98,7 +97,6 @@ function checkOnlineStatus($table_name, $user_id)
   }
   else
   {
-    
     //offline
     return "offline";
   }

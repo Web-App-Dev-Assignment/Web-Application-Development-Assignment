@@ -23,13 +23,6 @@ function startMatchMaking(user_id, game_type)
             matchMaking(user_id, game_type)}
             ,1500);  
         }
-        else if(jason.errormessage === "Already matchmaking.")
-        {
-
-        }
-        else
-        {
-        }
       }
       catch(err)
       {

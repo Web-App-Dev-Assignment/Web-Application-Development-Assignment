@@ -17,7 +17,6 @@ function collapsible(string)//might need to refresh the height when a text has b
       this.classList.toggle("active");
       var sibling = this.nextElementSibling;
       var parent = this.parentElement;
-      //console.log(parent.style.height);
       if (parent.style.height){
         parent.style.height = null;
         sibling.style.overflowY = null;
@@ -27,7 +26,6 @@ function collapsible(string)//might need to refresh the height when a text has b
       } 
     });
   }
-  //return parent.style.height;
 }
 
 function buttonVisibility(string)

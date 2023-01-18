@@ -56,22 +56,10 @@ function createGameTable()
     )";
     $stmt = $db_conn->prepare($sql_table);
     $stmt->execute();
-    //debug_to_console("Table $game_db not found. Table $game_db created.",1);
   }
   catch(Throwable $e)
   {
     echo $e;
-    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-    // $output = array("errormessage"=>$e);
-    // echo json_encode($output);
-    if ($db_conn->errno === 1050)//1050 duplicate table
-    {
-      //debug_to_console("Table $game_db already exists. \\nError:\\n" . test_escape_char($e),1);
-    }
-    else
-    {
-      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
-    }
   }
 }
 
@@ -96,11 +84,6 @@ function insertGameSession($game_tb, $game_type, $user_id)
   catch(Throwable $e)
   {
     echo $e;
-    if($db_conn->errno === 1146)//1146 Table doesn't exist
-      {
-        //createGameTable();
-        //createGameType($game_type);
-      }
   }
 }
 
@@ -151,12 +134,6 @@ function deleteGameSession($user_id)//delete the data from game and game type
     ON %1$s.id = %2$s.id
     WHERE %1$s.id= "%3$s"',$game_tb, $game_type, $user_id);
 
-    // DELETE game_table, rock_paper_scissors FROM game_table INNER JOIN rock_paper_scissors ON game_table.id = rock_paper_scissors.id
-    // WHERE game_table.id= 'ec70fe89f59fa30755df7e41adac5be9'
-
-    // $sql = sprintf("DELETE FROM %s INNER JOIN %s
-    // WHERE id= '%s' ", $game_tb, $game_type, $user_id);
-
     $stmt = $db_conn->prepare($sql);
     $stmt->execute();
   }
@@ -200,7 +177,6 @@ function getGameType($user_id)
   }
   catch(Throwable $e)
   {
-    //echo $e;
     return;
   }
   
@@ -226,7 +202,6 @@ function getGameTypes($game_id)
   }
   catch(Throwable $e)
   {
-    //echo $e;
     return;
   }
   
@@ -252,7 +227,6 @@ function getGameId($user_id)
   }
   catch(Throwable $e)
   {
-    //echo $e;
     return;
   }
   

@@ -17,21 +17,9 @@ function createChatTable()
       FOREIGN KEY(id) REFERENCES $tbname(id)
     )";
     $db_conn->query($sql_table);
-    //debug_to_console("Table $chat_tb not found. Table $chat_tb created.",1);
   }
   catch(Throwable $e)
   {
-    //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-    // $output = array("errormessage"=>$e);
-    // echo json_encode($output);
-    if ($db_conn->errno === 1050)//1050 duplicate table
-    {
-      //debug_to_console("Table $chat_tb already exists. \\nError:\\n" . test_escape_char($e),1);
-    }
-    else
-    {
-      //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
-    }
   }
 }
 
@@ -93,7 +81,6 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
           {
             $output .= $user['username'];
           }
-          //$output .= ' says: ';
           $output .= '</span>';
           $output .= ' ';
           if ($status === "offline")
@@ -111,17 +98,8 @@ function displayMessage($game_id)//mabye write a function to differentiate you a
           $output .= $chat['chat_text'];
           $output .= '</span>';
           $output .= '<br><hr>';
-          //echo $user['username'];
-          //echo $chat['chat_text'];
-
-          //$output = '<span class=name>' .'noname'. ' says: ' .'</spawn>';
-
-          //echo $output;
         }
       }
-      //echo "<span style=\"color:blue\">testing123</span>";
-      //echo '<span class=name >testing123</span>';
-      
       return $output;
     }
   }

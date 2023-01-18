@@ -97,32 +97,14 @@ body
 {
 	height: 70%;
 	width: 100%;
-	/*
-	position:fixed;
-	height: 3vw;
-	max-height: 50%;
-	width: 20%;
-	bottom: 0;
-  right: 0;
-	transition: height 0.2s ease-out;
-	margin-right: 0.3vw;
-	*/
 }
 
-/*Placeholder, might not be needed*/
 .chatBox
 {
 	margin-bottom: 0.1em;
   margin-bottom: 1vw;
 	height: 100%;
 }
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-/*
-.active, .collapsible:hover {
-	background-color: #131f29;
-}
-*/
 
 /* Style the collapsible content. Note: hidden by default */
 .collapsibleContent {
@@ -147,10 +129,6 @@ body
 	width:100%;
 	padding-left: 0;
 	padding-right: 0;
-	/*
-	margin-left: auto;
-  margin-right: auto;
-	*/
 }
 
 

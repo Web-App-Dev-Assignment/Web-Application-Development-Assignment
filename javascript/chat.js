@@ -19,7 +19,6 @@ function insertMessage(chat_text, user_id, game_id)
 
 function displayMessage(game_id)
 {
-  //console.log(game_id);
   $.ajax
   ({
     type:'POST',

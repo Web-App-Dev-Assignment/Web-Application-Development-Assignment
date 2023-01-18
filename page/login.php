@@ -30,12 +30,10 @@
       <input type="password" name="password" id="password" value="" placeholder="Enter password.">
       <span class="error" id="err"></span><br><br>
 
-      <!---<button type="button" id="login">Login</button>--->
       <div class="buttonContainer">
         <button class="buttonWrapper" type="button" id="login"><span style="font-family:symbols;">&#xE916;</span>Login</button><br>
       </div>
     </form><br>
-      <!---<button onclick="document.location='index.php'">Back</button><br>--->
       <div class="buttonContainer">
         <button class="buttonWrapper" onclick="document.location='index.php'"><span style="font-family:symbols;">&#xE900;</span>Back</button><br>
       </div>
@@ -57,7 +55,6 @@
           username:$("#username").val(),
           password:$("#password").val()
         },
-        //dataType:'json',
         success:function(response)
         {
           jason = $.parseJSON(response);

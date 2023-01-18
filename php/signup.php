@@ -18,7 +18,6 @@ function createUserTable()
     reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )";//ON INSERT or ON UPDATE, check
   $db_conn->query($sql_table);
-  //$stmt->prepare($sql);
 }
 
 //format of the username condition
@@ -50,7 +49,6 @@ function usernameCondition($username)
     }
     catch(Throwable $e)
     {
-      //debug_to_console(test_escape_char($e), 0);
     }
     return $usernameErr;
   }
@@ -66,7 +64,6 @@ function passwordCondition($password)
 
   else if (!preg_match("/[a-zA-Z]/", $password)) {
     $passwordErr = "Password must contain at least one letter.";
-    //need toggle password visibility, need ensure user type 8~16 char with special character
   }
   
   else if (!preg_match("/[0-9]/", $password)) {
@@ -109,7 +106,6 @@ function emailCondition($email)
     }
     catch(Throwable $e)
     {
-      //debug_to_console(test_escape_char($e), 0);
     }
   }
   
@@ -134,67 +130,34 @@ function createUser($name, $username, $password, $email, $gender){
     }
     catch(Throwable $e){
        debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-      // debug_to_console("Error preparing the SQL code. \\nError:\\n" . test_escape_char($e),1);
       
       if($db_conn->errno === 1146)//1146 Table doesn't exist
       {
-        // debug_to_console("Table $tbname doesn\\'t exists.", 1);
         try
         {
           createUserTable();
-          // debug_to_console("Table $tbname not found. Table $tbname created.",1);
         }
         catch(Throwable $e)
         {
-          // debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-          if ($db_conn->errno === 1050)//1050 duplicate table
-          {
-            // debug_to_console("Table $tbname already exists. \\nError:\\n" . test_escape_char($e),1);
-          }
-          else
-          {
-            // debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
-          }
         }
-      }
-      else
-      {
-        // debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e),2);
       }
     }
     $role = 'user';
 
     $stmt->bind_param("sssssss", $id, $name, $username, $hash, $email, $gender, $role);
-    //$stmt->bind_param("sssssss", $id, $name, $username, $hash, $email, $gender, 'user');
 
     try
     {
       $stmt->execute();
-      // debug_to_console("Insertion into table $tbname success!",0);
-      //header("Location: signup-success.html");
-      //exit;
     }
     catch(Throwable $e)
     {
        debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-      if($db_conn->errno === 1062)//1062 duplicate Unique information
-      {
-        // debug_to_console("Duplicate Unique entry. \\nError:\\n" . test_escape_char($e),1);
-      }
-      else
-      {
-        // debug_to_console("Insertion into table $tbname unsuccessful. \\nError:\\n" . test_escape_char($e),2);
-      }
     }
 
-    //$sql = "INSERT INTO $tbname (id,name ,username, pw, email)
-    //VALUES ( '$id' , NULLIF('$name','') ,'$username' , '$hash' , NULLIF('$email',''))";
-    //$db_conn->query($sql);
   }
   catch(Throwable $e)
   {
-     //debug_to_console(test_escape_char($db_conn->error) . "\\nError Code : " . $db_conn->errno ,1);
-    //debug_to_console("Opps, something went wrong. \\nError:\\n" . test_escape_char($e), 2);
   }
 }
 //--------------------------End of insertion to table--------------------------

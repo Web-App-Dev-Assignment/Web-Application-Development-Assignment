@@ -5,11 +5,9 @@
 
   if (isset($_SESSION["user_id"]))
   {
-    //include_once __DIR__ . "\\..\\php\\matchmaking.php";  
     include_once __DIR__ . "\\..\\php\\game.php";
 
     redirectGameSession($_SESSION["user_id"]);//redirect the player to game page if they are in a game session
-    //if matchmaking then resume/cancel?
   }
   else
   {
@@ -37,12 +35,8 @@
   <div style="height:100%;width:100%;">
     <div class="leftColumn">
     <span class="clickable symbol" onclick="document.location='index.php'" style=" font-size:xx-large;">&#xE91E;</span>
-      <!---<h2>Column 1</h2>
-      <p>Some text..</p>--->
     </div>
     <div class="middleColumn">
-      <!---<h2>Column 2</h2>
-      <p>Some text..</p>--->
       <button type="button" id="matchmakingButton" class="center" style="margin-top: 20%;">Matchmaking</button>
     </div>
     <div class="rightColumn">
@@ -51,14 +45,13 @@
       <select name="game_type" id="game_type">
         <optgroup label="Game Type">
           <option value="rock_paper_scissors">Rock Paper Scissors</option>
-          <!---<option value="tick_tack_toe">Tick Tack Toe</option>--->
         </optgroup>
       </select>
       </form><br>
     </div>
   </div>
   
-  <div class="chatSetting" style="margin-right:0.3em"><!--temp, might not be necessary to fix text input--->
+  <div class="chatSetting" style="margin-right:0.3em">
     <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
       <div class ="chat">
         <div class="chatBox">

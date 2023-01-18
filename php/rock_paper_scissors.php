@@ -126,8 +126,6 @@ function checkMatch($user_id, $game_id)
     {
       include_once __DIR__ . "\\..\\php\\game.php";
       deleteGameType($game_type, $game_id);
-      //deleteGameSessions($game_id);
-      //mabye delete the chat message or not for logs?
     }
     
     if($loser['id'] !== $user_id)
@@ -140,27 +138,20 @@ function checkMatch($user_id, $game_id)
       //you lose the match
       $message = "You've lost the match.";
     }
-    //$message = $loser['id'];
   }
   return $message;
 }
 
+/*
+if is_checked is false, continue, if true, return
+check if both made a move
+if both made a move, then check for the move and perform conditions accordingly
+if updated, set the is_checked to 1
+after both players is_check is set to 1, reset the move to NULL and is_checked to 0
+*/
 function rockPaperScissors($user_id, $game_id)
 {
   global $db_conn, $game_type;
-  // $message = "";
-
-  //if is_checked is false, continue, if true, return
-  //check if both made a move
-  //if both made a move, then check for the move and perform conditions accordingly
-  //if updated, set the is_checked to 1
-  //after both players is_check is set to 1, reset the move to NULL and is_checked to 0
-
-  // $sql = sprintf("SELECT `move` FROM %s
-  // WHERE game_id = '%s' AND NOT `move` = NULL
-  // LIMIT 2"
-  // , $game_type, $game_id);
-  // echo "1 ";
   
   try
   {
@@ -173,13 +164,11 @@ function rockPaperScissors($user_id, $game_id)
     $stmt->bind_result($result);
     $stmt->fetch();
     
-    //echo $count;
     if($result === 1)//is_checked = true
     {
       return "";
-      //exit();//if updated, don't do anything; wait for the other player to be updated
+      //if updated, don't do anything; wait for the other player to be updated
     }
-    // echo "2 ";
     
     $sql = sprintf("SELECT COUNT(`move`) FROM %s
     WHERE game_id = '%s' AND NOT `move` IS NULL
@@ -194,12 +183,9 @@ function rockPaperScissors($user_id, $game_id)
 
     if($result < 2)//not every player made a move
     {
-      //write a function to tell who selected and to select move
-      // echo "less than 2";
-      //exit();
+      //Function to tell who selected and to select move
       return "";
     }
-    // echo "3 ";
 
     $sql = sprintf("SELECT id, `move` FROM %s
     WHERE game_id = '%s'
@@ -223,15 +209,6 @@ function rockPaperScissors($user_id, $game_id)
       $other_user = $user;
       $user = $users[1];
     }
-
-    // $sql = sprintf("SELECT * FROM %s
-    // WHERE NOT id = '%s' AND game_id = %s
-    // LIMIT 1"
-    // , $game_type, $user_id, $game_id);
-    // $stmt = $db_conn->prepare($sql);
-    // $stmt->execute();
-    // $result = $stmt->get_result();
-    // $other_user = $result->fetch_assoc();
 
     if($user['move'] === $other_user['move'])
     {
@@ -283,47 +260,8 @@ function rockPaperScissors($user_id, $game_id)
 
     setCheck($user_id);
     
-    // $sql = sprintf("UPDATE %s
-    // SET is_checked = 1
-    // WHERE id = '%s'"
-    // , $game_type, $user_id);
-    // $stmt = $db_conn->prepare($sql);
-    // $stmt->execute();
-
-    // $sql = sprintf("SELECT id FROM %s
-    // WHERE game_id = '%s' AND health = 0
-    // LIMIT 1"
-    // ,$game_type ,$game_id);
-    // $stmt = $db_conn->prepare($sql);
-    // $stmt->execute();
-    // $result = $stmt->get_result();
-    // $loser = $result->fetch_assoc();
-    // if ($loser)
-    // {
-    //   if($loser['id'] !== $user['id'])
-    //   {
-    //     //you win the match
-    //     $message = "Win match";
-    //   }
-    //   else if($loser['id'] === $other_user['id'])
-    //   {
-    //     //you lose the match
-    //     $message = "Lose match";
-    //   }
-    //   //$message = $loser['id'];
-    // }
-    
     //only reset if both is_check is 1
     $result = usersIsChecked($game_id);
-
-    // $sql = sprintf("SELECT COUNT(is_checked) FROM %s
-    // WHERE game_id = '%s' AND is_checked = 1
-    // LIMIT 2"
-    // ,$game_type ,$game_id);
-    // $stmt = $db_conn->prepare($sql);
-    // $stmt->execute();
-    // $stmt->bind_result($result);
-    // $stmt->fetch();
     
     if($result)
     {
@@ -334,38 +272,9 @@ function rockPaperScissors($user_id, $game_id)
       $stmt->free_result();
       $stmt = $db_conn->prepare($sql);
       $stmt->execute();
-
-
-
-      // $sql = sprintf("SELECT id FROM %s
-      // WHERE game_id = '%s' AND health = 0
-      // LIMIT 1"
-      // ,$game_type ,$game_id);
-      // $stmt = $db_conn->prepare($sql);
-      // $stmt->execute();
-      // $result = $stmt->get_result();
-      // $loser = $result->fetch_assoc();
-      // if ($loser)
-      // {
-      //   if($loser['id'] !== $user['id'])
-      //   {
-      //     //you win the match
-      //     $message = "Win match";
-      //   }
-      //   else if($loser['id'] === $other_user['id'])
-      //   {
-      //     //you lose the match
-      //     $message = "Lose match";
-      //   }
-      // }
     }
 
-    //echo $message;
-    // echo "testing";
-    // return "testing";
     return $message;
-    //$output = array("GameStatus"=>$message);
-    //exit(json_encode($output));
   }
   catch(Throwable $e)
   {

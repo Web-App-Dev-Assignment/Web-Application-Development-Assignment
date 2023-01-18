@@ -2,15 +2,8 @@
   include_once __DIR__ . "\\..\\php\\function.php";
 
   session_start();
-  //$_SESSION['game_id'] = "0123456789"; 
 
-  if (isset($_SESSION["user_id"]) && !empty($_SESSION['game_id']))
-  //if(isset($_SESSION["user_id"]))
-  {
-    //include_once __DIR__ . "\\..\\php\\chat.php";
-    //debug_to_console($_SESSION['game_id'],0);
-  }
-  else
+  if (!isset($_SESSION["user_id"]) && empty($_SESSION['game_id']))
   {
     header("Location: index.php");
     exit();
@@ -31,12 +24,10 @@
 <body style="max-width: none;">
 
   <div id="darkLayer" class="darkLayer" style="display:none">
-    <!---<div class="loader center" style="margin-top:10%;"></div>--->
     <p id="gameText" class="gameText" style="">Waiting for opponent to make a move<span id="animatedDots" class="animatedDots" ></span></p>
   </div>
 
   <div style="height:100%;width:100%;">
-    <!---<p id="gameText">Make a move.</p>--->
     <div id="rpsWrapper">
       <button type="button" class="rps" id="rock">✊</button>
       <button type="button" class="rps" id="paper">🖐</button>
@@ -52,18 +43,6 @@
       </div>
     <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
   </div>
-  
-  <!---temp, might not be necessary to fix text input-->
-  <!---
-  <div class="chatSetting" style="margin-right:0.3em">
-    <div class ="chat">
-      <button type="button" class="collapsible" id="chatButton" style="max-width:none;width:100%;">Chat</button>
-      <div class="chatBox">
-      </div>
-      <input type="text" id="chatInput" name="chatInput" placeholder="Message" class="chatInput" style="">
-    </div>
-  </div>
-  --->
   
 </body>
 </html>
@@ -82,21 +61,18 @@ $(document).ready(function()
 			if(e.keyCode == 13)//the enter key
       {
 				insertMessage($("#chatInput").val(), <?php echo json_encode($_SESSION["user_id"]);?>, <?php echo json_encode($_SESSION["game_id"]);?>);
-        //insertMessage($("#chatInput").val(), <?php //echo json_encode($_SESSION["user_id"]);?>, '');
 			}
 	})
 
   $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
       game_id:'='+'<?php echo json_encode($_SESSION["game_id"]);?>'
-      //game_id:"IS NULL"
     });
 	setInterval(function()
   {
     $(".chatBox").load("../ajax/ajax_displaymessage.php",
     {
       game_id:'='+'<?php echo json_encode($_SESSION["game_id"]);?>'
-      //game_id:"IS NULL"
     });
 	},1500)
 	
@@ -123,7 +99,6 @@ $(document).ready(function()
     }
 
     setMove(<?php echo json_encode($_SESSION["user_id"]);?>, <?php echo json_encode($_SESSION["game_id"]);?>, event.target.id);
-    //console.dir(event.target.id);
   })
 });
 

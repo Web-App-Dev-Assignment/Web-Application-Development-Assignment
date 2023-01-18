@@ -1,10 +1,6 @@
 <?php
   include_once __DIR__ . "\\..\\php\\function.php";
 
-  //$projectFolderName = explode('/', $_SERVER['PHP_SELF'])[1];
-  //echo $projectFolderName;
-  //echo getcwd();
-
   session_start();
 
   try
@@ -26,10 +22,6 @@
     debug_to_console(test_escape_char($e), 0);
     return;
   }
-
-
-  //print_r($_SESSION);
-  //debug_to_console(, 0);
 
 ?>
 
@@ -64,21 +56,16 @@
       <div class="buttonContainer">
         <button class="buttonWrapper" id="lobbyButton" onclick="document.location='lobby.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE91A;</span>Lobby</button><br>
         <button class="buttonWrapper" onclick="document.location='single_player_game.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE920;</span>Single Player Game</button><br>
-        <!---<button class="buttonWrapper" onclick="document.location='shared_screen.php'"><span id="lobbySpan" style="font-family:symbols;">&#xE921;</span>Shared Screen Games</button><br>--->
         <?php if($_SESSION["role"]==="admin"):?>
           <button class="buttonWrapper" onclick="document.location='admin_function.php'"><span style="font-family:symbols;">&#xE914;</span>Admin</button><br>
         <?php endif; ?>
-        <button class="buttonWrapper" onclick="document.location='logout.php'"><span style="font-family:symbols;">&#xE917;</span>Log out</button><br>
+        <button class="buttonWrapper" onclick="document.location='../php/logout.php'"><span style="font-family:symbols;">&#xE917;</span>Log out</button><br>
       </div>
-    <!---<p><a href="logout.php">Log out</a></p>--->
   <?php else: ?>
     <div class="buttonContainer">
       <button class="buttonWrapper" onclick="document.location='login.php'"><span style="font-family:symbols;">&#xE916;</span>Log in</button><br>
       <button class="buttonWrapper" onclick="document.location='signup.php'"><span style="font-family:symbols;">&#xE913;</span>Sign up</button><br>
     </div>
-    <!---<button onclick="document.location='login.php'">Log in</button><br>
-    <button onclick="document.location='signup.php'">Sign up</button><br>--->
-          <!---<p><a href="login.php">Log in</a> or <a href="signup.php">sign up</a></p>--->
   <?php endif; ?>
 
 </body>
